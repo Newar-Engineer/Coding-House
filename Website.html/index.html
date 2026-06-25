@@ -681,6 +681,17 @@
 window.addEventListener('load', () => {
   document.querySelector('.loading-screen').classList.remove('active');
 });
+function showLoading(event) {
+  document.querySelector('.loading-screen').classList.add('active');
+}
+window.addEventListener('load', () => {
+  document.querySelector('.loading-screen').classList.remove('active');
+});
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    document.querySelector('.loading-screen').classList.remove('active');
+  }
+});
 const languages = [
   { name:"Python", tag:"Beginner friendly", ab:"Py", c1:"#3b82f6", c2:"#22d3ee", slug:"python" },
   { name:"Java", tag:"Enterprise & Android", ab:"Jv", c1:"#8b5cf6", c2:"#3b82f6", slug:"java" },
