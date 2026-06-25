@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Coding House</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;min-height:100vh;
+  background:#060914;color:#e2e8f0;
+  display:flex;flex-direction:column;
+}
+
+/* ── NAV ── */
+.top-nav{
+  padding:16px 32px;border-bottom:1px solid rgba(99,102,241,.15);
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(6,9,20,.95);backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:50;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  color:#e2e8f0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;
+}
+.mark{color:#6366f1;font-size:1.3rem}
+.nav-back{
+  text-decoration:none;color:#64748b;font-size:13px;
+  padding:6px 14px;border:1px solid rgba(99,102,241,.2);border-radius:8px;
+  transition:all .2s;
+}
+.nav-back:hover{color:#e2e8f0;border-color:rgba(99,102,241,.5)}
+
+/* ── LAYOUT ── */
+.page{display:flex;flex:1;min-height:calc(100vh - 57px)}
+
+/* ── FORM SIDE ── */
+.form-side{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:48px 32px;
+}
+.login-box{width:100%;max-width:400px}
+
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.logo-ico{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:.9rem;color:#fff;
+}
+
+.login-heading h2{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:6px}
+.login-heading p{font-size:14px;color:#64748b;margin-bottom:32px}
+
+/* role tabs */
+.role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px}
+.role-tab{
+  padding:10px;border:1.5px solid rgba(99,102,241,.2);border-radius:10px;
+  background:transparent;color:#64748b;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .25s;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.role-tab .tab-icon{font-size:20px}
+.role-tab:hover{border-color:rgba(99,102,241,.5);color:#e2e8f0}
+.role-tab.active{
+  border-color:#6366f1;color:#e2e8f0;
+  background:rgba(99,102,241,.1);box-shadow:0 0 0 1px rgba(99,102,241,.3) inset;
+}
+.role-tab.admin-tab.active{
+  border-color:#a855f7;background:rgba(168,85,247,.1);
+  box-shadow:0 0 0 1px rgba(168,85,247,.3) inset;
+}
+
+/* form */
+.form-group{margin-bottom:18px}
+.form-label{font-size:13px;font-weight:500;color:#cbd5e1;margin-bottom:7px;display:block}
+.form-input{
+  width:100%;padding:11px 14px;
+  background:rgba(20,20,40,.8);border:1.5px solid rgba(99,102,241,.2);
+  border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;font-family:inherit;
+  transition:border-color .2s,box-shadow .2s;
+}
+.form-input::placeholder{color:#334155}
+.form-input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+
+.form-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.remember{display:flex;align-items:center;gap:7px;font-size:13px;color:#64748b;cursor:pointer}
+.remember input{accent-color:#6366f1}
+.forgot{font-size:13px;color:#6366f1;text-decoration:none}
+.forgot:hover{text-decoration:underline}
+
+.submit-btn{
+  width:100%;padding:13px;font-size:15px;font-weight:700;
+  border:none;border-radius:10px;cursor:pointer;
+  transition:all .25s;font-family:'Space Grotesk',sans-serif;
+}
+.submit-btn.user-btn{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+}
+.submit-btn.admin-btn{
+  background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;
+}
+.submit-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(99,102,241,.35)}
+.submit-btn:active{transform:translateY(0)}
+
+.divider{display:flex;align-items:center;gap:14px;margin:22px 0;color:#334155;font-size:13px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(99,102,241,.15)}
+
+.social-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.social-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px;background:rgba(20,20,40,.8);border:1.5px solid rgba(99,102,241,.18);
+  border-radius:10px;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;
+  transition:all .2s;font-family:inherit;
+}
+.social-btn:hover{border-color:rgba(99,102,241,.4);color:#e2e8f0}
+
+.signup-row{margin-top:22px;text-align:center;font-size:13px;color:#64748b}
+.signup-row a{color:#6366f1;text-decoration:none;font-weight:500}
+.signup-row a:hover{text-decoration:underline}
+
+/* demo hint */
+.demo-hint{
+  margin-top:16px;padding:10px 14px;
+  background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);
+  border-radius:8px;font-size:11px;color:#64748b;
+  font-family:'JetBrains Mono',monospace;text-align:center;
+}
+.demo-hint strong{color:#818cf8}
+
+/* ── RIGHT SIDE ── */
+.info-side{
+  flex:1;
+  background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.05));
+  border-left:1px solid rgba(99,102,241,.12);
+  display:flex;align-items:center;justify-content:center;
+  padding:48px;position:relative;overflow:hidden;
+}
+.info-side canvas{position:absolute;top:0;left:0;pointer-events:none}
+.info-content{position:relative;z-index:2;max-width:340px}
+.info-content h3{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;margin-bottom:14px;line-height:1.3}
+.info-content p{color:#64748b;font-size:14px;line-height:1.7;margin-bottom:28px}
+.feature-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.feature-list li{display:flex;align-items:center;gap:12px;font-size:14px;color:#94a3b8}
+.feat-check{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#6366f1;
+}
+
+@media(max-width:768px){.info-side{display:none}.form-side{padding:32px 20px}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" class="nav-logo"><span class="mark">&lt;/&gt;</span> Coding House</a>
+  <a href="../index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page">
+
+  <!-- FORM -->
+  <div class="form-side">
+    <div class="login-box">
+
+      <div class="logo-row">
+        <div class="logo-ico">CH</div>
+        <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem">Coding House</span>
+      </div>
+
+      <div class="login-heading">
+        <h2>Welcome back 👋</h2>
+        <p>Sign in to continue your coding journey</p>
+      </div>
+
+      <!-- ROLE TABS -->
+      <div class="role-tabs">
+        <button class="role-tab active" id="userTab" onclick="selectRole('user')">
+          <span class="tab-icon">🎓</span>
+          <span>Student</span>
+        </button>
+        <button class="role-tab admin-tab" id="adminTab" onclick="selectRole('admin')">
+          <span class="tab-icon">🛡️</span>
+          <span>Admin</span>
+        </button>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="email">Email address</label>
+          <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+        </div>
+        <div class="form-row">
+          <label class="remember"><input type="checkbox"> Remember me</label>
+          <a href="#" class="forgot">Forgot password?</a>
+        </div>
+        <button type="submit" class="submit-btn user-btn" id="submitBtn">Sign in as Student</button>
+      </form>
+
+      <div class="demo-hint">Demo → any email/password works · Role tab determines destination</div>
+
+      <div class="divider"><span>or</span></div>
+
+      <div class="social-row">
+        <button class="social-btn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+        <button class="social-btn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          GitHub
+        </button>
+      </div>
+
+      <div class="signup-row">Don't have an account? <a href="../index.html">Create one free</a></div>
+
+    </div>
+  </div>
+
+  <!-- INFO SIDE -->
+  <div class="info-side">
+    <canvas id="infoCanvas"></canvas>
+    <div class="info-content">
+      <h3>Learn at your own pace</h3>
+      <p>From your first loop to a production-ready portfolio — Coding House tracks every step.</p>
+      <ul class="feature-list">
+        <li><span class="feat-check">✓</span> 16+ programming languages</li>
+        <li><span class="feat-check">✓</span> 100+ guided projects</li>
+        <li><span class="feat-check">✓</span> 5 development tracks</li>
+        <li><span class="feat-check">✓</span> AI coding assistant</li>
+        <li><span class="feat-check">✓</span> Interview preparation</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentRole = 'user';
+
+function selectRole(role){
+  currentRole = role;
+  const userTab = document.getElementById('userTab');
+  const adminTab = document.getElementById('adminTab');
+  const btn = document.getElementById('submitBtn');
+
+  if(role==='user'){
+    userTab.classList.add('active'); adminTab.classList.remove('active');
+    btn.textContent='Sign in as Student';
+    btn.className='submit-btn user-btn';
+  } else {
+    adminTab.classList.add('active'); userTab.classList.remove('active');
+    btn.textContent='Sign in as Admin';
+    btn.className='submit-btn admin-btn';
+  }
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Signing in...';
+  btn.style.opacity = '0.7';
+  setTimeout(()=>{
+    if(currentRole==='admin'){
+      window.location.href='./admin/admindashboard.html';
+    } else {
+      window.location.href='./user/userdashboard.html';
+    }
+  }, 800);
+}
+
+/* ── FLOATING PARTICLES ON RIGHT SIDE ── */
+(function(){
+  const canvas = document.getElementById('infoCanvas');
+  const side = canvas.parentElement;
+  const ctx = canvas.getContext('2d');
+
+  function resize(){
+    canvas.width = side.offsetWidth;
+    canvas.height = side.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const words = ['Python','JavaScript','React','Go','Rust','Node.js','Flutter','AI','CSS','SQL','Git','Docker'];
+  const particles = Array.from({length:24},(_,i)=>({
+    x:Math.random()*1200, y:Math.random()*800,
+    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.3,
+    label:words[i%words.length],
+    op:Math.random()*.25+.05,
+    size:Math.random()*3+2,
+  }));
+
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    t+=0.01;
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<-50)p.x=canvas.width+50;
+      if(p.x>canvas.width+50)p.x=-50;
+      if(p.y<-20)p.y=canvas.height+20;
+      if(p.y>canvas.height+20)p.y=-20;
+
+      ctx.save();
+      ctx.globalAlpha=p.op+Math.sin(t+p.x)*.03;
+      ctx.fillStyle='#6366f1';
+      ctx.font=`500 11px 'JetBrains Mono',monospace`;
+      ctx.fillText(p.label,p.x,p.y);
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

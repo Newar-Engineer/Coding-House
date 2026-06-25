@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go — Coding House</title>
+<title>Dart — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
@@ -29,13 +29,13 @@
 
 <section>
   <div class="wrap" style="padding-top:36px;">
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Go</div>
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Dart</div>
 
     <div class="portal-hero">
-      <div class="portal-badge" style="background:linear-gradient(135deg, #22d3ee, #34e0a1)">Go</div>
+      <div class="portal-badge" style="background:linear-gradient(135deg, #22d3ee, #3b82f6)">Dt</div>
       <div class="portal-title">
-        <h1>Go</h1>
-        <p>Cloud & concurrency — Beginner to Professional</p>
+        <h1>Dart</h1>
+        <p>UI-first language — Beginner to Professional</p>
       </div>
       <div class="portal-progress">
         <div class="pp-label"><span>Your progress</span><span>0%</span></div>
@@ -56,7 +56,7 @@
       <div class="lesson-list">
       <a href="#" class="lesson-card">
         <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>What is Go</h4><span>Overview</span></div>
+        <div class="lesson-info"><h4>What is Dart</h4><span>Overview</span></div>
         <span class="lesson-status start">Start</span>
       </a>
       <a href="#" class="lesson-card">
@@ -204,7 +204,7 @@
     </div>
     <div class="tab-panel" id="panel-cert">
       <div class="cert-card">
-        <h3>Go Certification Test</h3>
+        <h3>Dart Certification Test</h3>
         <p>Unlocks once Beginner, Intermediate, and Advanced are complete.</p>
         <div class="cert-meta">
           <div><strong>60</strong>minutes</div>
@@ -217,48 +217,6 @@
 
   </div>
 </section>
-<div id="ch-toggle" style="position:fixed; bottom:24px; right:24px; width:54px; height:54px; border-radius:50%; background:var(--grad-main); display:flex; align-items:center; justify-content:center; cursor:pointer; font-family:var(--font-mono); color:#fff; font-weight:700; z-index:999;">&lt;/&gt;</div>
-
-<div id="ch-window" style="display:none; position:fixed; bottom:90px; right:24px; width:320px; max-height:420px; background:#11151C; border:1px solid rgba(255,255,255,0.1); border-radius:12px; flex-direction:column; z-index:999;">
-  <div id="ch-messages" style="flex:1; padding:12px; overflow-y:auto; font-family:var(--font-display); font-size:14px; color:#fff;"></div>
-  <input id="ch-input" placeholder="Ask about a language, course, or code..." style="border:none; background:#0B0E14; color:#fff; padding:12px; border-radius:0 0 12px 12px; font-family:var(--font-display);">
-</div>
-
-<script>
-const toggle = document.getElementById('ch-toggle');
-const win = document.getElementById('ch-window');
-const messages = document.getElementById('ch-messages');
-const input = document.getElementById('ch-input');
-let history = [];
-
-toggle.onclick = () => win.style.display = win.style.display === 'none' ? 'flex' : 'none';
-
-function append(role, text) {
-  const div = document.createElement('div');
-  div.style.margin = '8px 0';
-  div.style.color = role === 'user' ? '#8B5CF6' : '#fff';
-  div.textContent = (role === 'user' ? 'You: ' : 'CH: ') + text;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-input.addEventListener('keydown', async (e) => {
-  if (e.key !== 'Enter' || !input.value.trim()) return;
-  const msg = input.value;
-  input.value = '';
-  append('user', msg);
-  history.push({ role: 'user', content: msg });
-
-  const res = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: msg, history })
-  });
-  const { reply } = await res.json();
-  append('assistant', reply);
-  history.push({ role: 'assistant', content: reply });
-});
-</script>
 
 <footer>
   <div class="wrap">

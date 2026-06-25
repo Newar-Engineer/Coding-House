@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coding House — Learn Programming From Beginner to Professional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .tracks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 28px;
+    margin-top: 48px;
+  }
+  .track-card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(14,165,233,0.08));
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 28px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: slideInUp 0.8s ease-out backwards;
+  }
+  .track-card:nth-child(1){animation-delay:0.1s}
+  .track-card:nth-child(2){animation-delay:0.2s}
+  .track-card:nth-child(3){animation-delay:0.3s}
+  .track-card:nth-child(4){animation-delay:0.4s}
+  .track-card:nth-child(5){animation-delay:0.5s}
+  @keyframes slideInUp {
+    from { opacity:0; transform:translateY(30px) }
+    to   { opacity:1; transform:translateY(0) }
+  }
+  .track-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-12px);
+    box-shadow: 0 30px 60px rgba(124,58,237,0.3);
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(14,165,233,0.12));
+  }
+  .track-badge {
+    font-size: 48px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform:translateY(0) }
+    50%      { transform:translateY(-8px) }
+  }
+  .track-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .track-card p { font-size:14px; color:var(--text-mute); margin-bottom:16px }
+  .track-skills { display:flex; flex-wrap:wrap; gap:8px }
+  .skill-tag {
+    padding: 6px 12px;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid rgba(124,58,237,0.4);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mute);
+    transition: all 0.3s ease;
+  }
+  .track-card:hover .skill-tag {
+    background: rgba(124,58,237,0.3);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .track-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .track-duration { font-size:12px; color:var(--text-mute) }
+  .cta-arrow { font-size:20px; transition:all 0.3s ease }
+  .track-card:hover .cta-arrow { transform:translateX(6px) }
+  .loading-screen {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: var(--bg);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .loading-screen.active { display:flex }
+  .spinner {
+    width:50px; height:50px;
+    border: 4px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg) } }
+  .loading-text { color:var(--text-mute); font-size:14px; font-weight:600 }
+
+  /* ── LOGIN BUTTON ── */
+  .btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1.5px solid rgba(124,58,237,0.6);
+    border-radius: 8px;
+    color: #c4b5fd;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .btn-login:hover {
+    background: rgba(124,58,237,0.15);
+    border-color: #7c3aed;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+  }
+  .btn-login svg {
+    width: 15px;
+    height: 15px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+  <div class="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-text">Loading your track...</div>
+</div>
+
+
+<header>
+  <nav>
+    <a href="#" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li class="has-drop">
+        <a href="#languages">Courses</a>
+        <div class="dropdown">
+          <a href="#languages">Languages</a>
+          <a href="#tracks">Development Tracks</a>
+          <a href="#challenges">Coding Challenges</a>
+        </div>
+      </li>
+      <li><a href="#languages">Languages</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#tracks">Roadmaps</a></li>
+      <li><a href="#features">Interview Prep</a></li>
+      <li><a href="#stories">Community</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <div class="nav-cta">
+  <a href="login.html" class="btn btn-ghost btn-sm">Log In</a>
+  <a href="#languages" class="btn btn-primary btn-sm">Start Learning</a>
+  <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</div>
+  </nav>
+</header>
+
+<!-- ============================= HERO ============================= -->
+<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">terminal --init coding-house</div>
+      <h1>Coding House<br><span class="grad">starts here.</span></h1>
+      <p class="sub">Learn Programming From Beginner to Professional Level — with real tracks, real projects, and a portal for every language.</p>
+      <p class="desc">16 languages · 5 development tracks · 100+ guided projects</p>
+      <div class="hero-cta">
+        <a href="#languages" class="btn btn-primary">Start Learning Free</a>
+        <a href="#languages" class="btn btn-ghost">Browse Languages</a>
+      </div>
+    </div>
+
+    <div class="terminal-stage">
+      <div class="float-card fc-1">
+        <div class="l1">import torch</div>
+        <div>model.train()</div>
+      </div>
+      <div class="float-card fc-2">
+        <div class="l1">fetch('/api/users')</div>
+        <div class="l2">.then(res =&gt; res.json())</div>
+      </div>
+      <div class="float-card fc-3">
+        <div class="l1">SELECT * FROM</div>
+        <div>progress;</div>
+      </div>
+
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+          <span class="term-tab">main.py — Coding House</span>
+        </div>
+        <div class="term-body">
+<div><span class="ln">1</span><span class="kw">class</span> <span class="fn">Learner</span>:</div>
+<div><span class="ln">2</span>&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">__init__</span>(self, level=<span class="str">"beginner"</span>):</div>
+<div><span class="ln">3</span>&nbsp;&nbsp;&nbsp;&nbsp;self.level = level</div>
+<div><span class="ln">4</span>&nbsp;&nbsp;&nbsp;&nbsp;self.streak = <span class="num">0</span></div>
+<div><span class="ln">5</span></div>
+<div><span class="ln">6</span>&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">level_up</span>(self):</div>
+<div><span class="ln">7</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="com"># beginner → intermediate → advanced</span></div>
+<div><span class="ln">8</span>&nbsp;&nbsp;&nbsp;&nbsp;self.streak += <span class="num">1</span></div>
+<div><span class="ln">9</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"professional"</span><span class="cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= POPULAR LANGUAGES ============================= -->
+<section id="languages">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">click a language to open its portal</div>
+      <h2>Pick your language</h2>
+      <p>Every language below opens a dedicated learning portal — beginner lessons, intermediate depth, advanced systems, and shippable projects.</p>
+    </div>
+    <div class="lang-grid" id="lang-grid"></div>
+  </div>
+</section>
+
+<!-- ============================= CURRICULUM PATH ============================= -->
+<section class="section-alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">inside every track</div>
+      <h2>One path, four stages</h2>
+      <p>Shown here with Python — every language on Coding House follows this exact structure.</p>
+    </div>
+
+    <div class="path-rail">
+      <div class="path-step">
+        <span class="dot"></span>
+        <h4>Beginner</h4>
+        <ul>
+          <li>What is Python</li>
+          <li>Installation</li>
+          <li>Variables &amp; data types</li>
+          <li>Operators &amp; conditions</li>
+          <li>Loops &amp; functions</li>
+          <li>Lists, dicts, tuples</li>
+        </ul>
+      </div>
+      <div class="path-step">
+        <span class="dot"></span>
+        <h4>Intermediate</h4>
+        <ul>
+          <li>OOP</li>
+          <li>File handling</li>
+          <li>Modules &amp; packages</li>
+          <li>APIs &amp; JSON</li>
+          <li>Error handling</li>
+          <li>Virtual environments</li>
+        </ul>
+      </div>
+      <div class="path-step">
+        <span class="dot"></span>
+        <h4>Advanced</h4>
+        <ul>
+          <li>Multithreading</li>
+          <li>Async programming</li>
+          <li>Design patterns</li>
+          <li>Data science</li>
+          <li>Machine learning</li>
+          <li>Automation &amp; scraping</li>
+        </ul>
+      </div>
+      <div class="path-step">
+        <span class="dot"></span>
+        <h4>Professional Projects</h4>
+        <ul>
+          <li>AI chatbot</li>
+          <li>Face recognition</li>
+          <li>E-commerce backend</li>
+          <li>Discord bot</li>
+          <li>Stock market analyzer</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="path-note">
+      Same four-stage structure for
+      <span class="chip">Java</span><span class="chip">C</span><span class="chip">C++</span>
+      <span class="chip">C#</span><span class="chip">JavaScript</span><span class="chip">Go</span>
+      <span class="chip">Rust</span><span class="chip">PHP</span> — plus
+      <span class="chip">Interview Questions</span><span class="chip">Certification Test</span> included with every language.
+    </div>
+  </div>
+</section>
+
+<!-- ============================= DEVELOPMENT TRACKS ============================= -->
+<section id="tracks">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">roadmaps</div>
+      <h2>🚀 Development tracks</h2>
+      <p>Choose your learning path and master in-demand technologies. Click any track to begin your journey!</p>
+    </div>
+
+    <div class="tracks-container">
+      <a href="Development tracks/web-development.html" class="track-card" onclick="showLoading(event)">
+        <div class="track-badge" style="background:linear-gradient(135deg,#f97316,#fb923c)">🌐</div>
+        <div class="track-content">
+          <h3>Web Development</h3>
+          <p>Master responsive, modern web development from frontend to backend.</p>
+          <div class="track-skills">
+            <span class="skill-tag">HTML/CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Node.js</span>
+          </div>
+        </div>
+        <div class="track-footer">
+          <span class="track-duration">⏱️ 150+ hours</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="Development tracks/web-development.html" class="track-card" onclick="showLoading(event)">
+        <div class="track-badge" style="background:linear-gradient(135deg,#ec4899,#f472b6)">📱</div>
+        <div class="track-content">
+          <h3>Mobile Development</h3>
+          <p>Build amazing iOS and Android apps that users love.</p>
+          <div class="track-skills">
+            <span class="skill-tag">React Native</span>
+            <span class="skill-tag">Flutter</span>
+            <span class="skill-tag">Swift</span>
+            <span class="skill-tag">Kotlin</span>
+          </div>
+        </div>
+        <div class="track-footer">
+          <span class="track-duration">⏱️ 140+ hours</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="Development tracks/web-development.html" class="track-card" onclick="showLoading(event)">
+        <div class="track-badge" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">🤖</div>
+        <div class="track-content">
+          <h3>AI &amp; Machine Learning</h3>
+          <p>Master deep learning, neural networks, and AI models.</p>
+          <div class="track-skills">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">TensorFlow</span>
+            <span class="skill-tag">PyTorch</span>
+            <span class="skill-tag">NLP</span>
+          </div>
+        </div>
+        <div class="track-footer">
+          <span class="track-duration">⏱️ 160+ hours</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="Development tracks/web-development.html" class="track-card" onclick="showLoading(event)">
+        <div class="track-badge" style="background:linear-gradient(135deg,#ef4444,#f97316)">🔒</div>
+        <div class="track-content">
+          <h3>Cyber Security</h3>
+          <p>Protect systems, detect threats, and master ethical hacking.</p>
+          <div class="track-skills">
+            <span class="skill-tag">Networking</span>
+            <span class="skill-tag">Ethical Hacking</span>
+            <span class="skill-tag">Cryptography</span>
+            <span class="skill-tag">Linux</span>
+          </div>
+        </div>
+        <div class="track-footer">
+          <span class="track-duration">⏱️ 130+ hours</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="Development tracks/web-development.html" class="track-card" onclick="showLoading(event)">
+        <div class="track-badge" style="background:linear-gradient(135deg,#06b6d4,#10b981)">☁️</div>
+        <div class="track-content">
+          <h3>Cloud Computing</h3>
+          <p>Master AWS, Azure, GCP and build scalable applications.</p>
+          <div class="track-skills">
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">Kubernetes</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">DevOps</span>
+          </div>
+        </div>
+        <div class="track-footer">
+          <span class="track-duration">⏱️ 120+ hours</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= PLATFORM FEATURES ============================= -->
+<section class="section-alt" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">platform</div>
+      <h2>Built for actually learning to code</h2>
+      <p>Not just video lessons — a workspace built around writing, breaking, and fixing real code.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-cell">
+        <div class="ic">&lt;/&gt;</div>
+        <h4>Interactive code editor</h4>
+        <p>Write and run code directly in the browser — no setup required.</p>
+        <div class="mini-tags"><span>Editor</span><span>Output console</span><span>Error debugger</span></div>
+      </div>
+      <div class="feature-cell">
+        <div class="ic">✦</div>
+        <h4>AI coding assistant</h4>
+        <p>Stuck on a bug? Ask it to explain, fix, or improve your code line by line.</p>
+        <div class="mini-tags"><span>Explain code</span><span>Fix errors</span><span>Suggest improvements</span></div>
+      </div>
+      <div class="feature-cell">
+        <div class="ic">↗</div>
+        <h4>Progress tracking</h4>
+        <p>Watch every course turn into a percentage, a certificate, and a streak.</p>
+        <div class="mini-tags"><span>Completion %</span><span>Certificates</span><span>Streaks</span></div>
+      </div>
+      <div class="feature-cell">
+        <div class="ic">◆</div>
+        <h4>Coding challenges</h4>
+        <p>Four difficulty tiers, from your first loop to interview-grade problems.</p>
+        <div class="mini-tags"><span>Easy</span><span>Medium</span><span>Hard</span><span>Expert</span></div>
+      </div>
+      <div class="feature-cell">
+        <div class="ic">☷</div>
+        <h4>Interview preparation</h4>
+        <p>Drill the exact rounds companies actually run.</p>
+        <div class="mini-tags"><span>Technical Qs</span><span>System design</span><span>DSA</span><span>Mock interviews</span></div>
+      </div>
+      <div class="feature-cell">
+        <div class="ic">⌁</div>
+        <h4>Achievements</h4>
+        <p>Earned, not given — badges that map to real skills shipped.</p>
+        <div class="mini-tags"><span>Badges</span><span>Leaderboard</span><span>Milestones</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FEATURED PROJECTS ============================= -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">professional projects</div>
+      <h2>Build things that matter</h2>
+      <p>Every track ends in a project worth putting on your portfolio — not a to-do list app.</p>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <span class="num">01</span>
+        <h3>AI Chatbot</h3>
+        <p>A conversational assistant built on an LLM API, with memory and a custom persona.</p>
+        <span class="tag">Python · NLP</span>
+      </div>
+      <div class="proj-card">
+        <span class="num">02</span>
+        <h3>Face Recognition</h3>
+        <p>Real-time face detection and identity matching using OpenCV.</p>
+        <span class="tag">Python · OpenCV</span>
+      </div>
+      <div class="proj-card">
+        <span class="num">03</span>
+        <h3>E-commerce Backend</h3>
+        <p>Auth, products, carts, and checkout — a backend that holds up under real traffic.</p>
+        <span class="tag">Node.js · MongoDB</span>
+      </div>
+      <div class="proj-card">
+        <span class="num">04</span>
+        <h3>Discord Bot</h3>
+        <p>Slash commands, moderation, and scheduled tasks for a live community server.</p>
+        <span class="tag">JavaScript · APIs</span>
+      </div>
+      <div class="proj-card">
+        <span class="num">05</span>
+        <h3>Stock Market Analyzer</h3>
+        <p>Pulls live market data and visualizes trends to back a trading thesis.</p>
+        <span class="tag">Python · Data Science</span>
+      </div>
+      <div class="proj-card" style="border-style:dashed; justify-content:center; align-items:center; text-align:center;">
+        <p style="color:var(--text-mute);">+ 95 more projects across every track</p>
+        <a href="#" class="track-link">See all projects →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= CODING CHALLENGES ============================= -->
+<section class="section-alt" id="challenges">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">daily practice</div>
+      <h2>Sharpen your skills, one problem at a time</h2>
+      <p>Four tiers of difficulty, scored and timed like the interviews you're training for.</p>
+    </div>
+    <div class="chal-grid">
+      <div class="chal-card chal-easy">
+        <h4>Easy</h4>
+        <span class="count">420 problems</span>
+        <div class="chal-bar"><span></span></div>
+      </div>
+      <div class="chal-card chal-med">
+        <h4>Medium</h4>
+        <span class="count">360 problems</span>
+        <div class="chal-bar"><span></span></div>
+      </div>
+      <div class="chal-card chal-hard">
+        <h4>Hard</h4>
+        <span class="count">210 problems</span>
+        <div class="chal-bar"><span></span></div>
+      </div>
+      <div class="chal-card chal-exp">
+        <h4>Expert</h4>
+        <span class="count">95 problems</span>
+        <div class="chal-bar"><span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= SUCCESS STORIES ============================= -->
+<section id="stories">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">community</div>
+      <h2>From first line to first offer</h2>
+      <p>People who started exactly where you are right now.</p>
+    </div>
+    <div class="story-grid">
+      <div class="story-card">
+        <p class="quote">Started on the Python beginner path with zero background. Six months later I shipped the e-commerce backend project and used it in my interview.</p>
+        <div class="story-who">
+          <div class="story-avatar">AS</div>
+          <div><div class="name">Amara S.</div><div class="role">Backend Developer</div></div>
+        </div>
+      </div>
+      <div class="story-card">
+        <p class="quote">The interview prep track is the reason I stopped freezing on whiteboard questions. DSA finally clicked.</p>
+        <div class="story-who">
+          <div class="story-avatar">RK</div>
+          <div><div class="name">Rohan K.</div><div class="role">Software Engineer</div></div>
+        </div>
+      </div>
+      <div class="story-card">
+        <p class="quote">I followed the AI &amp; ML track end to end. The face recognition project became the centerpiece of my portfolio.</p>
+        <div class="story-who">
+          <div class="story-avatar">LM</div>
+          <div><div class="name">Lina M.</div><div class="role">ML Engineer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= PRICING ============================= -->
+<section class="section-alt" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">pricing</div>
+      <h2>Start free. Upgrade when it's worth it.</h2>
+      <p>No hidden tiers per language — one plan unlocks everything.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <h3>Free</h3>
+        <div class="price">$0<span>/forever</span></div>
+        <ul>
+          <li>3 languages, beginner stage</li>
+          <li>Limited coding challenges</li>
+          <li>Community access</li>
+          <li>Progress tracking</li>
+        </ul>
+        <a href="login.html" class="btn btn-ghost">Get started</a>
+      </div>
+      <div class="price-card featured">
+        <h3>Pro</h3>
+        <div class="price">Free<span>/month</span></div>
+        <ul>
+          <li>All 16 languages, every stage</li>
+          <li>All development tracks</li>
+          <li>AI coding assistant</li>
+          <li>Full challenge library</li>
+          <li>Certificates on completion</li>
+        </ul>
+        <a href="login.html" class="btn btn-primary">Start free trial</a>
+      </div>
+      <div class="price-card">
+        <h3>Lifetime</h3>
+        <div class="price">Free<span>/one-time</span></div>
+        <ul>
+          <li>Everything in Pro, forever</li>
+          <li>Future languages &amp; tracks included</li>
+          <li>Priority AI assistant access</li>
+          <li>1:1 mock interview credit</li>
+        </ul>
+        <a href="login.html" class="btn btn-ghost">Buy lifetime</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FOOTER ============================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a>
+        <p>Learn programming from beginner to professional level — one language, one project at a time.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Learn</h5>
+        <a href="#languages">Languages</a>
+        <a href="#tracks">Roadmaps</a>
+        <a href="#projects">Projects</a>
+        <a href="#challenges">Challenges</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Community</h5>
+        <a href="https://discord.gg/knbWG8KjT">Discord</a>
+        <a href="#">Forum</a>
+        <a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a>
+      </div>
+      <div class="foot-col">
+        <h5>Stay updated</h5>
+        <p style="font-size:13px; color:var(--text-mute);">New courses, roadmaps, and challenges — twice a month.</p>
+        <form class="foot-form" onsubmit="event.preventDefault()">
+          <input type="email" placeholder="you@email.com" required>
+          <button class="btn btn-primary btn-sm" type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Coding House. All rights reserved.</span>
+      <div class="foot-social">
+        <a href="#">Twitter</a><a href="#">GitHub</a><a href="https://www.youtube.com/@Krylvex">YouTube</a><a href="#">Discord</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showLoading(event) {
+  document.querySelector('.loading-screen').classList.add('active');
+}
+window.addEventListener('load', () => {
+  document.querySelector('.loading-screen').classList.remove('active');
+});
+const languages = [
+  { name:"Python", tag:"Beginner friendly", ab:"Py", c1:"#3b82f6", c2:"#22d3ee", slug:"python" },
+  { name:"Java", tag:"Enterprise & Android", ab:"Jv", c1:"#8b5cf6", c2:"#3b82f6", slug:"java" },
+  { name:"C", tag:"Systems fundamentals", ab:"C", c1:"#22d3ee", c2:"#3b82f6", slug:"c" },
+  { name:"C++", tag:"Performance & games", ab:"C+", c1:"#3b82f6", c2:"#8b5cf6", slug:"cpp" },
+  { name:"C#", tag:".NET & game dev", ab:"C#", c1:"#8b5cf6", c2:"#22d3ee", slug:"csharp" },
+  { name:"JavaScript", tag:"The web's language", ab:"Js", c1:"#f5b942", c2:"#3b82f6", slug:"javascript" },
+  { name:"TypeScript", tag:"JavaScript, typed", ab:"Ts", c1:"#3b82f6", c2:"#22d3ee", slug:"typescript" },
+  { name:"Go", tag:"Cloud & concurrency", ab:"Go", c1:"#22d3ee", c2:"#34e0a1", slug:"go" },
+  { name:"Rust", tag:"Safe systems code", ab:"Rs", c1:"#f5b942", c2:"#ff5d72", slug:"rust" },
+  { name:"PHP", tag:"Server-side web", ab:"Php", c1:"#8b5cf6", c2:"#f5b942", slug:"php" },
+  { name:"Kotlin", tag:"Modern Android", ab:"Kt", c1:"#8b5cf6", c2:"#ff5d72", slug:"kotlin" },
+  { name:"Swift", tag:"iOS & macOS", ab:"Sw", c1:"#ff5d72", c2:"#f5b942", slug:"swift" },
+  { name:"Dart", tag:"UI-first language", ab:"Dt", c1:"#22d3ee", c2:"#3b82f6", slug:"dart" },
+  { name:"Ruby", tag:"Expressive & fast", ab:"Rb", c1:"#ff5d72", c2:"#8b5cf6", slug:"ruby" },
+  { name:"R", tag:"Statistics & data", ab:"R", c1:"#3b82f6", c2:"#34e0a1", slug:"r" },
+  { name:"MATLAB", tag:"Engineering & math", ab:"Ml", c1:"#f5b942", c2:"#3b82f6", slug:"matlab" },
+];
+
+const grid = document.getElementById("lang-grid");
+grid.innerHTML = languages.map(l => `
+  <a href="${l.slug}.html" class="lang-card">
+    <div class="lang-badge" style="background:linear-gradient(135deg, ${l.c1}, ${l.c2})">${l.ab}</div>
+    <div class="lang-name">${l.name}</div>
+    <div class="lang-tag">${l.tag}</div>
+    <div class="lang-arrow">Open portal →</div>
+  </a>
+`).join("");
+
+const burger = document.querySelector(".burger");
+const navLinks = document.querySelector(".nav-links");
+burger.addEventListener("click", () => {
+  const open = navLinks.style.display === "flex";
+  navLinks.style.display = open ? "none" : "flex";
+  navLinks.style.flexDirection = "column";
+  navLinks.style.position = "absolute";
+  navLinks.style.top = "64px";
+  navLinks.style.left = "0";
+  navLinks.style.right = "0";
+  navLinks.style.background = "rgba(6,9,20,.98)";
+  navLinks.style.padding = "20px 32px";
+  navLinks.style.borderBottom = "1px solid var(--border)";
+  navLinks.style.gap = "18px";
+});
+</script>
+</body>
+</html>
