@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Coding House</title>
+<title>Profile & Progress — Coding House</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -296,7 +296,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
-    <a class="nav-item active" href="userdashboard.html"><span class="ni">🏠</span> Dashboard</a>
+    <a class="nav-item" href="userdashboard.html"><span class="ni">🏠</span> Dashboard</a>
     <a class="nav-item" href="courses.html"><span class="ni">📚</span> My Courses</a>
     <a class="nav-item" href="roadmaps.html"><span class="ni">🗺️</span> Roadmaps</a>
     <a class="nav-item" href="challenges.html"><span class="ni">⚡</span> Challenges</a>
@@ -308,7 +308,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <a class="nav-item" href="notes.html"><span class="ni">📝</span> Notes</a>
 
     <div class="nav-section" style="margin-top:12px">Account</div>
-    <a class="nav-item" href="profile.html"><span class="ni">👤</span> Profile</a>
+    <a class="nav-item active" href="profile.html"><span class="ni">👤</span> Profile</a>
     <a class="nav-item" href="achievements.html"><span class="ni">🏆</span> Achievements</a>
     <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
   </nav>
@@ -338,243 +338,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
   <div class="content">
 
-    <!-- AQUARIUM -->
-    <div class="aquarium-wrap" id="aquarium">
-      <div class="aquarium-label">🌊 Your Learning Aquarium</div>
-      <canvas id="fishCanvas"></canvas>
-      <!-- Bubbles injected by JS -->
-      <!-- Seaweed -->
-      <svg style="position:absolute;bottom:0;left:40px;z-index:2" width="20" height="70" viewBox="0 0 20 70">
-        <path class="seaweed" d="M10 70 Q5 55 12 45 Q18 35 8 25 Q2 15 10 5" stroke="#1a7a3a" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay:0s"/>
-      </svg>
-      <svg style="position:absolute;bottom:0;left:90px;z-index:2" width="18" height="55" viewBox="0 0 18 55">
-        <path class="seaweed" d="M9 55 Q14 40 7 32 Q2 22 11 10" stroke="#16653a" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay:.7s"/>
-      </svg>
-      <svg style="position:absolute;bottom:0;right:60px;z-index:2" width="20" height="65" viewBox="0 0 20 65">
-        <path class="seaweed" d="M10 65 Q4 50 13 40 Q19 30 9 18 Q3 10 11 2" stroke="#145e30" stroke-width="3" fill="none" stroke-linecap="round" style="animation-delay:1.2s"/>
-      </svg>
-      <div class="water-shimmer"></div>
+    <h2>👤 User Profile & Certificates</h2>
+    <p style="color:var(--mute); margin-top:4px; margin-bottom:24px;">Manage details, view learning records, and verify credentials.</p>
+
+    <div class="two-col" style="grid-template-columns: 1fr 2fr; gap:20px;">
+        <div class="card" style="text-align:center; padding:32px 20px;">
+            <div class="user-av" style="width:80px; height:80px; font-size:32px; margin:0 auto 16px;">SR</div>
+            <h3>Shrestha</h3>
+            <span class="status s-active" style="display:inline-block; margin-top:8px;">Pro Member</span>
+            <p style="font-size:12px; color:var(--mute); margin-top:12px;">Joined: June 15, 2026</p>
+            <p style="font-size:12px; color:var(--mute)">Verified XP: 2,840</p>
+        </div>
+        <div class="card">
+            <div class="card-title">Verify Certificates</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="display:flex; justify-content:space-between; padding:16px; border:1px solid var(--border); border-radius:10px; align-items:center;">
+                    <div>
+                        <h4 style="font-weight:700;">Python Fundamentals</h4>
+                        <span style="font-size:11px; color:var(--mute);">Issued: Jun 21 · Ref: CH-74829</span>
+                    </div>
+                    <button class="action-btn" onclick="alert('Opening PDF certificate...')">Download PDF</button>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:16px; border:1px solid var(--border); border-radius:10px; align-items:center; opacity:0.5;">
+                    <div>
+                        <h4 style="font-weight:700;">Advanced Python Concepts</h4>
+                        <span style="font-size:11px; color:var(--mute);">Incomplete (Requires OOP & Async milestones)</span>
+                    </div>
+                    <span style="font-size:12px; color:var(--mute);">Locked</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- STATS -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">📖</div>
-        <div class="stat-val" style="color:#818cf8">7</div>
-        <div class="stat-label">Courses In Progress</div>
-        <span class="stat-change blue">▲ 2 this week</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-val" style="color:#10b981">34</div>
-        <div class="stat-label">Lessons Completed</div>
-        <span class="stat-change up">▲ 8 this week</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">⚡</div>
-        <div class="stat-val" style="color:#f5b942">128</div>
-        <div class="stat-label">Challenges Solved</div>
-        <span class="stat-change up">▲ 12 this week</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🏆</div>
-        <div class="stat-val" style="color:#f87171">2,840</div>
-        <div class="stat-label">XP Points</div>
-        <span class="stat-change blue">Rank #47</span>
-      </div>
-    </div>
-
-    <!-- SNAKE + JS ANIMATIONS ROW -->
-    <div class="two-col" style="margin-bottom:28px">
-      <!-- Python Snake -->
-      <div class="snake-card" style="cursor: pointer;" onclick="window.location.href='../python.html'">
-        <div class="card-title"><span>🐍</span> Python — Snake Animation</div>
-        <div class="python-tag">PYTHON</div>
-        <div class="snake-canvas-wrap">
-          <canvas id="snakeCanvas" width="300" height="140"></canvas>
-        </div>
-        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-size:13px;font-weight:600">Python Mastery</div>
-            <div style="font-size:11px;color:var(--mute)">Advanced · Ch 7 of 12</div>
-          </div>
-          <div>
-            <div class="prog-bar" style="width:160px;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden">
-              <div class="prog-fill" style="--w:62%;width:62%;background:linear-gradient(90deg,#3b82f6,#22d3ee);height:100%"></div>
-            </div>
-            <div style="font-size:11px;color:var(--mute);margin-top:4px;text-align:right">62%</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- JavaScript Bubbles -->
-      <div class="js-card" style="cursor: pointer;" onclick="window.location.href='../javascript.html'">
-        <div class="card-title"><span>⚡</span> JavaScript — Event Loop</div>
-        <div class="js-tag">JS</div>
-        <canvas id="jsCanvas" width="300" height="140" style="border-radius:10px;background:rgba(0,0,0,.3);display:block;margin:12px auto 0"></canvas>
-        <div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-size:13px;font-weight:600">JavaScript Pro</div>
-            <div style="font-size:11px;color:var(--mute)">Intermediate · Ch 5 of 10</div>
-          </div>
-          <div>
-            <div class="prog-bar" style="width:160px;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden">
-              <div class="prog-fill" style="--w:45%;width:45%;background:linear-gradient(90deg,#f5b942,#fb923c);height:100%"></div>
-            </div>
-            <div style="font-size:11px;color:var(--mute);margin-top:4px;text-align:right">45%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- COURSES + LEADERBOARD -->
-    <div class="three-col">
-      <div>
-        <!-- Active Courses -->
-        <div class="card" style="margin-bottom:20px;animation-delay:.25s">
-          <div class="card-title"><span>📚</span> Active Courses</div>
-          <div class="course-item" onclick="window.location.href='../python.html'">
-            <div class="course-ico" style="background:linear-gradient(135deg,#3b82f6,#22d3ee)">Py</div>
-            <div class="course-info">
-              <div class="course-name">Python — Advanced</div>
-              <div class="course-meta">Chapter 7 · OOP Deep Dive</div>
-            </div>
-            <div class="course-prog"><div class="course-pct" style="color:#22d3ee">62%</div></div>
-          </div>
-          <div class="course-item" onclick="window.location.href='../javascript.html'">
-            <div class="course-ico" style="background:linear-gradient(135deg,#f5b942,#3b82f6)">Js</div>
-            <div class="course-info">
-              <div class="course-name">JavaScript Pro</div>
-              <div class="course-meta">Chapter 5 · Async / Promises</div>
-            </div>
-            <div class="course-prog"><div class="course-pct" style="color:#f5b942">45%</div></div>
-          </div>
-          <div class="course-item" onclick="window.location.href='../typescript.html'">
-            <div class="course-ico" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)">Ts</div>
-            <div class="course-info">
-              <div class="course-name">TypeScript Fundamentals</div>
-              <div class="course-meta">Chapter 2 · Types & Interfaces</div>
-            </div>
-            <div class="course-prog"><div class="course-pct" style="color:#8b5cf6">28%</div></div>
-          </div>
-          <div class="course-item" onclick="window.location.href='../go.html'">
-            <div class="course-ico" style="background:linear-gradient(135deg,#22d3ee,#10b981)">Go</div>
-            <div class="course-info">
-              <div class="course-name">Go — Concurrency</div>
-              <div class="course-meta">Chapter 1 · Goroutines</div>
-            </div>
-            <div class="course-prog"><div class="course-pct" style="color:#22d3ee">12%</div></div>
-          </div>
-        </div>
-
-        <!-- Daily Challenges -->
-        <div class="card" style="animation-delay:.3s">
-          <div class="card-title"><span>⚡</span> Today's Challenges</div>
-          <div class="challenge-card">
-            <div class="ch-header">
-              <span class="ch-title">Two Sum</span>
-              <span class="ch-diff diff-easy">Easy</span>
-            </div>
-            <div class="ch-desc">Given an array of integers, return indices of two numbers that add to a target.</div>
-            <div class="ch-footer">
-              <span class="ch-tag">Arrays</span>
-              <span class="ch-tag">Hash Map</span>
-              <a href="#" class="go-btn" style="margin-left:auto;padding:5px 12px;font-size:11px">Solve →</a>
-            </div>
-          </div>
-          <div class="challenge-card">
-            <div class="ch-header">
-              <span class="ch-title">LRU Cache</span>
-              <span class="ch-diff diff-hard">Hard</span>
-            </div>
-            <div class="ch-desc">Design a data structure that follows the Least Recently Used cache eviction policy.</div>
-            <div class="ch-footer">
-              <span class="ch-tag">Design</span>
-              <span class="ch-tag">LinkedList</span>
-              <a href="#" class="go-btn" style="margin-left:auto;padding:5px 12px;font-size:11px">Solve →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div style="display:flex;flex-direction:column;gap:20px">
-        <!-- Leaderboard -->
-        <div class="card" style="animation-delay:.28s">
-          <div class="card-title"><span>🏆</span> Weekly Board</div>
-          <div class="lb-row">
-            <div class="lb-rank gold">1</div>
-            <div class="lb-av" style="background:linear-gradient(135deg,#f5b942,#fb923c)">AK</div>
-            <div class="lb-name">Aryan K.</div>
-            <div class="lb-pts">4,210 xp</div>
-          </div>
-          <div class="lb-row">
-            <div class="lb-rank silver">2</div>
-            <div class="lb-av" style="background:linear-gradient(135deg,#94a3b8,#64748b)">PS</div>
-            <div class="lb-name">Priya S.</div>
-            <div class="lb-pts">3,880 xp</div>
-          </div>
-          <div class="lb-row">
-            <div class="lb-rank bronze">3</div>
-            <div class="lb-av" style="background:linear-gradient(135deg,#cd7f32,#b45309)">RJ</div>
-            <div class="lb-name">Rahul J.</div>
-            <div class="lb-pts">3,640 xp</div>
-          </div>
-          <div class="lb-row">
-            <div class="lb-rank" style="color:var(--mute)">4</div>
-            <div class="lb-av" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">MK</div>
-            <div class="lb-name">Maya K.</div>
-            <div class="lb-pts">3,100 xp</div>
-          </div>
-          <div class="lb-row me">
-            <div class="lb-rank" style="color:var(--primary2)">47</div>
-            <div class="lb-av" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">SR</div>
-            <div class="lb-name" style="color:var(--primary2);font-weight:700">You</div>
-            <div class="lb-pts">2,840 xp</div>
-          </div>
-        </div>
-
-        <!-- Achievements -->
-        <div class="card" style="animation-delay:.32s">
-          <div class="card-title"><span>🎖️</span> Achievements</div>
-          <div class="badge-grid">
-            <div class="badge-item earned">
-              <div class="badge-icon">🔥</div>
-              <div class="badge-name">7-Day Streak</div>
-            </div>
-            <div class="badge-item earned">
-              <div class="badge-icon">🐍</div>
-              <div class="badge-name">Python Adept</div>
-            </div>
-            <div class="badge-item earned">
-              <div class="badge-icon">⚡</div>
-              <div class="badge-name">100 Solved</div>
-            </div>
-            <div class="badge-item locked">
-              <div class="badge-icon">🦀</div>
-              <div class="badge-name">Rust Rookie</div>
-            </div>
-            <div class="badge-item locked">
-              <div class="badge-icon">🏅</div>
-              <div class="badge-name">Top 10</div>
-            </div>
-            <div class="badge-item locked">
-              <div class="badge-icon">🎓</div>
-              <div class="badge-name">Certified</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Activity -->
-        <div class="card" style="animation-delay:.34s">
-          <div class="card-title"><span>📅</span> Activity (13 wks)</div>
-          <div class="heat-grid" id="heatmap"></div>
-          <div style="font-size:11px;color:var(--mute);margin-top:8px;text-align:right">Less ◀ ▶ More</div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
+</div><!-- /content -->
 </main>
 
 <script>

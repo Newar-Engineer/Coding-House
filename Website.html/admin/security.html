@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Coding House</title>
+<title>Security Center — Admin Coding House</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -245,7 +245,7 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Overview</div>
-    <a class="nav-item active" href="admindashboard.html"><span class="ni">⚡</span> Dashboard</a>
+    <a class="nav-item" href="admindashboard.html"><span class="ni">⚡</span> Dashboard</a>
     <a class="nav-item" href="analytics.html"><span class="ni">📊</span> Analytics</a>
     <a class="nav-item" href="revenue.html"><span class="ni">📈</span> Revenue</a>
 
@@ -258,7 +258,7 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 
     <div class="nav-section" style="margin-top:12px">System</div>
     <a class="nav-item" href="permissions.html"><span class="ni">🔒</span> Permissions</a>
-    <a class="nav-item" href="security.html"><span class="ni">🛡️</span> Security</a>
+    <a class="nav-item active" href="security.html"><span class="ni">🛡️</span> Security</a>
     <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
     <a class="nav-item" href="audit-log.html"><span class="ni">📜</span> Audit Log</a>
   </nav>
@@ -290,276 +290,14 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 
   <div class="content">
 
-    <!-- OCEAN / MEGALODON -->
-    <div class="ocean-wrap">
-      <div class="ocean-label">🦈 Admin Waters — Megalodon Territory</div>
-      <div class="ocean-subtitle">Server depth: 4,200m · All domains online</div>
-      <canvas id="megaCanvas"></canvas>
-      <div class="deep-glow"></div>
+    <h2>🛡️ Security & System Audits</h2>
+    <p style="color:var(--mute); margin-top:4px; margin-bottom:24px;">Configure CORS settings, check IP blocks, review brute-force shields, and log actions.</p>
+    <div class="card">
+        <p style="color:var(--green); font-weight:700;">🟢 All security modules are running normally.</p>
+        <p style="font-size:12px; color:var(--mute); margin-top:8px;">Brute-force shield: Active · IP blocks: 4 active · SSL validation: Verified</p>
     </div>
 
-    <!-- STATS ROW -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-val" style="color:#c084fc">24,831</div>
-        <div class="stat-label">Total Users</div>
-        <span class="stat-trend up">▲ +312 today</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🟢</div>
-        <div class="stat-val" style="color:#10b981">1,247</div>
-        <div class="stat-label">Online Now</div>
-        <span class="stat-trend up">▲ peak hour</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📚</div>
-        <div class="stat-val" style="color:#6366f1">8,940</div>
-        <div class="stat-label">Active Enrollments</div>
-        <span class="stat-trend nu">↔ stable</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">💰</div>
-        <div class="stat-val" style="color:#f5b942">$4,210</div>
-        <div class="stat-label">Revenue Today</div>
-        <span class="stat-trend up">▲ +18% vs avg</span>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🚨</div>
-        <div class="stat-val" style="color:#f43f5e">3</div>
-        <div class="stat-label">Pending Flags</div>
-        <span class="stat-trend dn">Needs review</span>
-      </div>
-    </div>
-
-    <!-- USERS TABLE + LOG -->
-    <div class="row r-2-1">
-      <div class="card" style="animation-delay:.15s">
-        <div class="card-title">
-          <div class="card-title-left"><span>👥</span> Recent Users</div>
-          <button class="btn-sm2">View all →</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Email</th>
-              <th>Plan</th>
-              <th>Status</th>
-              <th>Joined</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">SR</div> Shrestha R.</div></td>
-              <td style="color:var(--mute);font-size:12px">shrestha@email.com</td>
-              <td><span class="status s-active">Pro</span></td>
-              <td><span class="status s-active">Active</span></td>
-              <td style="color:var(--mute);font-size:11px;font-family:'JetBrains Mono',monospace">Jun 23</td>
-              <td><button class="action-btn">View</button></td>
-            </tr>
-            <tr>
-              <td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#f5b942,#f97316)">AK</div> Aryan K.</div></td>
-              <td style="color:var(--mute);font-size:12px">aryan@email.com</td>
-              <td><span class="status s-new">Free</span></td>
-              <td><span class="status s-new">New</span></td>
-              <td style="color:var(--mute);font-size:11px;font-family:'JetBrains Mono',monospace">Jun 23</td>
-              <td><button class="action-btn">View</button></td>
-            </tr>
-            <tr>
-              <td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#10b981,#22d3ee)">PS</div> Priya S.</div></td>
-              <td style="color:var(--mute);font-size:12px">priya@email.com</td>
-              <td><span class="status s-active">Lifetime</span></td>
-              <td><span class="status s-active">Active</span></td>
-              <td style="color:var(--mute);font-size:11px;font-family:'JetBrains Mono',monospace">Jun 21</td>
-              <td><button class="action-btn">View</button></td>
-            </tr>
-            <tr>
-              <td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#f43f5e,#f97316)">MJ</div> Mike J.</div></td>
-              <td style="color:var(--mute);font-size:12px">mike@email.com</td>
-              <td><span class="status s-new">Free</span></td>
-              <td><span class="status s-idle">Idle</span></td>
-              <td style="color:var(--mute);font-size:11px;font-family:'JetBrains Mono',monospace">Jun 19</td>
-              <td><button class="action-btn danger">Ban</button></td>
-            </tr>
-            <tr>
-              <td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#8b5cf6,#6366f1)">LM</div> Lina M.</div></td>
-              <td style="color:var(--mute);font-size:12px">lina@email.com</td>
-              <td><span class="status s-active">Pro</span></td>
-              <td><span class="status s-active">Active</span></td>
-              <td style="color:var(--mute);font-size:11px;font-family:'JetBrains Mono',monospace">Jun 18</td>
-              <td><button class="action-btn">View</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- AUDIT LOG -->
-      <div class="card" style="animation-delay:.2s">
-        <div class="card-title">
-          <div class="card-title-left"><span>📜</span> Audit Log</div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#10b981"></div>
-          <div>
-            <div class="log-text"><strong>New user registered</strong> aryan@email.com joined via invite</div>
-            <div class="log-time">2 min ago</div>
-          </div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#f5b942"></div>
-          <div>
-            <div class="log-text"><strong>Course published</strong> "Rust Systems Programming" went live</div>
-            <div class="log-time">18 min ago</div>
-          </div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#f43f5e"></div>
-          <div>
-            <div class="log-text"><strong>Flag raised</strong> Suspicious activity on user ID #4421</div>
-            <div class="log-time">42 min ago</div>
-          </div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#6366f1"></div>
-          <div>
-            <div class="log-text"><strong>Revenue milestone</strong> $4,000 daily revenue hit for first time</div>
-            <div class="log-time">1 hr ago</div>
-          </div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#a855f7"></div>
-          <div>
-            <div class="log-text"><strong>Permission updated</strong> Role changed for user Lina M.</div>
-            <div class="log-time">3 hr ago</div>
-          </div>
-        </div>
-        <div class="log-item">
-          <div class="log-dot" style="background:#10b981"></div>
-          <div>
-            <div class="log-text"><strong>Backup completed</strong> Full DB snapshot saved successfully</div>
-            <div class="log-time">6 hr ago</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CHARTS + MODERATION -->
-    <div class="row r-1-1">
-      <!-- Sign-up chart -->
-      <div class="card" style="animation-delay:.25s">
-        <div class="card-title">
-          <div class="card-title-left"><span>📈</span> Sign-ups (last 7 days)</div>
-        </div>
-        <div class="bar-chart" id="barChart"></div>
-        <div style="display:flex;justify-content:space-between;margin-top:8px">
-          <span style="font-size:11px;color:var(--mute)">Total this week</span>
-          <span style="font-size:13px;font-weight:700;color:var(--primary2)">1,847 new users</span>
-        </div>
-      </div>
-
-      <!-- Content moderation -->
-      <div class="card" style="animation-delay:.28s">
-        <div class="card-title">
-          <div class="card-title-left"><span>🚨</span> Moderation Queue</div>
-          <span style="font-size:11px;font-weight:700;color:var(--red);background:rgba(244,63,94,.1);padding:3px 8px;border-radius:10px">3 pending</span>
-        </div>
-        <div class="mod-item">
-          <span class="mod-type" style="background:rgba(244,63,94,.15);color:var(--red)">SPAM</span>
-          <div class="mod-body">
-            <strong>Forum post by user #4421</strong>
-            Repeated off-topic promotional links in Python thread
-          </div>
-          <button class="approve-btn">Approve</button>
-          <button class="reject-btn">Remove</button>
-        </div>
-        <div class="mod-item">
-          <span class="mod-type" style="background:rgba(245,185,66,.15);color:var(--yellow)">REVIEW</span>
-          <div class="mod-body">
-            <strong>Challenge solution by Aryan K.</strong>
-            Possible plagiarism detected — 94% similarity
-          </div>
-          <button class="approve-btn">Pass</button>
-          <button class="reject-btn">Reject</button>
-        </div>
-        <div class="mod-item">
-          <span class="mod-type" style="background:rgba(99,102,241,.15);color:#818cf8">BUG</span>
-          <div class="mod-body">
-            <strong>Course content error reported</strong>
-            JavaScript Ch.4 — broken code snippet in exercise 3
-          </div>
-          <button class="approve-btn">Fix</button>
-          <button class="reject-btn">Dismiss</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- COURSE STATS -->
-    <div class="row r-3">
-      <div class="card" style="animation-delay:.3s">
-        <div class="card-title"><div class="card-title-left"><span>🔥</span> Top Courses</div></div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">Python</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:82%;background:linear-gradient(90deg,#3b82f6,#22d3ee)"></div></div>
-          <span class="mini-pct">82%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">JavaScript</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:71%;background:linear-gradient(90deg,#f5b942,#fb923c)"></div></div>
-          <span class="mini-pct">71%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">Java</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:58%;background:linear-gradient(90deg,#8b5cf6,#6366f1)"></div></div>
-          <span class="mini-pct">58%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">C++</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:44%;background:linear-gradient(90deg,#6366f1,#22d3ee)"></div></div>
-          <span class="mini-pct">44%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">Go</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:37%;background:linear-gradient(90deg,#22d3ee,#10b981)"></div></div>
-          <span class="mini-pct">37%</span>
-        </div>
-      </div>
-      <div class="card" style="animation-delay:.32s">
-        <div class="card-title"><div class="card-title-left"><span>💰</span> Revenue Split</div></div>
-        <canvas id="revenueCanvas" width="240" height="140" style="display:block;margin:0 auto"></canvas>
-      </div>
-      <div class="card" style="animation-delay:.34s">
-        <div class="card-title"><div class="card-title-left"><span>🌍</span> Top Regions</div></div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">🇳🇵 Nepal</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:34%;background:linear-gradient(90deg,#a855f7,#6366f1)"></div></div>
-          <span class="mini-pct">34%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">🇮🇳 India</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:28%;background:linear-gradient(90deg,#f97316,#f5b942)"></div></div>
-          <span class="mini-pct">28%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">🇺🇸 USA</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:18%;background:linear-gradient(90deg,#6366f1,#22d3ee)"></div></div>
-          <span class="mini-pct">18%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">🇧🇩 Bangladesh</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:12%;background:linear-gradient(90deg,#10b981,#22d3ee)"></div></div>
-          <span class="mini-pct">12%</span>
-        </div>
-        <div class="mini-prog">
-          <span style="font-size:12px;width:90px">🌐 Others</span>
-          <div class="mini-bar"><div class="mini-fill" style="width:8%;background:rgba(255,255,255,.2)"></div></div>
-          <span class="mini-pct">8%</span>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
+</div><!-- /content -->
 </main>
 
 <script>

@@ -3,10 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python — Coding House</title>
+<title>Python Portal — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<style>
+  body {
+    animation: pageIn 0.5s ease;
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .snake-hero-wrap {
+    position: relative;
+    height: 280px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #050d03 0%, #0d1f0c 50%, #081407 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    margin-bottom: 36px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(16, 185, 129, 0.1);
+  }
+  
+  .snake-hero-label {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .snake-hero-label h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+  .snake-hero-label p {
+    font-size: 14px;
+    color: var(--green);
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .level-controller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+  }
+  .level-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+  }
+  .level-selector {
+    display: flex;
+    gap: 8px;
+  }
+  .level-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-mute);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+  .level-btn.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #10b981;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+  }
+  .topic-card:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .topic-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .topic-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    flex: 1;
+    margin-left: 12px;
+  }
+  
+  .code-container {
+    background: #04060b;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  
+  .code-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .code-usecase {
+    font-size: 12px;
+    color: var(--green);
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid var(--green);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+</style>
 </head>
 <body>
 
@@ -21,7 +161,8 @@
       <li><a href="index.html#pricing">Pricing</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="index.html#pricing" class="btn btn-primary btn-sm">Start Learning</a>
+      <a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
       <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
@@ -31,189 +172,27 @@
   <div class="wrap" style="padding-top:36px;">
     <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Python</div>
 
-    <div class="portal-hero">
-      <div class="portal-badge" style="background:linear-gradient(135deg, #3b82f6, #22d3ee)">Py</div>
-      <div class="portal-title">
-        <h1>Python</h1>
-        <p>Beginner friendly — Beginner to Professional</p>
+    <!-- REALISTIC SNAKE CANVAS HERO -->
+    <div class="snake-hero-wrap">
+      <div class="snake-hero-label">
+        <p>🐍 Animated Python Portal</p>
+        <h1>Python Masterclass</h1>
       </div>
-      <div class="portal-progress">
-        <div class="pp-label"><span>Your progress</span><span>0%</span></div>
-        <div class="pp-bar"><span style="width:0%"></span></div>
+      <canvas id="pythonSnakeCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
+    </div>
+
+    <!-- LEVEL CONTROLLER -->
+    <div class="level-controller">
+      <div class="level-title">Select Learning Tier:</div>
+      <div class="level-selector">
+        <button class="level-btn active" data-level="beg">🟢 Beginner</button>
+        <button class="level-btn" data-level="int">🟡 Intermediate</button>
+        <button class="level-btn" data-level="pro">🔴 Professional</button>
       </div>
     </div>
 
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="beginner">Beginner</button>
-      <button class="tab-btn" data-tab="intermediate">Intermediate</button>
-      <button class="tab-btn" data-tab="advanced">Advanced</button>
-      <button class="tab-btn" data-tab="projects">Professional Projects</button>
-      <button class="tab-btn" data-tab="interview">Interview Questions</button>
-      <button class="tab-btn" data-tab="cert">Certification Test</button>
-    </div>
-
-    <div class="tab-panel active" id="panel-beginner">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>What is Python</h4><span>Overview</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Installation & Setup</h4><span>Environment</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Variables & Data Types</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Operators</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>Conditions</h4><span>Control flow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Loops</h4><span>Control flow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">07</span>
-        <div class="lesson-info"><h4>Functions</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">08</span>
-        <div class="lesson-info"><h4>Collections & Data Structures</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-intermediate">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Object-Oriented Programming</h4><span>Core concept</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>File Handling</h4><span>I/O</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Modules & Packages</h4><span>Organization</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Working with APIs</h4><span>Integration</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>JSON & Data Formats</h4><span>Integration</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Error Handling</h4><span>Reliability</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">07</span>
-        <div class="lesson-info"><h4>Environment & Tooling</h4><span>Workflow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-advanced">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Concurrency & Multithreading</h4><span>Performance</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Async Programming</h4><span>Performance</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Design Patterns</h4><span>Architecture</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Performance Optimization</h4><span>Performance</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>Testing & Debugging</h4><span>Quality</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Build & Deployment</h4><span>Shipping</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-projects">
-      <div class="proj-mini-grid">
-      <div class="proj-mini"><h4>AI Chatbot</h4><p>A conversational assistant with memory and a custom persona.</p></div>
-      <div class="proj-mini"><h4>Face Recognition</h4><p>Real-time detection and identity matching.</p></div>
-      <div class="proj-mini"><h4>E-commerce Backend</h4><p>Auth, products, carts, and checkout.</p></div>
-      <div class="proj-mini"><h4>Discord Bot</h4><p>Slash commands, moderation, scheduled tasks.</p></div>
-      <div class="proj-mini"><h4>Stock Market Analyzer</h4><p>Pulls live data and visualizes trends.</p></div>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-interview">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Core Language Questions</h4><span>Frequently asked</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Common Pitfalls & Gotchas</h4><span>Frequently asked</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Coding Round Practice</h4><span>Practice</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Behavioral Questions</h4><span>Soft skills</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-cert">
-      <div class="cert-card">
-        <h3>Python Certification Test</h3>
-        <p>Unlocks once Beginner, Intermediate, and Advanced are complete.</p>
-        <div class="cert-meta">
-          <div><strong>60</strong>minutes</div>
-          <div><strong>40</strong>questions</div>
-          <div><strong>70%</strong>pass mark</div>
-        </div>
-        <a href="#" class="btn btn-ghost" style="opacity:.5; pointer-events:none;">Complete all stages to unlock</a>
-      </div>
-    </div>
+    <!-- TOPIC LIST -->
+    <div id="topics-root"></div>
 
   </div>
 </section>
@@ -230,25 +209,331 @@
 </footer>
 
 <script>
-document.querySelectorAll(".tab-btn").forEach(btn => {
+// --- PYTHON DATA ---
+const topicsData = [
+  {
+    num: "01",
+    title: "Variables & Basic Logic",
+    beg: {
+      desc: "Beginners start with simple assignments. Variables store text or numbers directly in memory without complicated structure.",
+      code: `# Creating basic variables\\nusername = "Alice"\\nuser_age = 25\\n\\n# Dynamic conversion\\nprint(f"User {username} is {user_age} years old.")`,
+      usecase: "Real-world use: Stacking basic scalar properties like configuration flags or name inputs."
+    },
+    int: {
+      desc: "Intermediate programmers use Python's type hinting syntax for strict validation and checking tools.",
+      code: `from typing import Union\\n\\n# Strict typing for variable and parameters\\ndef check_status(score: int) -> Union[str, bool]:\\n    if score > 80:\\n        return "Pass"\\n    return False`,
+      usecase: "Real-world use: Documenting public libraries where function signatures must clearly indicate parameter specifications."
+    },
+    pro: {
+      desc: "Professionals use frozen dataclasses or structured protocols for secure data structures that cannot be modified.",
+      code: `from dataclasses import dataclass, field\\n\\n@dataclass(frozen=True)\\nclass Configuration:\\n    host: str = "127.0.0.1"\\n    port: int = 5432\\n    db_name: str = field(default="production_db")\\n\\n# Immutable properties prevents corruption\\nconfig = Configuration()\\ntry:\\n    config.port = 8080\\nexcept Exception as e:\\n    print("System safe:", e)`,
+      usecase: "Real-world use: Safely reading credentials or socket paths in thread-safe cloud architectures."
+    }
+  },
+  {
+    num: "02",
+    title: "Loops & Iterations",
+    beg: {
+      desc: "Loops allow code to repeat. Use basic range loops to run code a specific number of times.",
+      code: `# Standard loop to count to 5\\nfor i in range(1, 6):\\n    print(f"Step {i}")`,
+      usecase: "Real-world use: Simple iterations like sending 5 retry requests."
+    },
+    int: {
+      desc: "Intermediate code uses list comprehensions and clean utilities like enumerate to loop with index tracking.",
+      code: `items = ["Apples", "Oranges", "Bananas"]\\n\\n# Enumerate gets index and item in one step\\nindexed_items = [f"Item {idx}: {name}" for idx, name in enumerate(items)]\\nprint(indexed_items)`,
+      usecase: "Real-world use: Transforming database columns into readable rows."
+    },
+    pro: {
+      desc: "Professional loops use custom generators and memory-efficient iterators to stream millions of rows without RAM exhaustion.",
+      code: `def stream_large_log_file(filepath: str):\\n    # Generator yielding line by line (RAM efficient)\\n    with open(filepath, 'r') as file:\\n        for line in file:\\n            if "ERROR" in line:\\n                yield line.strip()\\n\\n# Stream rows sequentially\\nfor error in stream_large_log_file("server_log.txt"):\\n    print(f"Alert raised: {error}")`,
+      usecase: "Real-world use: Real-time parsing of multi-gigabyte server logs."
+    }
+  },
+  {
+    num: "03",
+    title: "Conditionals & Logic Selection",
+    beg: {
+      desc: "Conditionals allow branching execution. Use standard if/elif/else blocks to pick code paths.",
+      code: `status = "offline"\\nif status == "online":\\n    print("Connecting...")\\nelif status == "maintenance":\\n    print("Down for service.")\\nelse:\\n    print("System offline.")`,
+      usecase: "Real-world use: Flow control based on API response strings."
+    },
+    int: {
+      desc: "Intermediate selection uses dictionaries to map actions (avoiding long if/else ladders).",
+      code: `def fetch_user(): return "Fetching user details..."\\ndef fetch_billing(): return "Fetching invoices..."\\n\\n# Dictionary mapping selection\\naction_map = {\\n    "user": fetch_user,\\n    "billing": fetch_billing\\n}\\n\\n# Default routing fallback\\nresult = action_map.get("user", lambda: "Unknown section")()\\nprint(result)`,
+      usecase: "Real-world use: Routing web requests or keyboard short-cuts efficiently."
+    },
+    pro: {
+      desc: "Professional code uses structural pattern matching (introduced in Python 3.10) for parsing complex data schemas.",
+      code: `def process_action(payload: dict):\\n    match payload:\\n        case {"action": "delete", "id": int(target_id)}:\\n            print(f"Purging record ID: {target_id}")\\n        case {"action": "update", "id": int(target_id), "data": str(info)}:\\n            print(f"Updating ID {target_id} with data {info}")\\n        case _:\\n            print("Invalid payload format")\\n\\nprocess_action({"action": "delete", "id": 105})`,
+      usecase: "Real-world use: Handling web socket event payloads in chat or transaction services."
+    }
+  }
+];
+
+// --- INTERACTIVE TIER RENDERING ---
+let currentLevel = 'beg'; // beg, int, pro
+
+function renderTopics() {
+  const root = document.getElementById("topics-root");
+  root.innerHTML = topicsData.map(t => {
+    const tierData = t[currentLevel];
+    return `
+      <div class="topic-card">
+        <div class="topic-header">
+          <span class="topic-num">${t.num}</span>
+          <h3 class="topic-title">${t.title}</h3>
+          <span style="font-size:12px; color:var(--mute); text-transform:uppercase; font-weight:700;">Python Tier</span>
+        </div>
+        <p class="code-desc">${tierData.desc}</p>
+        <div class="code-container">
+          <pre style="margin:0;"><code style="color:#22d3ee;">${escapeHtml(tierData.code)}</code></pre>
+        </div>
+        <div class="code-usecase">${tierData.usecase}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/\\\\n/g, "\\n")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+document.querySelectorAll(".level-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    currentLevel = btn.dataset.level;
+    renderTopics();
   });
 });
-const burger = document.querySelector(".burger");
-const navLinks = document.querySelector(".nav-links");
-burger.addEventListener("click", () => {
-  const open = navLinks.style.display === "flex";
-  navLinks.style.display = open ? "none" : "flex";
-  navLinks.style.flexDirection = "column";
-  navLinks.style.position = "absolute";
-  navLinks.style.top = "64px"; navLinks.style.left = "0"; navLinks.style.right = "0";
-  navLinks.style.background = "rgba(6,9,20,.98)"; navLinks.style.padding = "20px 32px";
-  navLinks.style.borderBottom = "1px solid var(--border)"; navLinks.style.gap = "18px";
-});
+
+// Initial Render
+renderTopics();
+
+
+// ═══════════════════════ REALISTIC SNAKE CANVAS ANIMATION ═══════════════════════
+(function() {
+  const canvas = document.getElementById('pythonSnakeCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  function resize() {
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Snake physics structure
+  const segmentCount = 42;
+  const segments = [];
+  
+  // Set initial segments on canvas center
+  for(let i = 0; i < segmentCount; i++) {
+    segments.push({ x: canvas.width / 2, y: canvas.height / 2 });
+  }
+  
+  let targetAngle = 0;
+  let targetX = canvas.width / 2;
+  let targetY = canvas.height / 2;
+  
+  let time = 0;
+  
+  // Floating forest particles
+  const particles = Array.from({ length: 15 }, () => ({
+    x: Math.random() * 2000,
+    y: Math.random() * 300,
+    vx: -(0.2 + Math.random() * 0.3),
+    size: 1 + Math.random() * 3,
+    op: 0.1 + Math.random() * 0.4
+  }));
+
+  function drawScale(x, y, r, i) {
+    // Alternate body colors for python camouflage
+    // Earthy green-yellow tones: Olive, Tan, Gold
+    let baseColor = '#1d3516'; // Olive
+    let patternColor = '#d9a73d'; // Gold/Tan
+    
+    if (i % 2 === 0) {
+      ctx.fillStyle = baseColor;
+    } else {
+      ctx.fillStyle = patternColor;
+    }
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Draw central diamond scale markings (camouflage blotches)
+    if (i > 1 && i < segmentCount - 2) {
+      ctx.fillStyle = '#0b160a'; // Dark blotch center
+      ctx.beginPath();
+      ctx.ellipse(x, y, r * 0.6, r * 0.4, Math.sin(i * 0.3), 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.strokeStyle = '#ebd18a'; // Light golden scale border
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function renderFrame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    time += 0.016;
+
+    // Draw jungle atmosphere particles
+    particles.forEach(p => {
+      p.x += p.vx;
+      if (p.x < -10) p.x = canvas.width + 10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = \`rgba(16, 185, 129, \${p.op})\`;
+      ctx.fill();
+    });
+
+    // Sinusoidal autonomous path movement
+    // Auto-orbiting patterns mimicking organic hunting path
+    const amplitude = 65;
+    const frequency = 0.55;
+    
+    // Path coordinates
+    targetX = canvas.width / 2 + Math.cos(time * 0.6) * (canvas.width * 0.35);
+    targetY = canvas.height / 2 + Math.sin(time * 1.3) * (canvas.height * 0.22);
+    
+    // Smooth transition of head coordinates
+    const head = segments[0];
+    const dx = targetX - head.x;
+    const dy = targetY - head.y;
+    const distanceToTarget = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distanceToTarget > 5) {
+      head.x += (dx / distanceToTarget) * 2.8;
+      head.y += (dy / distanceToTarget) * 2.8;
+    }
+    
+    // Propagate position down the segments chain with slithering motion
+    for(let i = 1; i < segmentCount; i++) {
+      const prev = segments[i - 1];
+      const curr = segments[i];
+      
+      const sDx = prev.x - curr.x;
+      const sDy = prev.y - curr.y;
+      const dist = Math.sqrt(sDx * sDx + sDy * sDy) || 1;
+      
+      // Fixed segment-to-segment spacer
+      const spacer = 7.5;
+      
+      if (dist > spacer) {
+        // Add a secondary slither lateral wiggle (snake sine wave propagation)
+        const wiggle = Math.sin(time * 6 - i * 0.3) * 0.8;
+        curr.x += (sDx / dist) * (dist - spacer) + Math.cos(time + i) * wiggle;
+        curr.y += (sDy / dist) * (dist - spacer) + Math.sin(time + i) * wiggle;
+      }
+    }
+
+    // Set shadow effects for realistic 3D volume
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+    ctx.shadowBlur = 12;
+    ctx.shadowOffsetY = 8;
+    ctx.shadowOffsetX = 3;
+
+    // Draw snake body: Tail to Head (so overlap stacks correctly)
+    for(let i = segmentCount - 1; i >= 0; i--) {
+      // Calculate tapered radius from tail to head
+      // Thick in the middle, thin on tail end
+      let r = 16.5;
+      if (i < 8) {
+        // Taper to head
+        r = 11 + i * 0.7;
+      } else if (i > 25) {
+        // Taper to tail
+        const progress = (i - 25) / (segmentCount - 25);
+        r = 16.5 - progress * 13;
+      }
+      
+      r = Math.max(r, 2.5); // minimum width limit
+      drawScale(segments[i].x, segments[i].y, r, i);
+    }
+    
+    ctx.restore(); // remove shadow mapping for delicate head details
+
+    // Draw specialized Python head details
+    const headSegment = segments[0];
+    const neckSegment = segments[1];
+    const angle = Math.atan2(headSegment.y - neckSegment.y, headSegment.x - neckSegment.x);
+
+    ctx.save();
+    ctx.translate(headSegment.x, headSegment.y);
+    ctx.rotate(angle);
+
+    // Draw flickering tongue (flickers in and out based on sine wave logic)
+    const tonguePhase = Math.sin(time * 12);
+    if (tonguePhase > 0.4) {
+      ctx.strokeStyle = '#ef4444'; // Snake red tongue
+      ctx.lineWidth = 1.8;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(10, 0);
+      ctx.lineTo(24, 0);
+      // Fork
+      ctx.moveTo(24, 0);
+      ctx.lineTo(28, -4);
+      ctx.moveTo(24, 0);
+      ctx.lineTo(28, 4);
+      ctx.stroke();
+    }
+
+    // Oval head body
+    ctx.fillStyle = '#1d3516'; // Olive Green Head
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 14, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ebd18a';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Golden-tan head markings
+    ctx.fillStyle = '#d9a73d';
+    ctx.beginPath();
+    ctx.ellipse(-3, 0, 8, 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Realistic narrow eyes with pupils
+    const eyeOffsets = [-4.5, 4.5];
+    eyeOffsets.forEach(ey => {
+      // White reflection eye structure
+      ctx.fillStyle = '#ffde38'; // Golden yellow eyes
+      ctx.beginPath();
+      ctx.arc(3, ey, 2.8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Slit pupil
+      ctx.fillStyle = '#06060b';
+      ctx.beginPath();
+      ctx.ellipse(3, ey, 0.8, 2.4, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye glare reflection highlight
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(2, ey - 0.8, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.restore();
+
+    requestAnimationFrame(renderFrame);
+  }
+  
+  // Start animation loop
+  renderFrame();
+})();
 </script>
 </body>
 </html>

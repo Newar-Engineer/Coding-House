@@ -3,10 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Java — Coding House</title>
+<title>Java Portal — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<style>
+  body {
+    animation: pageIn 0.5s ease;
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .java-hero-wrap {
+    position: relative;
+    height: 280px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #180905 0%, #30140b 50%, #1c0a05 100%);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    margin-bottom: 36px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(239, 68, 68, 0.1);
+  }
+  
+  .java-hero-label {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .java-hero-label h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  }
+  .java-hero-label p {
+    font-size: 14px;
+    color: #f87171;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .level-controller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+  }
+  .level-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+  }
+  .level-selector {
+    display: flex;
+    gap: 8px;
+  }
+  .level-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-mute);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+  }
+  .level-btn.active {
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    border-color: #f87171;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+  }
+  .topic-card:hover {
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .topic-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: #f87171;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .topic-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    flex: 1;
+    margin-left: 12px;
+  }
+  
+  .code-container {
+    background: #04060b;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  
+  .code-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .code-usecase {
+    font-size: 12px;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.08);
+    border-left: 3px solid #f87171;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+</style>
 </head>
 <body>
 
@@ -21,7 +161,8 @@
       <li><a href="index.html#pricing">Pricing</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="index.html#pricing" class="btn btn-primary btn-sm">Start Learning</a>
+      <a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
+      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
       <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
@@ -31,189 +172,27 @@
   <div class="wrap" style="padding-top:36px;">
     <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Java</div>
 
-    <div class="portal-hero">
-      <div class="portal-badge" style="background:linear-gradient(135deg, #8b5cf6, #3b82f6)">Jv</div>
-      <div class="portal-title">
-        <h1>Java</h1>
-        <p>Enterprise & Android — Beginner to Professional</p>
+    <!-- JAVA COFFEE STEAM HERO AREA -->
+    <div class="java-hero-wrap">
+      <div class="java-hero-label">
+        <p>☕ Steaming Java Portal</p>
+        <h1>Java Platform</h1>
       </div>
-      <div class="portal-progress">
-        <div class="pp-label"><span>Your progress</span><span>0%</span></div>
-        <div class="pp-bar"><span style="width:0%"></span></div>
+      <canvas id="javaCoffeeCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
+    </div>
+
+    <!-- LEVEL CONTROLLER -->
+    <div class="level-controller">
+      <div class="level-title">Select Learning Tier:</div>
+      <div class="level-selector">
+        <button class="level-btn active" data-level="beg">🟢 Beginner</button>
+        <button class="level-btn" data-level="int">🟡 Intermediate</button>
+        <button class="level-btn" data-level="pro">🔴 Professional</button>
       </div>
     </div>
 
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="beginner">Beginner</button>
-      <button class="tab-btn" data-tab="intermediate">Intermediate</button>
-      <button class="tab-btn" data-tab="advanced">Advanced</button>
-      <button class="tab-btn" data-tab="projects">Professional Projects</button>
-      <button class="tab-btn" data-tab="interview">Interview Questions</button>
-      <button class="tab-btn" data-tab="cert">Certification Test</button>
-    </div>
-
-    <div class="tab-panel active" id="panel-beginner">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>What is Java</h4><span>Overview</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Installation & Setup</h4><span>Environment</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Variables & Data Types</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Operators</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>Conditions</h4><span>Control flow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Loops</h4><span>Control flow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">07</span>
-        <div class="lesson-info"><h4>Functions</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">08</span>
-        <div class="lesson-info"><h4>Collections & Data Structures</h4><span>Fundamentals</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-intermediate">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Object-Oriented Programming</h4><span>Core concept</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>File Handling</h4><span>I/O</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Modules & Packages</h4><span>Organization</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Working with APIs</h4><span>Integration</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>JSON & Data Formats</h4><span>Integration</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Error Handling</h4><span>Reliability</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">07</span>
-        <div class="lesson-info"><h4>Environment & Tooling</h4><span>Workflow</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-advanced">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Concurrency & Multithreading</h4><span>Performance</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Async Programming</h4><span>Performance</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Design Patterns</h4><span>Architecture</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Performance Optimization</h4><span>Performance</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">05</span>
-        <div class="lesson-info"><h4>Testing & Debugging</h4><span>Quality</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">06</span>
-        <div class="lesson-info"><h4>Build & Deployment</h4><span>Shipping</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-projects">
-      <div class="proj-mini-grid">
-      <div class="proj-mini"><h4>AI Chatbot</h4><p>A conversational assistant with memory and a custom persona.</p></div>
-      <div class="proj-mini"><h4>Face Recognition</h4><p>Real-time detection and identity matching.</p></div>
-      <div class="proj-mini"><h4>E-commerce Backend</h4><p>Auth, products, carts, and checkout.</p></div>
-      <div class="proj-mini"><h4>Discord Bot</h4><p>Slash commands, moderation, scheduled tasks.</p></div>
-      <div class="proj-mini"><h4>Stock Market Analyzer</h4><p>Pulls live data and visualizes trends.</p></div>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-interview">
-      <div class="lesson-list">
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">01</span>
-        <div class="lesson-info"><h4>Core Language Questions</h4><span>Frequently asked</span></div>
-        <span class="lesson-status start">Start</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">02</span>
-        <div class="lesson-info"><h4>Common Pitfalls & Gotchas</h4><span>Frequently asked</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">03</span>
-        <div class="lesson-info"><h4>Coding Round Practice</h4><span>Practice</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      <a href="#" class="lesson-card">
-        <span class="lesson-num">04</span>
-        <div class="lesson-info"><h4>Behavioral Questions</h4><span>Soft skills</span></div>
-        <span class="lesson-status ">Locked</span>
-      </a>
-      </div>
-    </div>
-    <div class="tab-panel" id="panel-cert">
-      <div class="cert-card">
-        <h3>Java Certification Test</h3>
-        <p>Unlocks once Beginner, Intermediate, and Advanced are complete.</p>
-        <div class="cert-meta">
-          <div><strong>60</strong>minutes</div>
-          <div><strong>40</strong>questions</div>
-          <div><strong>70%</strong>pass mark</div>
-        </div>
-        <a href="#" class="btn btn-ghost" style="opacity:.5; pointer-events:none;">Complete all stages to unlock</a>
-      </div>
-    </div>
+    <!-- TOPIC LIST -->
+    <div id="topics-root"></div>
 
   </div>
 </section>
@@ -230,25 +209,224 @@
 </footer>
 
 <script>
-document.querySelectorAll(".tab-btn").forEach(btn => {
+// --- JAVA TOPICS DATA ---
+const topicsData = [
+  {
+    num: "01",
+    title: "Class Structure & Hello World",
+    beg: {
+      desc: "Java requires code to reside inside classes. The standard main method acts as the entry point of execution.",
+      code: `public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello from Coding House!");\n    }\n}`,
+      usecase: "Real-world use: The foundational starting class of all applications."
+    },
+    int: {
+      desc: "Intermediate structure separates classes, custom methods, and introduces variables visibility (encapsulation).",
+      code: `public class User {\n    private String name;\n\n    public User(String name) {\n        this.name = name;\n    }\n\n    public String getName() {\n        return this.name;\n    }\n}`,
+      usecase: "Real-world use: Encapsulating data transfer objects (DTOs) in corporate projects."
+    },
+    pro: {
+      desc: "Professional Java uses strict records (introduced in Java 14) for immutable data representations with built-in getters, hashcode, and toString methods.",
+      code: `import java.util.Optional;\n\npublic record UserConfig(\n    String host,\n    int port,\n    Optional<String> secretToken\n) {\n    // Static factory validator\n    public static UserConfig ofLocal(int port) {\n        return new UserConfig("localhost", port, Optional.empty());\n    }\n}`,
+      usecase: "Real-world use: Thread-safe configuration bindings inside Spring Boot microservices."
+    }
+  },
+  {
+    num: "02",
+    title: "Collections & Data API",
+    beg: {
+      desc: "Java Collections offer generic data wrappers. ArrayList stores arrays of resizeable collections.",
+      code: `import java.util.ArrayList;\n\nArrayList<String> tasks = new ArrayList<>();\ntasks.add("Study Java OOP");\ntasks.add("Solve Two Sum");\n\nSystem.out.println("Pending tasks: " + tasks.size());`,
+      usecase: "Real-world use: Basic task aggregation loops."
+    },
+    int: {
+      desc: "Intermediate programmers use Map interface structures like HashMap to search key-value pairs at O(1) velocity.",
+      code: `import java.util.HashMap;\nimport java.util.Map;\n\nMap<String, Integer> scores = new HashMap<>();\nscores.put("Shrestha", 2840);\nscores.put("Aryan", 4210);\n\nfor (Map.Entry<String, Integer> entry : scores.entrySet()) {\n    System.out.println(entry.getKey() + ": " + entry.getValue());\n}`,
+      usecase: "Real-world use: Mapping database records by unique identifiers for instant cache lookups."
+    },
+    pro: {
+      desc: "Professional collections use stream pipes, lambdas, and collect operations to process datasets in parallel without mutations.",
+      code: `import java.util.List;\nimport java.util.Map;\nimport java.util.stream.Collectors;\n\nList<User> userList = List.of(new User("Shrestha", "PRO"), new User("Aryan", "FREE"));\n\n// Stream grouping records by plan category\nMap<String, List<User>> grouped = userList.stream()\n    .filter(u -> u.getXp() > 100)\n    .collect(Collectors.groupingBy(User::getPlan));`,
+      usecase: "Real-world use: High-throughput batch sorting in banking and analytics databases."
+    }
+  }
+];
+
+// --- INTERACTIVE TIER RENDERING ---
+let currentLevel = 'beg';
+
+function renderTopics() {
+  const root = document.getElementById("topics-root");
+  root.innerHTML = topicsData.map(t => {
+    const tierData = t[currentLevel];
+    return `
+      <div class="topic-card">
+        <div class="topic-header">
+          <span class="topic-num">${t.num}</span>
+          <h3 class="topic-title">${t.title}</h3>
+          <span style="font-size:12px; color:var(--mute); text-transform:uppercase; font-weight:700;">Java Tier</span>
+        </div>
+        <p class="code-desc">${tierData.desc}</p>
+        <div class="code-container">
+          <pre style="margin:0;"><code style="color:#22d3ee;">${escapeHtml(tierData.code)}</code></pre>
+        </div>
+        <div class="code-usecase">${tierData.usecase}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+document.querySelectorAll(".level-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    currentLevel = btn.dataset.level;
+    renderTopics();
   });
 });
-const burger = document.querySelector(".burger");
-const navLinks = document.querySelector(".nav-links");
-burger.addEventListener("click", () => {
-  const open = navLinks.style.display === "flex";
-  navLinks.style.display = open ? "none" : "flex";
-  navLinks.style.flexDirection = "column";
-  navLinks.style.position = "absolute";
-  navLinks.style.top = "64px"; navLinks.style.left = "0"; navLinks.style.right = "0";
-  navLinks.style.background = "rgba(6,9,20,.98)"; navLinks.style.padding = "20px 32px";
-  navLinks.style.borderBottom = "1px solid var(--border)"; navLinks.style.gap = "18px";
-});
+
+renderTopics();
+
+
+// ═══════════════════════ STEAMING JAVA COFFEE CUP CANVAS ═══════════════════════
+(function() {
+  const canvas = document.getElementById('javaCoffeeCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  function resize() {
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = canvas.parentElement.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let time = 0;
+  
+  // Array of steam particles
+  const steamParticles = [];
+  
+  function createSteamParticle() {
+    // Spawn steam above the cup center (cup center is roughly canvas.width - 150, 180)
+    const cupX = canvas.width - 150;
+    const cupY = 160;
+    
+    steamParticles.push({
+      x: cupX + (Math.random() - 0.5) * 40,
+      y: cupY,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: -(0.5 + Math.random() * 0.8),
+      size: 5 + Math.random() * 10,
+      alpha: 0.4 + Math.random() * 0.4,
+      expandRate: 0.15 + Math.random() * 0.1
+    });
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    time += 0.016;
+
+    const cupX = canvas.width - 150;
+    const cupY = 180;
+
+    // Draw warm ambient background lighting
+    const bgGlow = ctx.createRadialGradient(cupX, cupY, 0, cupX, cupY, 180);
+    bgGlow.addColorStop(0, 'rgba(239, 68, 68, 0.08)');
+    bgGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = bgGlow;
+    ctx.beginPath();
+    ctx.arc(cupX, cupY, 180, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw coffee cup plate (ellipse)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.fillStyle = 'rgba(10, 5, 2, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(cupX, cupY + 30, 70, 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw cup handle (curved line)
+    ctx.strokeStyle = '#f87171'; // Red handle
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.arc(cupX + 46, cupY, 16, -Math.PI / 2, Math.PI / 2);
+    ctx.stroke();
+
+    // Draw cup body
+    ctx.fillStyle = '#ef4444'; // Solid Red Cup
+    ctx.beginPath();
+    ctx.ellipse(cupX, cupY, 48, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Cup base cylinder
+    ctx.beginPath();
+    ctx.moveTo(cupX - 48, cupY);
+    ctx.lineTo(cupX - 38, cupY + 30);
+    ctx.quadraticCurveTo(cupX, cupY + 36, cupX + 38, cupY + 30);
+    ctx.lineTo(cupX + 48, cupY);
+    ctx.closePath();
+    ctx.fill();
+
+    // Draw dark coffee surface inside cup
+    ctx.fillStyle = '#2b1009'; // Coffee brown
+    ctx.beginPath();
+    ctx.ellipse(cupX, cupY, 42, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Coffee ripples (subtle concentric ellipses expanding)
+    ctx.strokeStyle = 'rgba(248, 113, 113, 0.2)';
+    ctx.lineWidth = 1;
+    const rippleRadius = (time * 12) % 36;
+    if (rippleRadius > 2) {
+      ctx.beginPath();
+      ctx.ellipse(cupX, cupY, rippleRadius, rippleRadius * 0.22, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Spawn steam particles occasionally
+    if (Math.random() < 0.08) {
+      createSteamParticle();
+    }
+
+    // Update and draw steam particles
+    ctx.fillStyle = 'rgba(240, 240, 255, 0.12)';
+    for (let i = steamParticles.length - 1; i >= 0; i--) {
+      const p = steamParticles[i];
+      p.x += p.vx + Math.sin(time * 3 + p.y * 0.05) * 0.3; // natural sway
+      p.y += p.vy;
+      p.size += p.expandRate;
+      p.alpha -= 0.005; // slowly dissipate
+
+      if (p.alpha <= 0 || p.y < 30) {
+        steamParticles.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      grad.addColorStop(0, `rgba(240, 240, 255, ${p.alpha * 0.4})`);
+      grad.addColorStop(1, 'transparent');
+      
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  
+  frame();
+})();
 </script>
 </body>
 </html>
