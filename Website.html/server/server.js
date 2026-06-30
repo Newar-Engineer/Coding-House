@@ -19,8 +19,21 @@ const PORT = process.env.PORT || 3001;
 
 // ── MIDDLEWARE ──
 app.use(helmet());
+const allowedOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'https://coding-house-1eotqvl9u-beastmr9766-1274s-projects.vercel.app',
+  'https://coding-house.vercel.app'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.indexOf('localhost') !== -1 || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'), false);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
