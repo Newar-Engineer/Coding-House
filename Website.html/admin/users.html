@@ -8,323 +8,153 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#07030f;
-  --surface:#0e0819;
-  --surface2:#130c22;
+  --bg:#07030f;--surface:#0e0819;--surface2:#130c22;
   --border:rgba(168,85,247,0.18);
-  --primary:#a855f7;
-  --primary2:#c084fc;
-  --accent:#f43f5e;
-  --red:#f43f5e;
-  --orange:#f97316;
-  --green:#10b981;
-  --yellow:#f5b942;
-  --blue:#6366f1;
-  --text:#e2e8f0;
-  --mute:#64748b;
-  --sidebar:230px;
+  --primary:#a855f7;--primary2:#c084fc;
+  --accent:#f43f5e;--red:#f43f5e;--orange:#f97316;
+  --green:#10b981;--yellow:#f5b942;--blue:#6366f1;
+  --text:#e2e8f0;--mute:#64748b;--sidebar:230px;
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* ── SIDEBAR ── */
-.sidebar{
-  position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
-  background:var(--surface);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;z-index:100;
-  background:linear-gradient(180deg,#0e0819,#0a0515);
-}
-.sidebar-logo{
-  padding:24px 20px 20px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;
-}
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;background:linear-gradient(180deg,#0e0819,#0a0515);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer}
 .sidebar-logo .mark{color:var(--primary);font-size:1.3rem}
-.admin-badge{
-  font-size:9px;font-weight:800;padding:2px 7px;
-  background:linear-gradient(135deg,var(--red),var(--orange));
-  border-radius:10px;letter-spacing:.06em;color:#fff;
-}
+.admin-badge{font-size:9px;font-weight:800;padding:2px 7px;background:linear-gradient(135deg,var(--red),var(--orange));border-radius:10px;letter-spacing:.06em;color:#fff}
 .sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
 .nav-section{padding:8px 20px 4px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
-.nav-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 20px;margin:2px 8px;border-radius:8px;
-  text-decoration:none;color:var(--mute);font-size:14px;font-weight:500;
-  transition:all .2s ease;cursor:pointer;border:none;background:none;width:calc(100% - 16px);
-}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;margin:2px 8px;border-radius:8px;text-decoration:none;color:var(--mute);font-size:14px;font-weight:500;transition:all .2s;cursor:pointer;border:none;background:none;width:calc(100% - 16px)}
 .nav-item:hover,.nav-item.active{background:rgba(168,85,247,.1);color:var(--text)}
 .nav-item.active{color:var(--primary2);border-left:2px solid var(--primary)}
 .nav-item .ni{font-size:16px;width:20px;text-align:center}
-.nav-item .badge{
-  margin-left:auto;font-size:10px;font-weight:700;
-  padding:2px 7px;background:rgba(244,63,94,.15);border-radius:10px;color:var(--red);
-}
-.sidebar-user{
-  padding:16px 20px;border-top:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;
-}
-.user-av{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,var(--red),var(--primary));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:13px;flex-shrink:0;
-}
+.sidebar-user{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.user-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--primary));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
 .user-info{flex:1;overflow:hidden}
 .user-name{font-size:13px;font-weight:600}
 .user-role{font-size:11px;color:var(--primary2)}
-.logout-btn{
-  padding:6px;border-radius:6px;border:none;background:rgba(244,63,94,.1);
-  color:var(--red);cursor:pointer;transition:all .2s;font-size:14px;
-}
+.logout-btn{padding:6px;border-radius:6px;border:none;background:rgba(244,63,94,.1);color:var(--red);cursor:pointer;transition:all .2s;font-size:14px}
 .logout-btn:hover{background:rgba(244,63,94,.2)}
-
-/* ── MAIN ── */
 .main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
-.topbar{
-  padding:16px 32px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;
-  background:rgba(7,3,15,.85);
-}
+.topbar{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;background:rgba(7,3,15,.85)}
 .topbar-left h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
 .topbar-left p{font-size:13px;color:var(--mute);margin-top:2px}
 .topbar-right{display:flex;align-items:center;gap:12px}
-.alert-btn{
-  display:flex;align-items:center;gap:6px;
-  padding:7px 14px;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);
-  border-radius:8px;font-size:12px;font-weight:600;color:var(--red);cursor:pointer;
-  transition:all .2s;
-}
-.alert-btn:hover{background:rgba(244,63,94,.18)}
-.live-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 6px var(--green);animation:blink 1.4s ease infinite;
-}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1.4s ease infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-/* ── CONTENT ── */
 .content{padding:28px 32px;flex:1}
-
-/* ── MEGA OCEAN ── */
-.ocean-wrap{
-  position:relative;height:180px;border-radius:20px;overflow:hidden;
-  background:linear-gradient(180deg,#000510 0%,#001030 45%,#000820 100%);
-  border:1px solid rgba(168,85,247,.2);margin-bottom:28px;
-  box-shadow:0 0 60px rgba(168,85,247,.06) inset;
-}
-.ocean-label{
-  position:absolute;top:14px;left:18px;font-size:11px;font-weight:700;
-  letter-spacing:.1em;color:rgba(168,85,247,.6);text-transform:uppercase;z-index:5;
-}
-.ocean-subtitle{
-  position:absolute;top:30px;left:18px;font-size:10px;color:rgba(255,255,255,.25);z-index:5;
-}
-.ocean-wrap canvas{position:absolute;top:0;left:0}
-/* deep glow */
-.deep-glow{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:200px;height:80px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(168,85,247,.1),transparent 70%);
-}
-
-/* ── STATS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
-.stat-card{
-  background:var(--surface);border:1px solid var(--border);border-radius:14px;
-  padding:18px 16px;position:relative;overflow:hidden;
-  transition:all .3s ease;animation:fadeUp .5s ease backwards;
-}
-.stat-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 12px 30px rgba(168,85,247,.12)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.stat-card:nth-child(1){animation-delay:.05s}.stat-card:nth-child(2){animation-delay:.1s}
-.stat-card:nth-child(3){animation-delay:.15s}.stat-card:nth-child(4){animation-delay:.2s}
-.stat-card:nth-child(5){animation-delay:.25s}
-.stat-icon{font-size:22px;margin-bottom:10px}
-.stat-val{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;line-height:1}
-.stat-label{font-size:11px;color:var(--mute);margin-top:4px;font-weight:500}
-.stat-trend{font-size:10px;margin-top:6px;display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:12px}
-.up{background:rgba(16,185,129,.1);color:var(--green)}
-.dn{background:rgba(244,63,94,.1);color:var(--red)}
-.nu{background:rgba(168,85,247,.1);color:var(--primary2)}
-
-/* ── LAYOUT GRIDS ── */
-.row{display:grid;gap:20px;margin-bottom:20px}
-.r-2-1{grid-template-columns:2fr 1fr}
-.r-1-1{grid-template-columns:1fr 1fr}
-.r-3{grid-template-columns:repeat(3,1fr)}
-
-/* ── CARD ── */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;animation:fadeUp .5s ease backwards}
-.card-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.card-title-left{display:flex;align-items:center;gap:8px}
-.btn-sm2{
-  font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);
-  background:transparent;color:var(--mute);cursor:pointer;transition:all .2s;
-}
-.btn-sm2:hover{border-color:var(--primary);color:var(--primary2)}
-
-/* ── TABLE ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 table{width:100%;border-collapse:collapse}
-th{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);padding:0 0 10px;text-align:left;border-bottom:1px solid var(--border)}
-td{padding:12px 0;font-size:13px;border-bottom:1px solid rgba(168,85,247,.06);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
+th{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);padding:8px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px 8px;font-size:13px;border-bottom:1px solid rgba(168,85,247,.06);vertical-align:middle}
+tr:hover td{background:rgba(168,85,247,.03)}
 .u-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px}
 .s-active{background:rgba(16,185,129,.12);color:var(--green)}
 .s-idle{background:rgba(245,185,66,.12);color:var(--yellow)}
 .s-new{background:rgba(99,102,241,.12);color:#818cf8}
 .s-ban{background:rgba(244,63,94,.12);color:var(--red)}
-.action-btn{
-  font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);
-  background:transparent;color:var(--mute);cursor:pointer;transition:all .2s;
-}
+.action-btn{font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mute);cursor:pointer;transition:all .2s}
 .action-btn:hover{border-color:var(--primary);color:var(--primary2)}
 .action-btn.danger:hover{border-color:var(--red);color:var(--red)}
-
-/* ── CHART BAR ── */
-.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding-top:8px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.bar-fill{
-  width:100%;border-radius:4px 4px 0 0;
-  transition:height .8s cubic-bezier(.34,1.56,.64,1);
-  min-height:4px;
-}
-.bar-lbl{font-size:9px;color:var(--mute);font-family:'JetBrains Mono',monospace}
-
-/* ── RECENT ACTIONS LOG ── */
-.log-item{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:10px 0;border-bottom:1px solid rgba(168,85,247,.07);
-}
-.log-item:last-child{border-bottom:none}
-.log-dot{
-  width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0;
-}
-.log-text{font-size:12px;line-height:1.5;color:var(--mute)}
-.log-text strong{color:var(--text);font-weight:600}
-.log-time{font-size:10px;color:var(--mute);margin-top:2px;font-family:'JetBrains Mono',monospace}
-
-/* ── CONTENT MODERATION ── */
-.mod-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px;border-radius:8px;background:var(--surface2);
-  border:1px solid var(--border);margin-bottom:8px;
-}
-.mod-type{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px}
-.mod-body{flex:1;font-size:12px;color:var(--mute)}
-.mod-body strong{color:var(--text);display:block;font-size:13px}
-.approve-btn{
-  padding:4px 10px;border-radius:6px;border:1px solid rgba(16,185,129,.3);
-  background:rgba(16,185,129,.08);color:var(--green);font-size:10px;font-weight:600;cursor:pointer;
-  transition:all .2s;
-}
+.approve-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(16,185,129,.3);background:rgba(16,185,129,.08);color:var(--green);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .approve-btn:hover{background:rgba(16,185,129,.18)}
-.reject-btn{
-  padding:4px 10px;border-radius:6px;border:1px solid rgba(244,63,94,.3);
-  background:rgba(244,63,94,.08);color:var(--red);font-size:10px;font-weight:600;cursor:pointer;
-  transition:all .2s;margin-left:4px;
-}
-.reject-btn:hover{background:rgba(244,63,94,.18)}
-
-/* ── MINI PROGRESS ── */
-.mini-prog{display:flex;gap:6px;align-items:center;margin-bottom:8px;font-size:12px}
-.mini-bar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
-.mini-fill{height:100%;border-radius:3px}
-.mini-pct{width:30px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute)}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo" style="cursor: pointer;" onclick="window.location.href='../index.html'">
-    <span class="mark">&lt;/&gt;</span>
-    <span>Coding House</span>
-    <span class="admin-badge">ADMIN</span>
+  <div class="sidebar-logo" onclick="window.location.href='../index.html'">
+    <span class="mark">&lt;/&gt;</span><span>Coding House</span><span class="admin-badge">ADMIN</span>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Overview</div>
     <a class="nav-item" href="admindashboard.html"><span class="ni">⚡</span> Dashboard</a>
     <a class="nav-item" href="analytics.html"><span class="ni">📊</span> Analytics</a>
     <a class="nav-item" href="revenue.html"><span class="ni">📈</span> Revenue</a>
-
     <div class="nav-section" style="margin-top:12px">Management</div>
-    <a class="nav-item active" href="users.html"><span class="ni">👥</span> Users <span class="badge">12 new</span></a>
+    <a class="nav-item active" href="users.html"><span class="ni">👥</span> Users</a>
     <a class="nav-item" href="courses-manage.html"><span class="ni">📚</span> Courses</a>
+    <a class="nav-item" href="images-manage.html"><span class="ni">🖼️</span> Images</a>
     <a class="nav-item" href="challenges-manage.html"><span class="ni">⚡</span> Challenges</a>
     <a class="nav-item" href="projects-manage.html"><span class="ni">🏗️</span> Projects</a>
+    <a class="nav-item" href="moderation.html"><span class="ni">🚨</span> Moderation</a>
+    <div class="nav-section" style="margin-top:12px">System</div>
+    <a class="nav-item" href="permissions.html"><span class="ni">🔒</span> Permissions</a>
+    <a class="nav-item" href="security.html"><span class="ni">🛡️</span> Security</a>
+    <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
+    <a class="nav-item" href="audit-log.html"><span class="ni">📜</span> Audit Log</a>
+  </nav>
   <div class="sidebar-user">
-    <div class="user-av">AD</div>
+    <div class="user-av" id="sidebar-av">AD</div>
     <div class="user-info">
-      <div class="user-name">Admin</div>
+      <div class="user-name" id="sidebar-name">Admin</div>
       <div class="user-role">Super Admin</div>
     </div>
-    <button class="logout-btn" onclick="window.location.href='../login.html'" title="Log out">↩</button>
+    <button class="logout-btn" onclick="AdminAuth.logout()" title="Log out">↩</button>
   </div>
 </aside>
 
 <!-- MAIN -->
 <main class="main">
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
-      <h1>Admin Control Panel 🦈</h1>
-      <p>Coding House · All systems operational · Last sync 2 min ago</p>
+      <h1>User Management 👥</h1>
+      <p>Manage all platform user accounts</p>
     </div>
     <div class="topbar-right">
-      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green)">
-        <div class="live-dot"></div> Live
-      </div>
-      <button class="alert-btn">🚨 3 Alerts</button>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green)"><div class="live-dot"></div> Live</div>
     </div>
   </div>
 
   <div class="content">
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-        <h2>👥 User Accounts Management</h2>
-        <button class="approve-btn" onclick="openUserModal()">+ Add User</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <h2>👥 User Accounts Management</h2>
+      <button class="approve-btn" onclick="openUserModal()">+ Add User</button>
     </div>
 
     <!-- USER FORM CARD -->
-    <div id="user-modal" class="card" style="display:none; margin-bottom:24px; border-color:var(--primary);">
+    <div id="user-modal" class="card" style="display:none;margin-bottom:24px;border-color:var(--primary);">
       <h3 style="margin-bottom:16px;" id="user-modal-title">Add / Edit User Account</h3>
-      <form id="user-form" onsubmit="saveUser(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <form id="user-form" onsubmit="saveUser(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <input type="hidden" id="user-index">
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Full Name</label>
-          <input type="text" id="u-name" required style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">Full Name</label>
+          <input type="text" id="u-name" required style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Email Address</label>
-          <input type="email" id="u-email" required style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">Email Address</label>
+          <input type="email" id="u-email" required style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Plan Tier</label>
-          <select id="u-plan" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none; cursor:pointer;">
-            <option value="Free">Free</option>
-            <option value="Pro">Pro</option>
-            <option value="Lifetime">Lifetime</option>
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">Plan Tier</label>
+          <select id="u-plan" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;cursor:pointer;">
+            <option value="free">Free</option>
+            <option value="pro">Pro</option>
+            <option value="lifetime">Lifetime</option>
           </select>
         </div>
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Account Status</label>
-          <select id="u-status" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none; cursor:pointer;">
-            <option value="Active">Active</option>
-            <option value="New">New</option>
-            <option value="Banned">Banned</option>
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">Account Status</label>
+          <select id="u-status" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;cursor:pointer;">
+            <option value="active">Active</option>
+            <option value="new">New</option>
+            <option value="idle">Idle</option>
+            <option value="banned">Banned</option>
           </select>
         </div>
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--xp)">XP Progress</label>
-          <input type="number" id="u-xp" required value="0" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">XP Progress</label>
+          <input type="number" id="u-xp" required value="0" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Avatar Initials (e.g. AB)</label>
-          <input type="text" id="u-av-init" required maxLength="2" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+          <label style="display:block;font-size:12px;margin-bottom:4px;color:var(--mute);">Role</label>
+          <select id="u-role" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;cursor:pointer;">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
-        <div style="grid-column: span 2; display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
+        <div style="grid-column:span 2;display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
           <button type="button" class="action-btn" onclick="closeUserModal()">Cancel</button>
           <button type="submit" class="approve-btn">Save Account</button>
         </div>
@@ -333,381 +163,113 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 
     <!-- USERS TABLE CARD -->
     <div class="card" style="margin-bottom:24px;">
-        <div style="display:flex; gap:16px; margin-bottom:16px;">
-            <input type="text" id="user-search" oninput="renderUsersList()" placeholder="Search user accounts by email or name..." style="flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
-        </div>
-        
-        <table style="width:100%; border-collapse:collapse;">
-          <thead>
-            <tr>
-              <th style="text-align:left; padding:8px;">User</th>
-              <th style="text-align:left; padding:8px;">Email</th>
-              <th style="text-align:left; padding:8px;">Plan</th>
-              <th style="text-align:left; padding:8px;">Status</th>
-              <th style="text-align:left; padding:8px;">XP</th>
-              <th style="text-align:left; padding:8px;">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="users-table-body">
-              <!-- Dynamic rows -->
-          </tbody>
-        </table>
+      <div style="display:flex;gap:16px;margin-bottom:16px;">
+        <input type="text" id="user-search" oninput="debounceSearch()" placeholder="Search user accounts by email or name..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);outline:none;">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th><th>Email</th><th>Role</th><th>Plan</th><th>Status</th><th>XP</th><th>Joined</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="users-table-body"></tbody>
+      </table>
+      <div id="pagination" style="display:flex;justify-content:center;gap:8px;margin-top:16px"></div>
     </div>
-
-</div><!-- /content -->
+  </div>
 </main>
 
+<!-- Supabase + Admin modules -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/admin-config.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script src="../js/admin-api.js"></script>
 <script>
-/* ═══════════════════════ MEGALODON ═══════════════════════ */
-(function(){
-  const canvas = document.getElementById('megaCanvas');
-  const wrap = canvas.parentElement;
-  const ctx = canvas.getContext('2d');
+/* ═══════════════════════ AUTH GUARD + INIT ═══════════════════════ */
+var currentPage = 1;
 
-  function resize(){
-    canvas.width = wrap.offsetWidth;
-    canvas.height = wrap.offsetHeight;
+(async function() {
+  var ok = await AdminAuth.requireAdminSession();
+  if (!ok) return;
+  var admin = AdminAuth.getAdminUser();
+  if (admin) {
+    document.getElementById('sidebar-name').textContent = admin.name || 'Admin';
+    var initials = (admin.name || 'AD').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+    document.getElementById('sidebar-av').textContent = initials;
   }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let t = 0;
-  // Debris particles
-  const debris = Array.from({length:30},()=>({
-    x:Math.random()*2000, y:Math.random()*200,
-    vx:-(0.1+Math.random()*0.3), size:Math.random()*2+1,
-    op:Math.random()*.5+.1
-  }));
-
-  // Megalodon segments
-  const SEGS = 20;
-  const meg = Array.from({length:SEGS},(_,i)=>({x:0,y:0}));
-  let megX=800, megY=90, megVX=-1.4, megVY=0, megDir=1;
-
-  function drawMeg(segs, scale, alpha){
-    if(alpha<=0) return;
-    const h=segs[0];
-    ctx.globalAlpha = alpha;
-
-    // Body
-    const bodyLen = 15*scale;
-    const bodyH = 6*scale;
-    ctx.beginPath();
-    ctx.moveTo(h.x, h.y);
-    for(let i=1;i<SEGS;i++){
-      ctx.lineTo(segs[i].x, segs[i].y);
-    }
-    ctx.strokeStyle='rgba(120,80,160,0.6)';
-    ctx.lineWidth=bodyH;
-    ctx.lineCap='round';
-    ctx.lineJoin='round';
-    ctx.stroke();
-
-    // body fill silhouette
-    ctx.beginPath();
-    ctx.ellipse(h.x, h.y, 48*scale, 14*scale, 0, 0, Math.PI*2);
-    ctx.fillStyle='rgba(80,40,120,0.7)';
-    ctx.fill();
-    ctx.strokeStyle='rgba(168,85,247,0.4)';
-    ctx.lineWidth=1.5;
-    ctx.stroke();
-
-    // dorsal fin
-    ctx.beginPath();
-    ctx.moveTo(h.x-5*scale, h.y-14*scale);
-    ctx.quadraticCurveTo(h.x+10*scale, h.y-44*scale, h.x+22*scale, h.y-12*scale);
-    ctx.quadraticCurveTo(h.x+8*scale, h.y-16*scale, h.x-5*scale, h.y-14*scale);
-    ctx.fillStyle='rgba(100,50,150,0.8)';
-    ctx.fill();
-    ctx.strokeStyle='rgba(168,85,247,0.5)';
-    ctx.lineWidth=1;
-    ctx.stroke();
-
-    // pectoral fins
-    ctx.beginPath();
-    ctx.moveTo(h.x+10*scale, h.y+6*scale);
-    ctx.quadraticCurveTo(h.x+30*scale, h.y+28*scale, h.x+50*scale, h.y+8*scale);
-    ctx.quadraticCurveTo(h.x+30*scale, h.y+6*scale, h.x+10*scale, h.y+6*scale);
-    ctx.fillStyle='rgba(100,50,150,0.6)';
-    ctx.fill();
-
-    // caudal fin (tail)
-    const tail = segs[SEGS-1];
-    ctx.beginPath();
-    ctx.moveTo(tail.x, tail.y);
-    const tailSwing = Math.sin(t*3)*10*scale;
-    ctx.lineTo(tail.x-20*scale, tail.y-16*scale+tailSwing);
-    ctx.lineTo(tail.x-24*scale, tail.y-26*scale+tailSwing);
-    ctx.lineTo(tail.x-10*scale, tail.y-4*scale);
-    ctx.lineTo(tail.x-24*scale, tail.y+20*scale-tailSwing);
-    ctx.lineTo(tail.x-20*scale, tail.y+10*scale-tailSwing);
-    ctx.closePath();
-    ctx.fillStyle='rgba(100,50,150,0.75)';
-    ctx.fill();
-    ctx.strokeStyle='rgba(168,85,247,0.4)';
-    ctx.lineWidth=1;
-    ctx.stroke();
-
-    // eye
-    const eDir = megVX < 0 ? -1 : 1;
-    ctx.beginPath();
-    ctx.arc(h.x+28*scale*eDir, h.y-3*scale, 4*scale, 0, Math.PI*2);
-    ctx.fillStyle='#fff';
-    ctx.globalAlpha=alpha*.9;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(h.x+29*scale*eDir, h.y-3*scale, 2*scale, 0, Math.PI*2);
-    ctx.fillStyle='#0a0010';
-    ctx.fill();
-
-    // teeth (show on turns)
-    ctx.globalAlpha=alpha*0.7;
-    const teethloc = h.x + 38*scale*eDir;
-    for(let i=0;i<5;i++){
-      ctx.beginPath();
-      ctx.moveTo(teethloc+i*2.5*scale, h.y+5*scale);
-      ctx.lineTo(teethloc+i*2.5*scale+1*scale, h.y+10*scale);
-      ctx.lineTo(teethloc+(i+1)*2.5*scale, h.y+5*scale);
-      ctx.fillStyle='rgba(220,220,230,0.9)';
-      ctx.fill();
-    }
-
-    // glow
-    ctx.globalAlpha=alpha*0.15;
-    const g=ctx.createRadialGradient(h.x,h.y,0,h.x,h.y,80*scale);
-    g.addColorStop(0,'rgba(168,85,247,0.6)');
-    g.addColorStop(1,'transparent');
-    ctx.fillStyle=g;
-    ctx.beginPath();ctx.arc(h.x,h.y,80*scale,0,Math.PI*2);ctx.fill();
-
-    ctx.globalAlpha=1;
-  }
-
-  // Small fish school
-  const smallFish = Array.from({length:12},()=>({
-    x:Math.random()*canvas.width, y:50+Math.random()*120,
-    vx:(Math.random()-.5)*1.2, phase:Math.random()*Math.PI*2,
-    col:['#22d3ee','#6366f1','#10b981','#f472b6'][Math.floor(Math.random()*4)],
-    s:0.3+Math.random()*0.3
-  }));
-
-  function drawSmallFish(f, tt){
-    const bob = Math.sin(tt*2+f.phase)*3;
-    const tail = Math.sin(tt*5+f.phase)*0.2;
-    ctx.save();
-    ctx.translate(f.x, f.y+bob);
-    if(f.vx<0) ctx.scale(-1,1);
-    const s=f.s;
-    // tail
-    ctx.beginPath();ctx.moveTo(-12*s,0);
-    ctx.lineTo(-18*s,-5*s);ctx.lineTo(-18*s,5*s);ctx.closePath();
-    ctx.fillStyle=f.col+'88';ctx.fill();
-    // body
-    ctx.beginPath();ctx.ellipse(0,0,12*s,5*s,tail,0,Math.PI*2);
-    ctx.fillStyle=f.col;ctx.fill();
-    // eye
-    ctx.beginPath();ctx.arc(8*s,-1*s,1.5*s,0,Math.PI*2);
-    ctx.fillStyle='#fff';ctx.fill();
-    ctx.restore();
-
-    f.x+=f.vx;f.y+=Math.sin(tt+f.phase)*0.3;
-    if(f.x>canvas.width+20) f.x=-20;
-    if(f.x<-20) f.x=canvas.width+20;
-  }
-
-  function frame(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    t+=0.016;
-
-    // deep light rays
-    ctx.globalAlpha=0.04;
-    for(let i=0;i<5;i++){
-      ctx.beginPath();
-      ctx.moveTo(canvas.width*0.2*i, 0);
-      ctx.lineTo(canvas.width*0.2*i+30, canvas.height);
-      ctx.strokeStyle='rgba(168,85,247,.8)';
-      ctx.lineWidth=20;
-      ctx.stroke();
-    }
-    ctx.globalAlpha=1;
-
-    // debris
-    debris.forEach(d=>{
-      d.x+=d.vx;
-      if(d.x<-5) d.x=canvas.width+5;
-      ctx.beginPath();ctx.arc(d.x,d.y,d.size,0,Math.PI*2);
-      ctx.fillStyle=`rgba(168,85,247,${d.op})`;ctx.fill();
-    });
-
-    // small fish (scatter when meg passes)
-    smallFish.forEach(f=>{
-      const dist = Math.hypot(f.x-megX, f.y-megY);
-      if(dist<120){
-        f.vx += (f.x-megX)/dist * 0.4;
-        f.vy = ((f.y-megY)/dist)*0.4;
-      }
-      drawSmallFish(f,t);
-    });
-
-    // megalodon movement
-    megVY = Math.sin(t*0.5)*0.6;
-    megX += megVX;
-    megY = Math.max(30, Math.min(canvas.height-30, megY+megVY));
-    if(megX < -200){ megX=canvas.width+200; }
-    if(megX > canvas.width+200){ megX=-200; }
-
-    // update segment chain
-    meg[0].x=megX; meg[0].y=megY;
-    for(let i=1;i<SEGS;i++){
-      const dx=meg[i-1].x-meg[i].x;
-      const dy=meg[i-1].y-meg[i].y;
-      const d=Math.sqrt(dx*dx+dy*dy)||1;
-      const space=14;
-      if(d>space){meg[i].x+=dx/d*(d-space);meg[i].y+=dy/d*(d-space);}
-    }
-
-    drawMeg(meg, 1, 0.92);
-    requestAnimationFrame(frame);
-  }
-  frame();
+  loadUsers();
 })();
 
-/* ═══════════════════════ BAR CHART ═══════════════════════ */
-(function(){
-  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const vals=[210,185,270,310,290,180,402];
-  const max=Math.max(...vals);
-  const container=document.getElementById('barChart');
-  days.forEach((d,i)=>{
-    const pct=Math.round((vals[i]/max)*100);
-    const col=i===6?'linear-gradient(180deg,#a855f7,#6366f1)':'linear-gradient(180deg,#4c1d95,#312e81)';
-    const div=document.createElement('div');
-    div.className='bar-col';
-    div.innerHTML=`
-      <div class="bar-fill" style="height:${pct}%;background:${col};animation:barGrow .8s ${i*.07}s ease backwards"></div>
-      <div class="bar-lbl">${d}</div>
-    `;
-    container.appendChild(div);
-  });
-  const style=document.createElement('style');
-  style.textContent='@keyframes barGrow{from{height:0}to{height:var(--h)}}';
-  document.head.appendChild(style);
-})();
+/* ═══════════════════════ LOAD USERS FROM API ═══════════════════════ */
+async function loadUsers(page) {
+  currentPage = page || 1;
+  var search = document.getElementById('user-search').value.trim();
+  var result = await AdminAPI.fetchUsers(currentPage, search, { limit: 20 });
+  if (!result.ok) return;
 
-/* ═══════════════════════ REVENUE DONUT ═══════════════════════ */
-(function(){
-  const canvas=document.getElementById('revenueCanvas');
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
-  const cx=W/2, cy=H/2, R=52, r=32;
-
-  const slices=[
-    {label:'Pro',pct:52,col:'#a855f7'},
-    {label:'Lifetime',pct:31,col:'#6366f1'},
-    {label:'Free',pct:17,col:'#374151'},
-  ];
-
-  let angle=-Math.PI/2;
-  slices.forEach(s=>{
-    const sweep=(s.pct/100)*Math.PI*2;
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,R,angle,angle+sweep);
-    ctx.closePath();
-    ctx.fillStyle=s.col;ctx.fill();
-    angle+=sweep;
-  });
-  // hole
-  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.fillStyle='#0e0819';ctx.fill();
-
-  // center text
-  ctx.fillStyle='#e2e8f0';
-  ctx.font='bold 13px Space Grotesk,sans-serif';
-    ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('$4,210',cx,cy-6);
-  ctx.font='9px Inter,sans-serif';ctx.fillStyle='#64748b';
-  ctx.fillText('TODAY',cx,cy+9);
-
-  // legend
-  let ly=H-28;
-  slices.forEach(s=>{
-    ctx.fillStyle=s.col;
-    ctx.fillRect(8,ly,10,10);
-    ctx.fillStyle='#94a3b8';
-    ctx.font='10px Inter,sans-serif';
-    ctx.textAlign='left';ctx.textBaseline='middle';
-    ctx.fillText(`${s.label} ${s.pct}%`,22,ly+5);
-    ly+=14;
-  });
-})();
-
-/* ═══════════════════════ USER ACCOUNTS CONTROLLER ═══════════════════════ */
-var defaultUsers = [
-  { name: "Shrestha R.", email: "shrestha@email.com", plan: "Pro", status: "Active", xp: 2840, av: "SR" },
-  { name: "Aryan K.", email: "aryan@email.com", plan: "Free", status: "New", xp: 4210, av: "AK" },
-  { name: "Priya S.", email: "priya@email.com", plan: "Lifetime", status: "Active", xp: 3880, av: "PS" }
-];
-
-if (!localStorage.getItem('codinghouse_users')) {
-  localStorage.setItem('codinghouse_users', JSON.stringify(defaultUsers));
-}
-
-var users = JSON.parse(localStorage.getItem('codinghouse_users'));
-
-function renderUsersList() {
-  var search = document.getElementById('user-search').value.toLowerCase();
+  var users = result.data.users || [];
+  var pag = result.data.pagination || {};
   var html = '';
-  
-  var filtered = users.filter(u => {
-    return u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
+
+  users.forEach(function(u) {
+    var planClass = u.plan === 'pro' ? 's-active' : (u.plan === 'lifetime' ? 's-active' : 's-new');
+    var statusClass = u.status === 'active' ? 's-active' : (u.status === 'new' ? 's-new' : (u.status === 'banned' ? 's-ban' : 's-idle'));
+    var roleClass = u.role === 'admin' ? 's-active' : 's-new';
+    var initials = (u.name || 'XX').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+    var date = new Date(u.created_at).toLocaleDateString();
+
+    html += '<tr>' +
+      '<td><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,var(--primary),var(--accent))">' + initials + '</div>' + u.name + '</div></td>' +
+      '<td style="color:var(--mute);font-size:12px;">' + u.email + '</td>' +
+      '<td><span class="status ' + roleClass + '">' + u.role + '</span></td>' +
+      '<td><span class="status ' + planClass + '">' + u.plan + '</span></td>' +
+      '<td><span class="status ' + statusClass + '">' + u.status + '</span></td>' +
+      '<td style="font-family:JetBrains Mono,monospace;">' + Number(u.xp).toLocaleString() + '</td>' +
+      '<td style="font-size:11px;color:var(--mute)">' + date + '</td>' +
+      '<td style="display:flex;gap:6px;">' +
+        '<button class="action-btn" onclick="openUserModal(' + u.id + ')">Edit</button>' +
+        '<button class="action-btn danger" onclick="deleteUser(' + u.id + ',\'' + u.name.replace(/'/g,"\\'") + '\')">Delete</button>' +
+      '</td></tr>';
   });
 
-  filtered.forEach((u, idx) => {
-    var planClass = u.plan === 'Pro' ? 's-active' : (u.plan === 'Lifetime' ? 's-active' : 's-new');
-    var statusClass = u.status === 'Active' ? 's-active' : (u.status === 'New' ? 's-new' : 's-ban');
-    
-    // Find absolute index in the main users array
-    var mainIndex = users.indexOf(u);
-    
-    html += `
-      <tr>
-        <td style="padding:12px 8px;">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="u-av" style="background:linear-gradient(135deg, var(--primary), var(--accent))">${u.av}</div>
-            ${u.name}
-          </div>
-        </td>
-        <td style="color:var(--mute);font-size:12px; padding:12px 8px;">${u.email}</td>
-        <td style="padding:12px 8px;"><span class="status ${planClass}">${u.plan}</span></td>
-        <td style="padding:12px 8px;"><span class="status ${statusClass}">${u.status}</span></td>
-        <td style="padding:12px 8px; font-family:'JetBrains Mono',monospace;">${Number(u.xp).toLocaleString()}</td>
-        <td style="padding:12px 8px; display:flex; gap:6px;">
-          <button class="action-btn" onclick="openUserModal(${mainIndex})">Edit</button>
-          <button class="action-btn danger" onclick="deleteUser(${mainIndex})">Delete</button>
-        </td>
-      </tr>
-    `;
-  });
+  document.getElementById('users-table-body').innerHTML = html || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--mute);">No users found.</td></tr>';
 
-  document.getElementById('users-table-body').innerHTML = html || '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--mute);">No users match search criteria.</td></tr>';
+  // Pagination
+  var pagHtml = '';
+  if (pag.totalPages > 1) {
+    for (var p = 1; p <= pag.totalPages; p++) {
+      var active = p === currentPage ? 'border-color:var(--primary);color:var(--primary2);background:rgba(168,85,247,.1)' : '';
+      pagHtml += '<button class="action-btn" style="' + active + '" onclick="loadUsers(' + p + ')">' + p + '</button>';
+    }
+  }
+  document.getElementById('pagination').innerHTML = pagHtml;
 }
 
-function openUserModal(index) {
+var searchTimer = null;
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function() { loadUsers(1); }, 400);
+}
+
+/* ═══════════════════════ MODAL CRUD ═══════════════════════ */
+async function openUserModal(userId) {
   var modal = document.getElementById('user-modal');
   modal.style.display = 'block';
   modal.scrollIntoView({ behavior: 'smooth' });
 
-  if (index !== undefined) {
-    document.getElementById('user-modal-title').textContent = 'Edit User Account Config';
-    document.getElementById('user-index').value = index;
-    var u = users[index];
-    document.getElementById('u-name').value = u.name;
-    document.getElementById('u-email').value = u.email;
-    document.getElementById('u-plan').value = u.plan;
-    document.getElementById('u-status').value = u.status;
-    document.getElementById('u-xp').value = u.xp;
-    document.getElementById('u-av-init').value = u.av;
+  if (userId !== undefined) {
+    document.getElementById('user-modal-title').textContent = 'Edit User Account';
+    document.getElementById('user-index').value = userId;
+    var result = await AdminAPI.getUser(userId);
+    if (result.ok) {
+      var u = result.data;
+      document.getElementById('u-name').value = u.name;
+      document.getElementById('u-email').value = u.email;
+      document.getElementById('u-plan').value = u.plan;
+      document.getElementById('u-status').value = u.status;
+      document.getElementById('u-xp').value = u.xp;
+      document.getElementById('u-role').value = u.role;
+    }
   } else {
     document.getElementById('user-modal-title').textContent = 'Create New User Account';
     document.getElementById('user-index').value = '';
@@ -720,39 +282,37 @@ function closeUserModal() {
   document.getElementById('user-modal').style.display = 'none';
 }
 
-function saveUser(event) {
+async function saveUser(event) {
   event.preventDefault();
-  var idx = document.getElementById('user-index').value;
-  var name = document.getElementById('u-name').value;
-  var email = document.getElementById('u-email').value;
-  var plan = document.getElementById('u-plan').value;
-  var status = document.getElementById('u-status').value;
-  var xp = parseInt(document.getElementById('u-xp').value) || 0;
-  var av = document.getElementById('u-av-init').value.toUpperCase();
+  var userId = document.getElementById('user-index').value;
+  var userData = {
+    name:   document.getElementById('u-name').value.trim(),
+    email:  document.getElementById('u-email').value.trim(),
+    plan:   document.getElementById('u-plan').value,
+    status: document.getElementById('u-status').value,
+    xp:     parseInt(document.getElementById('u-xp').value) || 0,
+    role:   document.getElementById('u-role').value
+  };
 
-  var newUser = { name, email, plan, status, xp, av };
-
-  if (idx !== '') {
-    users[idx] = newUser;
+  var result;
+  if (userId) {
+    result = await AdminAPI.updateUser(userId, userData);
   } else {
-    users.push(newUser);
+    result = await AdminAPI.createUser(userData);
   }
 
-  localStorage.setItem('codinghouse_users', JSON.stringify(users));
-  renderUsersList();
-  closeUserModal();
-}
-
-function deleteUser(index) {
-  if (confirm('Are you sure you want to delete ' + users[index].name + '\'s account?')) {
-    users.splice(index, 1);
-    localStorage.setItem('codinghouse_users', JSON.stringify(users));
-    renderUsersList();
+  if (result.ok) {
+    closeUserModal();
+    loadUsers(currentPage);
   }
 }
 
-// Initial render
-renderUsersList();
+async function deleteUser(userId, userName) {
+  if (confirm('Are you sure you want to delete ' + userName + "'s account?")) {
+    var result = await AdminAPI.deleteUser(userId);
+    if (result.ok) loadUsers(currentPage);
+  }
+}
 </script>
 </body>
 </html>

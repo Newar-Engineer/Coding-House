@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Manager — Admin Coding House</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07030f;--surface:#0e0819;--surface2:#130c22;
+  --border:rgba(168,85,247,0.18);
+  --primary:#a855f7;--primary2:#c084fc;
+  --accent:#f43f5e;--red:#f43f5e;--orange:#f97316;
+  --green:#10b981;--yellow:#f5b942;--blue:#6366f1;
+  --text:#e2e8f0;--mute:#64748b;--sidebar:230px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;background:linear-gradient(180deg,#0e0819,#0a0515)}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer}
+.sidebar-logo .mark{color:var(--primary);font-size:1.3rem}
+.admin-badge{font-size:9px;font-weight:800;padding:2px 7px;background:linear-gradient(135deg,var(--red),var(--orange));border-radius:10px;letter-spacing:.06em;color:#fff}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
+.nav-section{padding:8px 20px 4px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;margin:2px 8px;border-radius:8px;text-decoration:none;color:var(--mute);font-size:14px;font-weight:500;transition:all .2s ease;cursor:pointer;border:none;background:none;width:calc(100% - 16px)}
+.nav-item:hover,.nav-item.active{background:rgba(168,85,247,.1);color:var(--text)}
+.nav-item.active{color:var(--primary2);border-left:2px solid var(--primary)}
+.nav-item .ni{font-size:16px;width:20px;text-align:center}
+.nav-item .badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;background:rgba(244,63,94,.15);border-radius:10px;color:var(--red)}
+.sidebar-user{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.user-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--primary));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.user-info{flex:1;overflow:hidden}
+.user-name{font-size:13px;font-weight:600}
+.user-role{font-size:11px;color:var(--primary2)}
+.logout-btn{padding:6px;border-radius:6px;border:none;background:rgba(244,63,94,.1);color:var(--red);cursor:pointer;transition:all .2s;font-size:14px}
+.logout-btn:hover{background:rgba(244,63,94,.2)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+.topbar{padding:16px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;background:rgba(7,3,15,.85)}
+.topbar-left h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
+.topbar-left p{font-size:13px;color:var(--mute);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 1.4s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.content{padding:28px 32px;flex:1}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 16px;transition:all .3s;animation:fadeUp .5s ease backwards}
+.stat-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 12px 30px rgba(168,85,247,.12)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.stat-icon{font-size:22px;margin-bottom:10px}
+.stat-val{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;line-height:1}
+.stat-label{font-size:11px;color:var(--mute);margin-top:4px;font-weight:500}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;animation:fadeUp .5s ease backwards}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+/* ACTION BTNS */
+.action-btn{font-size:10px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--mute);cursor:pointer;transition:all .2s}
+.action-btn:hover{border-color:var(--primary);color:var(--primary2)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.approve-btn{padding:6px 14px;border-radius:8px;border:1px solid rgba(16,185,129,.3);background:rgba(16,185,129,.08);color:var(--green);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.approve-btn:hover{background:rgba(16,185,129,.18)}
+
+/* UPLOAD ZONE */
+.upload-zone{
+  border:2px dashed rgba(168,85,247,.3);border-radius:16px;
+  padding:40px 24px;text-align:center;cursor:pointer;
+  transition:all .3s;background:rgba(168,85,247,.03);
+  margin-bottom:20px;
+}
+.upload-zone:hover,.upload-zone.dragover{
+  border-color:var(--primary);background:rgba(168,85,247,.08);
+  box-shadow:0 0 30px rgba(168,85,247,.08);
+}
+.upload-zone .uz-icon{font-size:40px;margin-bottom:12px}
+.upload-zone .uz-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.upload-zone .uz-sub{font-size:12px;color:var(--mute)}
+.upload-zone input[type="file"]{display:none}
+
+/* UPLOAD FORM FIELDS */
+.upload-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+.upload-meta label{font-size:12px;color:var(--mute);display:block;margin-bottom:4px}
+.upload-meta select,.upload-meta input{
+  width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;
+}
+.upload-meta select:focus,.upload-meta input:focus{border-color:var(--primary)}
+
+/* PROGRESS BAR */
+.upload-progress{display:none;margin-bottom:20px}
+.prog-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--blue));transition:width .3s;width:0%}
+.prog-text{font-size:11px;color:var(--mute);margin-top:6px;font-family:'JetBrains Mono',monospace}
+
+/* IMAGE GALLERY GRID */
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:20px}
+.img-card{
+  background:var(--surface2);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;transition:all .3s;animation:fadeUp .4s ease backwards;
+}
+.img-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:0 10px 30px rgba(168,85,247,.12)}
+.img-preview{
+  width:100%;height:160px;object-fit:cover;background:#0a0515;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview .placeholder{font-size:40px;color:rgba(168,85,247,.3)}
+.img-info{padding:14px}
+.img-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
+.img-meta{font-size:11px;color:var(--mute);display:flex;flex-direction:column;gap:3px}
+.img-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(168,85,247,.12);color:var(--primary2);margin-bottom:6px}
+.img-actions{display:flex;gap:6px;margin-top:10px}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar select,.filter-bar input{
+  padding:8px 12px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit;
+}
+.filter-bar select:focus,.filter-bar input:focus{border-color:var(--primary)}
+
+/* MODAL OVERLAY */
+.modal-overlay{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  padding:28px;width:100%;max-width:500px;animation:fadeUp .3s ease;
+}
+.modal-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--mute)}
+.empty-state .es-icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.empty-state p{font-size:14px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo" onclick="window.location.href='../index.html'">
+    <span class="mark">&lt;/&gt;</span>
+    <span>Coding House</span>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Overview</div>
+    <a class="nav-item" href="admindashboard.html"><span class="ni">⚡</span> Dashboard</a>
+    <a class="nav-item" href="analytics.html"><span class="ni">📊</span> Analytics</a>
+    <a class="nav-item" href="revenue.html"><span class="ni">📈</span> Revenue</a>
+
+    <div class="nav-section" style="margin-top:12px">Management</div>
+    <a class="nav-item" href="users.html"><span class="ni">👥</span> Users</a>
+    <a class="nav-item" href="courses-manage.html"><span class="ni">📚</span> Courses</a>
+    <a class="nav-item active" href="images-manage.html"><span class="ni">🖼️</span> Images</a>
+    <a class="nav-item" href="challenges-manage.html"><span class="ni">⚡</span> Challenges</a>
+    <a class="nav-item" href="projects-manage.html"><span class="ni">🏗️</span> Projects</a>
+    <a class="nav-item" href="moderation.html"><span class="ni">🚨</span> Moderation</a>
+
+    <div class="nav-section" style="margin-top:12px">System</div>
+    <a class="nav-item" href="permissions.html"><span class="ni">🔒</span> Permissions</a>
+    <a class="nav-item" href="security.html"><span class="ni">🛡️</span> Security</a>
+    <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
+    <a class="nav-item" href="audit-log.html"><span class="ni">📜</span> Audit Log</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av" id="sidebar-av">AD</div>
+    <div class="user-info">
+      <div class="user-name" id="sidebar-name">Admin</div>
+      <div class="user-role">Super Admin</div>
+    </div>
+    <button class="logout-btn" onclick="AdminAuth.logout()" title="Log out">↩</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Image Manager 🖼️</h1>
+      <p>Upload, manage, and assign course/track thumbnails</p>
+    </div>
+    <div class="topbar-right">
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green)">
+        <div class="live-dot"></div> Live
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- STATS -->
+    <div class="stats-row" id="img-stats">
+      <div class="stat-card"><div class="stat-icon">🖼️</div><div class="stat-val" id="stat-total">0</div><div class="stat-label">Total Images</div></div>
+      <div class="stat-card"><div class="stat-icon">📸</div><div class="stat-val" id="stat-banners">0</div><div class="stat-label">Course Banners</div></div>
+      <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-val" id="stat-icons">0</div><div class="stat-label">Track Icons</div></div>
+      <div class="stat-card"><div class="stat-icon">👤</div><div class="stat-val" id="stat-instructors">0</div><div class="stat-label">Instructor Photos</div></div>
+    </div>
+
+    <!-- UPLOAD SECTION -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">📤 Upload New Image</div>
+
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/svg+xml">
+        <div class="uz-icon">📁</div>
+        <div class="uz-title" id="uzTitle">Click or drag & drop an image here</div>
+        <div class="uz-sub">Max 5 MB · JPEG, PNG, WebP, or SVG</div>
+      </div>
+
+      <div class="upload-meta" id="uploadMeta" style="display:none">
+        <div>
+          <label>Category *</label>
+          <select id="up-category">
+            <option value="course_banner">Course Banner</option>
+            <option value="track_icon">Track Icon</option>
+            <option value="instructor">Instructor Photo</option>
+          </select>
+        </div>
+        <div>
+          <label>Linked Course/Track</label>
+          <select id="up-slug">
+            <option value="">— None —</option>
+          </select>
+        </div>
+        <div>
+          <label>Alt Text</label>
+          <input type="text" id="up-alt" placeholder="Describe the image...">
+        </div>
+      </div>
+
+      <div class="upload-progress" id="uploadProgress">
+        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+        <div class="prog-text" id="progText">Uploading...</div>
+      </div>
+
+      <div id="uploadActions" style="display:none;text-align:right">
+        <button class="action-btn" onclick="resetUpload()" style="margin-right:8px">Cancel</button>
+        <button class="approve-btn" id="uploadBtn" onclick="doUpload()">⬆ Upload Image</button>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="card">
+      <div class="card-title">
+        <span>🗂️ Image Gallery</span>
+        <button class="action-btn" onclick="loadImages()">↻ Refresh</button>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filter-category" onchange="loadImages()">
+          <option value="">All Categories</option>
+          <option value="course_banner">Course Banners</option>
+          <option value="track_icon">Track Icons</option>
+          <option value="instructor">Instructor Photos</option>
+        </select>
+        <input type="text" id="filter-search" placeholder="Search by filename..." oninput="debounceSearch()" style="flex:1;min-width:200px">
+      </div>
+
+      <div id="gallery" class="img-grid">
+        <div class="empty-state"><div class="es-icon">🖼️</div><p>No images uploaded yet</p></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <h3 id="editModalTitle">Edit Image Metadata</h3>
+    <input type="hidden" id="edit-id">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label style="font-size:12px;color:var(--mute);display:block;margin-bottom:4px">Category</label>
+        <select id="edit-category" style="width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none">
+          <option value="course_banner">Course Banner</option>
+          <option value="track_icon">Track Icon</option>
+          <option value="instructor">Instructor Photo</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--mute);display:block;margin-bottom:4px">Linked Course/Track</label>
+        <select id="edit-slug" style="width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none">
+          <option value="">— None —</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--mute);display:block;margin-bottom:4px">Alt Text</label>
+        <input type="text" id="edit-alt" placeholder="Image description..." style="width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="action-btn" onclick="closeEditModal()">Cancel</button>
+      <button class="approve-btn" onclick="saveEditModal()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/admin-config.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script src="../js/admin-api.js"></script>
+<script>
+// ── Auth Guard ──
+(async function() {
+  var ok = await AdminAuth.requireAdminSession();
+  if (!ok) return;
+  var admin = AdminAuth.getAdminUser();
+  if (admin) {
+    document.getElementById('sidebar-name').textContent = admin.name || 'Admin';
+    var initials = (admin.name || 'AD').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+    document.getElementById('sidebar-av').textContent = initials;
+  }
+  populateSlugs();
+  loadStats();
+  loadImages();
+})();
+
+// ── Populate slug dropdowns from localStorage languages ──
+function populateSlugs() {
+  var langs = [];
+  try { langs = JSON.parse(localStorage.getItem('codinghouse_languages') || '[]'); } catch(e){}
+
+  var trackSlugs = [
+    { slug: 'web-development', name: 'Web Development' },
+    { slug: 'mobile-development', name: 'Mobile Development' },
+    { slug: 'ai-machine-learning', name: 'AI / Machine Learning' },
+    { slug: 'cyber-security', name: 'Cyber Security' },
+    { slug: 'cloud-computing', name: 'Cloud Computing' }
+  ];
+
+  var allOptions = '<option value="">— None —</option>';
+  allOptions += '<optgroup label="Courses">';
+  langs.forEach(function(l) { allOptions += '<option value="' + l.slug + '">' + l.name + '</option>'; });
+  allOptions += '</optgroup><optgroup label="Tracks">';
+  trackSlugs.forEach(function(t) { allOptions += '<option value="' + t.slug + '">' + t.name + '</option>'; });
+  allOptions += '</optgroup>';
+
+  document.getElementById('up-slug').innerHTML = allOptions;
+  document.getElementById('edit-slug').innerHTML = allOptions;
+}
+
+// ── Load Stats ──
+async function loadStats() {
+  var result = await AdminAPI.getImageStats();
+  if (!result.ok) return;
+  var d = result.data;
+  document.getElementById('stat-total').textContent = d.total || 0;
+  document.getElementById('stat-banners').textContent = (d.byCategory && d.byCategory.course_banner) || 0;
+  document.getElementById('stat-icons').textContent = (d.byCategory && d.byCategory.track_icon) || 0;
+  document.getElementById('stat-instructors').textContent = (d.byCategory && d.byCategory.instructor) || 0;
+}
+
+// ── Load Images ──
+async function loadImages() {
+  var cat = document.getElementById('filter-category').value;
+  var search = document.getElementById('filter-search').value.trim();
+  var result = await AdminAPI.fetchImages(cat, search);
+  if (!result.ok) return;
+
+  var images = result.data.images || [];
+  var gallery = document.getElementById('gallery');
+
+  if (images.length === 0) {
+    gallery.innerHTML = '<div class="empty-state"><div class="es-icon">🖼️</div><p>No images found</p></div>';
+    return;
+  }
+
+  var catLabels = { course_banner: 'Course Banner', track_icon: 'Track Icon', instructor: 'Instructor' };
+
+  gallery.innerHTML = images.map(function(img) {
+    var sizeKB = img.file_size ? Math.round(img.file_size / 1024) + ' KB' : '—';
+    var date = new Date(img.created_at).toLocaleDateString();
+    return '<div class="img-card">' +
+      '<div class="img-preview"><img src="' + img.url + '" alt="' + (img.alt_text || img.filename) + '" onerror="this.parentElement.innerHTML=\'<div class=placeholder>🖼️</div>\'"></div>' +
+      '<div class="img-info">' +
+        '<span class="img-badge">' + (catLabels[img.category] || img.category) + '</span>' +
+        '<div class="img-name" title="' + img.filename + '">' + img.filename + '</div>' +
+        '<div class="img-meta">' +
+          '<span>📎 ' + (img.linked_slug || 'Unlinked') + '</span>' +
+          '<span>📦 ' + sizeKB + ' · ' + date + '</span>' +
+          (img.uploader_name ? '<span>👤 ' + img.uploader_name + '</span>' : '') +
+        '</div>' +
+        '<div class="img-actions">' +
+          '<button class="action-btn" onclick="openEditModal(' + img.id + ',\'' + (img.category||'') + '\',\'' + (img.linked_slug||'') + '\',\'' + (img.alt_text||'').replace(/'/g,"\\'") + '\')">Edit</button>' +
+          '<button class="action-btn danger" onclick="confirmDelete(' + img.id + ',\'' + img.filename.replace(/'/g,"\\'") + '\')">Delete</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Search Debounce ──
+var searchTimer = null;
+function debounceSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(loadImages, 400);
+}
+
+// ── Upload Logic ──
+var selectedFile = null;
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  if (e.target.files.length > 0) selectFile(e.target.files[0]);
+});
+
+// Drag & drop
+var zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+zone.addEventListener('drop', function(e) {
+  e.preventDefault(); zone.classList.remove('dragover');
+  if (e.dataTransfer.files.length > 0) selectFile(e.dataTransfer.files[0]);
+});
+
+function selectFile(file) {
+  if (!ADMIN_CONFIG.ALLOWED_TYPES.includes(file.type)) {
+    AdminAPI.showToast('Invalid file type. Use JPEG, PNG, WebP or SVG.', 'error');
+    return;
+  }
+  if (file.size > ADMIN_CONFIG.MAX_FILE_SIZE) {
+    AdminAPI.showToast('File too large. Max 5 MB.', 'error');
+    return;
+  }
+  selectedFile = file;
+  document.getElementById('uzTitle').textContent = '📄 ' + file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+  document.getElementById('uploadMeta').style.display = 'grid';
+  document.getElementById('uploadActions').style.display = 'block';
+}
+
+function resetUpload() {
+  selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uzTitle').textContent = 'Click or drag & drop an image here';
+  document.getElementById('uploadMeta').style.display = 'none';
+  document.getElementById('uploadActions').style.display = 'none';
+  document.getElementById('uploadProgress').style.display = 'none';
+  document.getElementById('progFill').style.width = '0%';
+}
+
+async function doUpload() {
+  if (!selectedFile) return;
+
+  var btn = document.getElementById('uploadBtn');
+  btn.disabled = true;
+  btn.textContent = 'Uploading...';
+
+  document.getElementById('uploadProgress').style.display = 'block';
+  document.getElementById('progFill').style.width = '50%';
+  document.getElementById('progText').textContent = 'Uploading to storage...';
+
+  var metadata = {
+    category:    document.getElementById('up-category').value,
+    linked_slug: document.getElementById('up-slug').value || null,
+    alt_text:    document.getElementById('up-alt').value.trim() || null
+  };
+
+  var result = await AdminAPI.uploadImage(selectedFile, metadata);
+
+  if (result.ok) {
+    document.getElementById('progFill').style.width = '100%';
+    document.getElementById('progText').textContent = '✓ Upload complete!';
+    setTimeout(function() {
+      resetUpload();
+      loadStats();
+      loadImages();
+    }, 800);
+  } else {
+    document.getElementById('progFill').style.width = '0%';
+    document.getElementById('progText').textContent = '✕ Upload failed';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '⬆ Upload Image';
+}
+
+// ── Edit Modal ──
+function openEditModal(id, category, slug, alt) {
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-category').value = category;
+  document.getElementById('edit-slug').value = slug;
+  document.getElementById('edit-alt').value = alt;
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+}
+async function saveEditModal() {
+  var id = document.getElementById('edit-id').value;
+  var result = await AdminAPI.updateImage(id, {
+    category:    document.getElementById('edit-category').value,
+    linked_slug: document.getElementById('edit-slug').value || null,
+    alt_text:    document.getElementById('edit-alt').value.trim() || null
+  });
+  if (result.ok) {
+    closeEditModal();
+    loadImages();
+    loadStats();
+  }
+}
+
+// ── Delete ──
+function confirmDelete(id, filename) {
+  if (confirm('Delete "' + filename + '"? This will remove it from storage and the database.')) {
+    AdminAPI.deleteImage(id).then(function(result) {
+      if (result.ok) { loadImages(); loadStats(); }
+    });
+  }
+}
+</script>
+</body>
+</html>
