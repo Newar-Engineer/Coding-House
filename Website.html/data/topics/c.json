@@ -1,0 +1,477 @@
+[
+  {
+    "num": "01",
+    "title": "Hello World & main()",
+    "beg": {
+      "desc": "Every C program starts with the main() function. #include brings in libraries.",
+      "code": "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}",
+      "usecase": "Real-world use: Understanding C program structure and entry point."
+    },
+    "int": {
+      "desc": "Use command-line arguments and return codes for flexible program behavior.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(int argc, char *argv[]) {\n    if (argc < 2) {\n        fprintf(stderr, \"Usage: %s <name>\\n\", argv[0]);\n        return EXIT_FAILURE;\n    }\n    printf(\"Hello, %s!\\n\", argv[1]);\n    return EXIT_SUCCESS;\n}",
+      "usecase": "Real-world use: CLI tools with argument parsing."
+    },
+    "pro": {
+      "desc": "Use _Noreturn, __attribute__, and proper exit handling for production C programs.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <signal.h>\n\nstatic volatile sig_atomic_t running = 1;\n\nvoid handle_sigint(int sig) {\n    (void)sig;\n    running = 0;\n}\n\nint main(void) {\n    signal(SIGINT, handle_sigint);\n    while (running) {\n        printf(\"Running... (Ctrl+C to stop)\\n\");\n        // Process work\n    }\n    printf(\"Graceful shutdown\\n\");\n    return 0;\n}",
+      "usecase": "Real-world use: Signal handling for graceful daemon shutdown."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Variables & Data Types",
+    "beg": {
+      "desc": "C has basic types: int, float, double, char. Variables must be declared with a type.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int age = 25;\n    float height = 5.9f;\n    double pi = 3.14159265;\n    char grade = 'A';\n    printf(\"Age: %d, Height: %.1f\\n\", age, height);\n    printf(\"Pi: %.5f, Grade: %c\\n\", pi, grade);\n    return 0;\n}",
+      "usecase": "Real-world use: Storing different kinds of data in programs."
+    },
+    "int": {
+      "desc": "Use sizeof, limits.h, and type qualifiers for precise type control.",
+      "code": "#include <stdio.h>\n#include <limits.h>\n#include <stdint.h>\n\nint main() {\n    printf(\"int: %zu bytes, range: %d to %d\\n\",\n           sizeof(int), INT_MIN, INT_MAX);\n    \n    uint8_t byte = 255;    // exactly 8 bits\n    int32_t precise = -1;  // exactly 32 bits\n    size_t len = 42;       // platform-sized unsigned\n    \n    const double TAX_RATE = 0.08;\n    printf(\"Tax: %.2f%%\\n\", TAX_RATE * 100);\n    return 0;\n}",
+      "usecase": "Real-world use: Portable code with fixed-width integer types."
+    },
+    "pro": {
+      "desc": "Use _Generic for type-generic macros and _Alignas for memory alignment control.",
+      "code": "#include <stdio.h>\n#include <stdalign.h>\n\n#define type_name(x) _Generic((x), \\\n    int: \"int\", float: \"float\", \\\n    double: \"double\", char*: \"string\", \\\n    default: \"other\")\n\nint main() {\n    _Alignas(64) int cache_line_data[16];\n    \n    int i = 42;\n    float f = 3.14f;\n    printf(\"%s\\n\", type_name(i));  // int\n    printf(\"%s\\n\", type_name(f));  // float\n    printf(\"Alignment: %zu\\n\", alignof(cache_line_data));\n    return 0;\n}",
+      "usecase": "Real-world use: Cache-aligned data structures for high-performance computing."
+    }
+  },
+  {
+    "num": "03",
+    "title": "Operators & Expressions",
+    "beg": {
+      "desc": "C supports arithmetic, relational, logical, and bitwise operators.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int a = 10, b = 3;\n    printf(\"%d + %d = %d\\n\", a, b, a + b);\n    printf(\"%d %% %d = %d\\n\", a, b, a % b);\n    printf(\"%d > %d: %d\\n\", a, b, a > b);\n    printf(\"AND: %d, OR: %d\\n\", a > 5 && b < 5, a > 5 || b > 5);\n    return 0;\n}",
+      "usecase": "Real-world use: Arithmetic calculations and logical checks."
+    },
+    "int": {
+      "desc": "Use bitwise operators for flags, masks, and efficient bit manipulation.",
+      "code": "#include <stdio.h>\n\n#define FLAG_READ  (1 << 0)  // 0001\n#define FLAG_WRITE (1 << 1)  // 0010\n#define FLAG_EXEC  (1 << 2)  // 0100\n\nint main() {\n    unsigned int perms = FLAG_READ | FLAG_WRITE;\n    \n    if (perms & FLAG_READ) printf(\"Can read\\n\");\n    if (perms & FLAG_EXEC) printf(\"Can execute\\n\");\n    else printf(\"Cannot execute\\n\");\n    \n    perms |= FLAG_EXEC;   // add exec\n    perms &= ~FLAG_WRITE; // remove write\n    printf(\"Perms: %u\\n\", perms);\n    return 0;\n}",
+      "usecase": "Real-world use: Unix file permission flags."
+    },
+    "pro": {
+      "desc": "Use compound assignment, comma operator, and ternary for concise expressions.",
+      "code": "#include <stdio.h>\n\n// Bit counting (Brian Kernighan's algorithm)\nint popcount(unsigned int n) {\n    int count = 0;\n    while (n) {\n        n &= (n - 1); // clear lowest set bit\n        count++;\n    }\n    return count;\n}\n\nint main() {\n    unsigned int x = 0xDEAD;\n    printf(\"0x%X has %d bits set\\n\", x, popcount(x));\n    \n    // Swap without temp variable\n    int a = 5, b = 10;\n    a ^= b; b ^= a; a ^= b;\n    printf(\"a=%d, b=%d\\n\", a, b);\n    return 0;\n}",
+      "usecase": "Real-world use: Efficient bit manipulation in embedded systems."
+    }
+  },
+  {
+    "num": "04",
+    "title": "Printf & Scanf",
+    "beg": {
+      "desc": "printf outputs formatted text. scanf reads user input.",
+      "code": "#include <stdio.h>\n\nint main() {\n    char name[50];\n    int age;\n    printf(\"Enter name: \");\n    scanf(\"%49s\", name);\n    printf(\"Enter age: \");\n    scanf(\"%d\", &age);\n    printf(\"Hello %s, you are %d years old\\n\", name, age);\n    return 0;\n}",
+      "usecase": "Real-world use: Interactive command-line programs."
+    },
+    "int": {
+      "desc": "Use format specifiers for precise output formatting and safe input handling.",
+      "code": "#include <stdio.h>\n\nint main() {\n    printf(\"%-15s | %8s | %6s\\n\", \"Name\", \"Price\", \"Qty\");\n    printf(\"%-15s | %8.2f | %6d\\n\", \"Widget A\", 19.99, 42);\n    printf(\"%-15s | %8.2f | %6d\\n\", \"Gadget B\", 149.50, 7);\n    \n    // Safe input with fgets\n    char line[256];\n    printf(\"Enter text: \");\n    if (fgets(line, sizeof(line), stdin)) {\n        printf(\"You said: %s\", line);\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Formatted table output and safe input reading."
+    },
+    "pro": {
+      "desc": "Use snprintf for safe string formatting and custom output formatting functions.",
+      "code": "#include <stdio.h>\n#include <string.h>\n\ntypedef struct {\n    char name[32];\n    double balance;\n    int active;\n} Account;\n\nint account_to_string(const Account *acc, char *buf, size_t size) {\n    return snprintf(buf, size,\n        \"{name: \\\"%s\\\", balance: %.2f, active: %s}\",\n        acc->name, acc->balance,\n        acc->active ? \"true\" : \"false\");\n}\n\nint main() {\n    Account acc = {\"Alice\", 1234.56, 1};\n    char buf[128];\n    account_to_string(&acc, buf, sizeof(buf));\n    printf(\"%s\\n\", buf);\n    return 0;\n}",
+      "usecase": "Real-world use: Safe JSON-like serialization for logging."
+    }
+  },
+  {
+    "num": "05",
+    "title": "Conditionals (if/switch)",
+    "beg": {
+      "desc": "Use if/else and switch to control program flow based on conditions.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int score = 85;\n    if (score >= 90) printf(\"A\\n\");\n    else if (score >= 80) printf(\"B\\n\");\n    else printf(\"C\\n\");\n    \n    char grade = 'B';\n    switch (grade) {\n        case 'A': printf(\"Excellent\\n\"); break;\n        case 'B': printf(\"Good\\n\"); break;\n        default: printf(\"OK\\n\");\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Grading systems and menu selections."
+    },
+    "int": {
+      "desc": "Use switch with enums for type-safe state machines.",
+      "code": "#include <stdio.h>\n\ntypedef enum { STATE_IDLE, STATE_RUNNING, STATE_ERROR, STATE_DONE } State;\n\nconst char* state_name(State s) {\n    switch (s) {\n        case STATE_IDLE:    return \"IDLE\";\n        case STATE_RUNNING: return \"RUNNING\";\n        case STATE_ERROR:   return \"ERROR\";\n        case STATE_DONE:    return \"DONE\";\n    }\n    return \"UNKNOWN\";\n}\n\nint main() {\n    State s = STATE_RUNNING;\n    printf(\"Current: %s\\n\", state_name(s));\n    return 0;\n}",
+      "usecase": "Real-world use: State machines in embedded firmware."
+    },
+    "pro": {
+      "desc": "Use function pointer dispatch tables for efficient multi-branch logic.",
+      "code": "#include <stdio.h>\n\ntypedef double (*BinOp)(double, double);\n\nstatic double op_add(double a, double b) { return a + b; }\nstatic double op_sub(double a, double b) { return a - b; }\nstatic double op_mul(double a, double b) { return a * b; }\nstatic double op_div(double a, double b) { return b ? a/b : 0; }\n\nstatic BinOp ops[256] = {0};\n\nint main() {\n    ops['+'] = op_add; ops['-'] = op_sub;\n    ops['*'] = op_mul; ops['/'] = op_div;\n    \n    char op = '*';\n    if (ops[(unsigned char)op])\n        printf(\"3 %c 4 = %.1f\\n\", op, ops[(unsigned char)op](3, 4));\n    return 0;\n}",
+      "usecase": "Real-world use: Calculator engines and opcode dispatch tables."
+    }
+  },
+  {
+    "num": "06",
+    "title": "Loops (for/while/do-while)",
+    "beg": {
+      "desc": "Loops repeat code blocks. C has for, while, and do-while loops.",
+      "code": "#include <stdio.h>\n\nint main() {\n    for (int i = 1; i <= 5; i++) {\n        printf(\"Count: %d\\n\", i);\n    }\n    \n    int n = 10;\n    while (n > 0) {\n        printf(\"%d \", n);\n        n -= 2;\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+      "usecase": "Real-world use: Iterating through data and countdowns."
+    },
+    "int": {
+      "desc": "Use nested loops for matrix operations and break/continue for flow control.",
+      "code": "#include <stdio.h>\n\nint main() {\n    // Multiplication table\n    for (int i = 1; i <= 5; i++) {\n        for (int j = 1; j <= 5; j++) {\n            printf(\"%4d\", i * j);\n        }\n        printf(\"\\n\");\n    }\n    \n    // Find first prime\n    for (int n = 100; n < 200; n++) {\n        int prime = 1;\n        for (int d = 2; d * d <= n; d++)\n            if (n % d == 0) { prime = 0; break; }\n        if (prime) { printf(\"First prime > 100: %d\\n\", n); break; }\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Matrix operations and prime number computation."
+    },
+    "pro": {
+      "desc": "Use Duff's device and loop unrolling for optimized iteration in performance-critical code.",
+      "code": "#include <stdio.h>\n#include <string.h>\n\n// Fast memory set using Duff's device pattern\nvoid fast_memset(unsigned char *dest, unsigned char val, size_t count) {\n    if (count == 0) return;\n    size_t n = (count + 7) / 8;\n    switch (count % 8) {\n        case 0: do { *dest++ = val;\n        case 7:      *dest++ = val;\n        case 6:      *dest++ = val;\n        case 5:      *dest++ = val;\n        case 4:      *dest++ = val;\n        case 3:      *dest++ = val;\n        case 2:      *dest++ = val;\n        case 1:      *dest++ = val;\n        } while (--n > 0);\n    }\n}\n\nint main() {\n    unsigned char buf[100];\n    fast_memset(buf, 0xAA, sizeof(buf));\n    printf(\"buf[0]=0x%02X, buf[99]=0x%02X\\n\", buf[0], buf[99]);\n    return 0;\n}",
+      "usecase": "Real-world use: Optimized memory operations in system programming."
+    }
+  },
+  {
+    "num": "07",
+    "title": "Functions & Prototypes",
+    "beg": {
+      "desc": "Functions break code into reusable pieces. Prototypes declare them before use.",
+      "code": "#include <stdio.h>\n\nint add(int a, int b);\nvoid greet(const char *name);\n\nint main() {\n    greet(\"Alice\");\n    printf(\"Sum: %d\\n\", add(3, 7));\n    return 0;\n}\n\nint add(int a, int b) { return a + b; }\nvoid greet(const char *name) { printf(\"Hello, %s!\\n\", name); }",
+      "usecase": "Real-world use: Organized, modular C programs."
+    },
+    "int": {
+      "desc": "Use const parameters, static functions, and pass-by-pointer for output parameters.",
+      "code": "#include <stdio.h>\n#include <math.h>\n\nstatic int divide(int a, int b, int *quotient, int *remainder) {\n    if (b == 0) return -1;\n    *quotient = a / b;\n    *remainder = a % b;\n    return 0;\n}\n\nint main() {\n    int q, r;\n    if (divide(17, 5, &q, &r) == 0)\n        printf(\"17 / 5 = %d remainder %d\\n\", q, r);\n    else\n        printf(\"Division error\\n\");\n    return 0;\n}",
+      "usecase": "Real-world use: Functions with multiple return values via pointers."
+    },
+    "pro": {
+      "desc": "Use variadic functions and function attributes for flexible, optimized APIs.",
+      "code": "#include <stdio.h>\n#include <stdarg.h>\n\n__attribute__((format(printf, 2, 3)))\nvoid log_msg(const char *level, const char *fmt, ...) {\n    va_list args;\n    printf(\"[%s] \", level);\n    va_start(args, fmt);\n    vprintf(fmt, args);\n    va_end(args);\n    printf(\"\\n\");\n}\n\n__attribute__((pure))\nint max3(int a, int b, int c) {\n    return a > b ? (a > c ? a : c) : (b > c ? b : c);\n}\n\nint main() {\n    log_msg(\"INFO\", \"Server started on port %d\", 8080);\n    log_msg(\"DEBUG\", \"Max: %d\", max3(10, 25, 15));\n    return 0;\n}",
+      "usecase": "Real-world use: Type-safe variadic logging functions."
+    }
+  },
+  {
+    "num": "08",
+    "title": "Arrays",
+    "beg": {
+      "desc": "Arrays store fixed-size sequences of elements of the same type.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int nums[5] = {10, 20, 30, 40, 50};\n    for (int i = 0; i < 5; i++) {\n        printf(\"nums[%d] = %d\\n\", i, nums[i]);\n    }\n    printf(\"Size: %zu elements\\n\", sizeof(nums)/sizeof(nums[0]));\n    return 0;\n}",
+      "usecase": "Real-world use: Storing collections of numeric data."
+    },
+    "int": {
+      "desc": "Use 2D arrays and pass arrays to functions with explicit size parameters.",
+      "code": "#include <stdio.h>\n\nvoid print_matrix(int rows, int cols, int mat[rows][cols]) {\n    for (int i = 0; i < rows; i++) {\n        for (int j = 0; j < cols; j++)\n            printf(\"%4d\", mat[i][j]);\n        printf(\"\\n\");\n    }\n}\n\nint main() {\n    int matrix[3][3] = {{1,2,3},{4,5,6},{7,8,9}};\n    print_matrix(3, 3, matrix);\n    return 0;\n}",
+      "usecase": "Real-world use: Matrix operations in numerical computing."
+    },
+    "pro": {
+      "desc": "Use VLAs and flexible array members for runtime-sized data structures.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\ntypedef struct {\n    size_t len;\n    char data[];  // Flexible array member (C99)\n} Buffer;\n\nBuffer *buffer_create(const char *str) {\n    size_t len = strlen(str);\n    Buffer *buf = malloc(sizeof(Buffer) + len + 1);\n    buf->len = len;\n    memcpy(buf->data, str, len + 1);\n    return buf;\n}\n\nint main() {\n    Buffer *b = buffer_create(\"Hello C!\");\n    printf(\"len=%zu, data=%s\\n\", b->len, b->data);\n    free(b);\n    return 0;\n}",
+      "usecase": "Real-world use: Variable-length protocol buffers in network programming."
+    }
+  },
+  {
+    "num": "09",
+    "title": "Strings (char arrays)",
+    "beg": {
+      "desc": "C strings are null-terminated character arrays. Use string.h functions to work with them.",
+      "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char name[50] = \"Alice\";\n    printf(\"Name: %s\\n\", name);\n    printf(\"Length: %zu\\n\", strlen(name));\n    \n    char greeting[100];\n    strcpy(greeting, \"Hello, \");\n    strcat(greeting, name);\n    printf(\"%s\\n\", greeting);\n    return 0;\n}",
+      "usecase": "Real-world use: Text processing in C programs."
+    },
+    "int": {
+      "desc": "Use strncpy, strtok, and strstr for safe string operations and parsing.",
+      "code": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char csv[] = \"Alice,25,Engineer\";\n    char *token = strtok(csv, \",\");\n    while (token) {\n        printf(\"Field: %s\\n\", token);\n        token = strtok(NULL, \",\");\n    }\n    \n    // Safe substring search\n    const char *text = \"Hello World\";\n    const char *found = strstr(text, \"World\");\n    if (found) printf(\"Found at position: %td\\n\", found - text);\n    return 0;\n}",
+      "usecase": "Real-world use: CSV parsing and text search."
+    },
+    "pro": {
+      "desc": "Use snprintf-based string builders for safe, efficient string construction.",
+      "code": "#include <stdio.h>\n#include <string.h>\n#include <stdlib.h>\n\ntypedef struct {\n    char *data;\n    size_t len, cap;\n} StringBuilder;\n\nvoid sb_init(StringBuilder *sb, size_t cap) {\n    sb->data = malloc(cap); sb->len = 0; sb->cap = cap;\n    sb->data[0] = '\\0';\n}\n\nvoid sb_append(StringBuilder *sb, const char *fmt, ...) {\n    va_list args; va_start(args, fmt);\n    int n = vsnprintf(sb->data + sb->len, sb->cap - sb->len, fmt, args);\n    if (n > 0) sb->len += n;\n    va_end(args);\n}\n\nint main() {\n    StringBuilder sb; sb_init(&sb, 256);\n    sb_append(&sb, \"Name: %s, \", \"Alice\");\n    sb_append(&sb, \"Age: %d\", 25);\n    printf(\"%s\\n\", sb.data);\n    free(sb.data); return 0;\n}",
+      "usecase": "Real-world use: Dynamic string building for log messages and JSON output."
+    }
+  },
+  {
+    "num": "10",
+    "title": "Pointers & Addresses",
+    "beg": {
+      "desc": "Pointers store memory addresses. Use & to get address and * to dereference.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int x = 42;\n    int *ptr = &x;\n    printf(\"Value: %d\\n\", *ptr);    // 42\n    printf(\"Address: %p\\n\", (void*)ptr);\n    \n    *ptr = 100; // modify via pointer\n    printf(\"New value: %d\\n\", x);   // 100\n    return 0;\n}",
+      "usecase": "Real-world use: Understanding memory access in C."
+    },
+    "int": {
+      "desc": "Use pointers for array traversal and function argument passing.",
+      "code": "#include <stdio.h>\n\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nvoid print_array(const int *arr, size_t n) {\n    for (const int *p = arr; p < arr + n; p++)\n        printf(\"%d \", *p);\n    printf(\"\\n\");\n}\n\nint main() {\n    int a = 5, b = 10;\n    swap(&a, &b);\n    printf(\"a=%d, b=%d\\n\", a, b); // 10, 5\n    \n    int nums[] = {3, 1, 4, 1, 5};\n    print_array(nums, 5);\n    return 0;\n}",
+      "usecase": "Real-world use: Swap operations and array processing via pointers."
+    },
+    "pro": {
+      "desc": "Use void pointers and restrict keyword for generic programming and optimization.",
+      "code": "#include <stdio.h>\n#include <string.h>\n\ntypedef int (*Comparator)(const void*, const void*);\n\nvoid* generic_max(void *arr, size_t n, size_t elem_size, Comparator cmp) {\n    char *base = arr;\n    char *max_elem = base;\n    for (size_t i = 1; i < n; i++) {\n        char *current = base + i * elem_size;\n        if (cmp(current, max_elem) > 0)\n            max_elem = current;\n    }\n    return max_elem;\n}\n\nint cmp_int(const void *a, const void *b) {\n    return *(const int*)a - *(const int*)b;\n}\n\nint main() {\n    int arr[] = {3, 7, 1, 9, 4};\n    int *m = generic_max(arr, 5, sizeof(int), cmp_int);\n    printf(\"Max: %d\\n\", *m); // 9\n    return 0;\n}",
+      "usecase": "Real-world use: Generic algorithms like qsort in the C standard library."
+    }
+  },
+  {
+    "num": "11",
+    "title": "Pointer Arithmetic",
+    "beg": {
+      "desc": "Pointer arithmetic lets you navigate through memory using addition and subtraction.",
+      "code": "#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr;\n    \n    printf(\"First: %d\\n\", *p);       // 10\n    printf(\"Third: %d\\n\", *(p + 2)); // 30\n    \n    p += 3;\n    printf(\"Fourth: %d\\n\", *p);      // 40\n    return 0;\n}",
+      "usecase": "Real-world use: Navigating arrays with pointer offsets."
+    },
+    "int": {
+      "desc": "Use pointer arithmetic for string processing and buffer manipulation.",
+      "code": "#include <stdio.h>\n\nsize_t my_strlen(const char *s) {\n    const char *p = s;\n    while (*p) p++;\n    return p - s;\n}\n\nchar* my_strchr(const char *s, int c) {\n    while (*s) {\n        if (*s == c) return (char*)s;\n        s++;\n    }\n    return NULL;\n}\n\nint main() {\n    const char *str = \"Hello, World!\";\n    printf(\"Length: %zu\\n\", my_strlen(str));\n    char *comma = my_strchr(str, ',');\n    if (comma) printf(\"After comma: %s\\n\", comma + 1);\n    return 0;\n}",
+      "usecase": "Real-world use: Implementing string functions from scratch."
+    },
+    "pro": {
+      "desc": "Use pointer subtraction for measuring offsets and implement memory views.",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\ntypedef struct {\n    const uint8_t *data;\n    size_t len;\n} Slice;\n\nSlice slice_of(const void *data, size_t len) {\n    return (Slice){.data = data, .len = len};\n}\n\nSlice slice_sub(Slice s, size_t start, size_t end) {\n    if (start > s.len) start = s.len;\n    if (end > s.len) end = s.len;\n    return (Slice){.data = s.data + start, .len = end - start};\n}\n\nint main() {\n    uint8_t packet[] = {0x48, 0x65, 0x6C, 0x6C, 0x6F};\n    Slice full = slice_of(packet, sizeof(packet));\n    Slice sub = slice_sub(full, 1, 4);\n    printf(\"Sub len: %zu, first: 0x%02X\\n\", sub.len, sub.data[0]);\n    return 0;\n}",
+      "usecase": "Real-world use: Zero-copy buffer slicing in network protocol parsing."
+    }
+  },
+  {
+    "num": "12",
+    "title": "Dynamic Memory (malloc/free)",
+    "beg": {
+      "desc": "Use malloc to allocate memory at runtime and free to release it.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int *arr = malloc(5 * sizeof(int));\n    if (!arr) { printf(\"Allocation failed\\n\"); return 1; }\n    \n    for (int i = 0; i < 5; i++) arr[i] = (i + 1) * 10;\n    for (int i = 0; i < 5; i++) printf(\"%d \", arr[i]);\n    printf(\"\\n\");\n    \n    free(arr);\n    return 0;\n}",
+      "usecase": "Real-world use: Creating arrays of runtime-determined size."
+    },
+    "int": {
+      "desc": "Use calloc for zeroed memory and realloc for resizable arrays.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct {\n    int *data;\n    size_t len, cap;\n} IntVec;\n\nvoid vec_push(IntVec *v, int val) {\n    if (v->len == v->cap) {\n        v->cap = v->cap ? v->cap * 2 : 4;\n        v->data = realloc(v->data, v->cap * sizeof(int));\n    }\n    v->data[v->len++] = val;\n}\n\nint main() {\n    IntVec v = {0};\n    for (int i = 0; i < 10; i++) vec_push(&v, i * i);\n    for (size_t i = 0; i < v.len; i++) printf(\"%d \", v.data[i]);\n    free(v.data);\n    return 0;\n}",
+      "usecase": "Real-world use: Dynamic arrays (vectors) implemented in C."
+    },
+    "pro": {
+      "desc": "Use arena allocators for batch allocation with O(1) cleanup.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdint.h>\n\ntypedef struct {\n    uint8_t *base;\n    size_t offset, capacity;\n} Arena;\n\nArena arena_create(size_t cap) {\n    return (Arena){.base = malloc(cap), .offset = 0, .capacity = cap};\n}\n\nvoid *arena_alloc(Arena *a, size_t size) {\n    size = (size + 7) & ~7; // align to 8 bytes\n    if (a->offset + size > a->capacity) return NULL;\n    void *ptr = a->base + a->offset;\n    a->offset += size;\n    return ptr;\n}\n\nvoid arena_destroy(Arena *a) { free(a->base); a->offset = 0; }\n\nint main() {\n    Arena a = arena_create(4096);\n    int *x = arena_alloc(&a, sizeof(int)); *x = 42;\n    char *s = arena_alloc(&a, 32); snprintf(s, 32, \"Hello\");\n    printf(\"%d, %s\\n\", *x, s);\n    arena_destroy(&a); // frees everything at once\n    return 0;\n}",
+      "usecase": "Real-world use: Arena allocators in game engines and compilers."
+    }
+  },
+  {
+    "num": "13",
+    "title": "Structures & Typedef",
+    "beg": {
+      "desc": "Structs group related variables together into a single type.",
+      "code": "#include <stdio.h>\n\ntypedef struct {\n    char name[50];\n    int age;\n    float gpa;\n} Student;\n\nint main() {\n    Student s = {\"Alice\", 20, 3.85};\n    printf(\"%s, age %d, GPA %.2f\\n\", s.name, s.age, s.gpa);\n    return 0;\n}",
+      "usecase": "Real-world use: Representing entities like students and employees."
+    },
+    "int": {
+      "desc": "Use struct pointers, designated initializers, and nested structs.",
+      "code": "#include <stdio.h>\n\ntypedef struct { double x, y; } Point;\ntypedef struct { Point center; double radius; } Circle;\n\ndouble circle_area(const Circle *c) {\n    return 3.14159 * c->radius * c->radius;\n}\n\nint main() {\n    Circle c = { .center = {3.0, 4.0}, .radius = 5.0 };\n    printf(\"Center: (%.1f, %.1f)\\n\", c.center.x, c.center.y);\n    printf(\"Area: %.2f\\n\", circle_area(&c));\n    return 0;\n}",
+      "usecase": "Real-world use: Geometric data structures with nested types."
+    },
+    "pro": {
+      "desc": "Use opaque structs and handle patterns for information hiding and API design.",
+      "code": "// point.h - Public API (opaque type)\ntypedef struct Point Point;\nPoint* point_create(double x, double y);\nvoid point_destroy(Point *p);\ndouble point_distance(const Point *a, const Point *b);\n\n// point.c - Implementation (hidden details)\n#include <math.h>\n#include <stdlib.h>\nstruct Point { double x, y; };\n\nPoint* point_create(double x, double y) {\n    Point *p = malloc(sizeof(Point));\n    if (p) { p->x = x; p->y = y; }\n    return p;\n}\nvoid point_destroy(Point *p) { free(p); }\ndouble point_distance(const Point *a, const Point *b) {\n    return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2));\n}",
+      "usecase": "Real-world use: Opaque types for library API design (like FILE* in stdio)."
+    }
+  },
+  {
+    "num": "14",
+    "title": "Unions & Enums",
+    "beg": {
+      "desc": "Enums define named constants. Unions share memory between members.",
+      "code": "#include <stdio.h>\n\ntypedef enum { RED, GREEN, BLUE } Color;\n\nint main() {\n    Color c = GREEN;\n    switch (c) {\n        case RED:   printf(\"Red\\n\"); break;\n        case GREEN: printf(\"Green\\n\"); break;\n        case BLUE:  printf(\"Blue\\n\"); break;\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Named constants for state and options."
+    },
+    "int": {
+      "desc": "Use unions for type-punning and variant types with tagged unions.",
+      "code": "#include <stdio.h>\n\ntypedef enum { VAL_INT, VAL_FLOAT, VAL_STRING } ValueType;\n\ntypedef struct {\n    ValueType type;\n    union {\n        int i;\n        double f;\n        const char *s;\n    } as;\n} Value;\n\nvoid print_value(Value v) {\n    switch (v.type) {\n        case VAL_INT:    printf(\"%d\\n\", v.as.i); break;\n        case VAL_FLOAT:  printf(\"%.2f\\n\", v.as.f); break;\n        case VAL_STRING: printf(\"%s\\n\", v.as.s); break;\n    }\n}\n\nint main() {\n    Value v = { .type = VAL_STRING, .as.s = \"hello\" };\n    print_value(v);\n    return 0;\n}",
+      "usecase": "Real-world use: Dynamic value types in interpreters and config parsers."
+    },
+    "pro": {
+      "desc": "Use anonymous unions and compound literals for ergonomic variant types.",
+      "code": "#include <stdio.h>\n\ntypedef enum { NODE_INT, NODE_BIN_OP } NodeKind;\ntypedef struct Node Node;\n\nstruct Node {\n    NodeKind kind;\n    union {\n        int value;  // NODE_INT\n        struct { Node *left; char op; Node *right; }; // NODE_BIN_OP (anonymous)\n    };\n};\n\nint eval(const Node *n) {\n    if (n->kind == NODE_INT) return n->value;\n    int l = eval(n->left), r = eval(n->right);\n    switch (n->op) {\n        case '+': return l + r;\n        case '*': return l * r;\n        default: return 0;\n    }\n}\n\nint main() {\n    Node a = {NODE_INT, .value = 3};\n    Node b = {NODE_INT, .value = 4};\n    Node expr = {NODE_BIN_OP, .left = &a, .op = '+', .right = &b};\n    printf(\"3 + 4 = %d\\n\", eval(&expr));\n    return 0;\n}",
+      "usecase": "Real-world use: AST nodes in compilers and expression evaluators."
+    }
+  },
+  {
+    "num": "15",
+    "title": "File I/O",
+    "beg": {
+      "desc": "Use fopen, fprintf, fscanf, and fclose for file reading and writing.",
+      "code": "#include <stdio.h>\n\nint main() {\n    FILE *f = fopen(\"test.txt\", \"w\");\n    if (f) {\n        fprintf(f, \"Hello, File!\\n\");\n        fclose(f);\n    }\n    \n    f = fopen(\"test.txt\", \"r\");\n    if (f) {\n        char line[256];\n        while (fgets(line, sizeof(line), f))\n            printf(\"%s\", line);\n        fclose(f);\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Reading and writing configuration files."
+    },
+    "int": {
+      "desc": "Use binary file I/O for structured data persistence.",
+      "code": "#include <stdio.h>\n\ntypedef struct { char name[32]; int score; } Record;\n\nint main() {\n    Record records[] = {{\"Alice\", 95}, {\"Bob\", 87}};\n    \n    FILE *f = fopen(\"data.bin\", \"wb\");\n    fwrite(records, sizeof(Record), 2, f);\n    fclose(f);\n    \n    Record loaded[2];\n    f = fopen(\"data.bin\", \"rb\");\n    fread(loaded, sizeof(Record), 2, f);\n    fclose(f);\n    \n    for (int i = 0; i < 2; i++)\n        printf(\"%s: %d\\n\", loaded[i].name, loaded[i].score);\n    return 0;\n}",
+      "usecase": "Real-world use: Binary data serialization for save files."
+    },
+    "pro": {
+      "desc": "Use memory-mapped files for zero-copy file processing.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#ifdef _WIN32\n#include <windows.h>\n#else\n#include <sys/mman.h>\n#include <sys/stat.h>\n#include <fcntl.h>\n#include <unistd.h>\n#endif\n\n// Count lines in a file using mmap (Unix)\nsize_t count_lines(const char *path) {\n    int fd = open(path, O_RDONLY);\n    struct stat st; fstat(fd, &st);\n    char *data = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);\n    size_t count = 0;\n    for (size_t i = 0; i < (size_t)st.st_size; i++)\n        if (data[i] == '\\n') count++;\n    munmap(data, st.st_size); close(fd);\n    return count;\n}",
+      "usecase": "Real-world use: Processing multi-GB log files with zero-copy I/O."
+    }
+  },
+  {
+    "num": "16",
+    "title": "Preprocessor & Macros",
+    "beg": {
+      "desc": "The preprocessor handles #include, #define, and conditional compilation.",
+      "code": "#include <stdio.h>\n\n#define PI 3.14159\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\n\nint main() {\n    double area = PI * 5 * 5;\n    printf(\"Area: %.2f\\n\", area);\n    printf(\"Max: %d\\n\", MAX(10, 20));\n    return 0;\n}",
+      "usecase": "Real-world use: Constants and utility macros."
+    },
+    "int": {
+      "desc": "Use conditional compilation and include guards for platform-portable code.",
+      "code": "#ifndef CONFIG_H\n#define CONFIG_H\n\n#ifdef _WIN32\n  #define PATH_SEP '\\\\'\n  #define EXPORT __declspec(dllexport)\n#else\n  #define PATH_SEP '/'\n  #define EXPORT __attribute__((visibility(\"default\")))\n#endif\n\n#ifdef DEBUG\n  #define LOG(fmt, ...) fprintf(stderr, \"[DBG] \" fmt \"\\n\", ##__VA_ARGS__)\n#else\n  #define LOG(fmt, ...) ((void)0)\n#endif\n\n#endif // CONFIG_H",
+      "usecase": "Real-world use: Cross-platform header files with debug logging."
+    },
+    "pro": {
+      "desc": "Use X-macros for generating repetitive code from a single source of truth.",
+      "code": "#include <stdio.h>\n\n// X-macro: single source of truth\n#define ERROR_LIST \\\n    X(OK,        0, \"Success\") \\\n    X(NOT_FOUND, 1, \"Not found\") \\\n    X(TIMEOUT,   2, \"Timeout\") \\\n    X(FORBIDDEN, 3, \"Forbidden\")\n\n// Generate enum\n#define X(name, val, str) ERR_##name = val,\ntypedef enum { ERROR_LIST } ErrorCode;\n#undef X\n\n// Generate string lookup\n#define X(name, val, str) case ERR_##name: return str;\nconst char* error_string(ErrorCode e) {\n    switch (e) { ERROR_LIST default: return \"Unknown\"; }\n}\n#undef X\n\nint main() {\n    printf(\"%s\\n\", error_string(ERR_TIMEOUT)); // Timeout\n    return 0;\n}",
+      "usecase": "Real-world use: Auto-generated error codes and string tables."
+    }
+  },
+  {
+    "num": "17",
+    "title": "Header Files & Linking",
+    "beg": {
+      "desc": "Header files (.h) declare functions. Source files (.c) implement them.",
+      "code": "// math_utils.h\n#ifndef MATH_UTILS_H\n#define MATH_UTILS_H\nint add(int a, int b);\nint multiply(int a, int b);\n#endif\n\n// math_utils.c\n#include \"math_utils.h\"\nint add(int a, int b) { return a + b; }\nint multiply(int a, int b) { return a * b; }\n\n// main.c\n#include <stdio.h>\n#include \"math_utils.h\"\nint main() { printf(\"%d\\n\", add(3, 4)); }",
+      "usecase": "Real-world use: Multi-file C project organization."
+    },
+    "int": {
+      "desc": "Use extern, static, and inline for controlling symbol visibility across translation units.",
+      "code": "// config.h\n#ifndef CONFIG_H\n#define CONFIG_H\n\nextern const int MAX_CONNECTIONS;\n\nstatic inline int min(int a, int b) {\n    return a < b ? a : b;\n}\n\n// Internal linkage - only visible in this file\nstatic void internal_helper(void);\n\n#endif\n\n// config.c\n#include \"config.h\"\nconst int MAX_CONNECTIONS = 100;\nstatic void internal_helper(void) { /* hidden */ }",
+      "usecase": "Real-world use: Controlling visibility in multi-file projects."
+    },
+    "pro": {
+      "desc": "Use weak symbols and constructor/destructor attributes for plugin systems.",
+      "code": "#include <stdio.h>\n\n// Weak symbol: can be overridden by linker\n__attribute__((weak))\nvoid plugin_init(void) {\n    printf(\"Default plugin\\n\");\n}\n\n// Auto-called before/after main\n__attribute__((constructor))\nstatic void startup(void) {\n    printf(\"Library loaded\\n\");\n}\n\n__attribute__((destructor))\nstatic void cleanup(void) {\n    printf(\"Library unloaded\\n\");\n}\n\nint main() {\n    plugin_init(); // calls weak default or strong override\n    return 0;\n}",
+      "usecase": "Real-world use: Shared library initialization and plugin architectures."
+    }
+  },
+  {
+    "num": "18",
+    "title": "Bitwise Operations",
+    "beg": {
+      "desc": "Bitwise operators work on individual bits: AND, OR, XOR, NOT, shifts.",
+      "code": "#include <stdio.h>\n\nint main() {\n    unsigned char a = 0b11001010;\n    unsigned char b = 0b10110011;\n    printf(\"AND: 0x%02X\\n\", a & b);\n    printf(\"OR:  0x%02X\\n\", a | b);\n    printf(\"XOR: 0x%02X\\n\", a ^ b);\n    printf(\"NOT: 0x%02X\\n\", (unsigned char)~a);\n    printf(\"SHL: 0x%02X\\n\", a << 1);\n    return 0;\n}",
+      "usecase": "Real-world use: Working with hardware registers and protocols."
+    },
+    "int": {
+      "desc": "Use bit manipulation for efficient set operations and flag management.",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\n// Bit set operations\nvoid set_bit(uint32_t *flags, int bit)   { *flags |= (1U << bit); }\nvoid clear_bit(uint32_t *flags, int bit) { *flags &= ~(1U << bit); }\nint test_bit(uint32_t flags, int bit)    { return (flags >> bit) & 1; }\nvoid toggle_bit(uint32_t *flags, int bit){ *flags ^= (1U << bit); }\n\nint main() {\n    uint32_t perms = 0;\n    set_bit(&perms, 0); // read\n    set_bit(&perms, 2); // execute\n    printf(\"read=%d write=%d exec=%d\\n\",\n        test_bit(perms,0), test_bit(perms,1), test_bit(perms,2));\n    return 0;\n}",
+      "usecase": "Real-world use: Permission flags in operating systems."
+    },
+    "pro": {
+      "desc": "Use intrinsics and bit tricks for high-performance algorithms.",
+      "code": "#include <stdio.h>\n#include <stdint.h>\n\n// Fast log2 using bit manipulation\nstatic inline int fast_log2(uint32_t n) {\n    int log = 0;\n    if (n & 0xFFFF0000) { n >>= 16; log += 16; }\n    if (n & 0xFF00)     { n >>= 8;  log += 8;  }\n    if (n & 0xF0)       { n >>= 4;  log += 4;  }\n    if (n & 0xC)        { n >>= 2;  log += 2;  }\n    if (n & 0x2)        {           log += 1;  }\n    return log;\n}\n\n// Next power of 2\nstatic inline uint32_t next_pow2(uint32_t n) {\n    n--; n|=n>>1; n|=n>>2; n|=n>>4; n|=n>>8; n|=n>>16;\n    return n + 1;\n}\n\nint main() {\n    printf(\"log2(1024)=%d\\n\", fast_log2(1024));  // 10\n    printf(\"next_pow2(100)=%u\\n\", next_pow2(100)); // 128\n    return 0;\n}",
+      "usecase": "Real-world use: Fast math in game engines and signal processing."
+    }
+  },
+  {
+    "num": "19",
+    "title": "Recursion",
+    "beg": {
+      "desc": "Recursion is when a function calls itself. Always define a base case.",
+      "code": "#include <stdio.h>\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}\n\nint main() {\n    printf(\"5! = %d\\n\", factorial(5)); // 120\n    return 0;\n}",
+      "usecase": "Real-world use: Mathematical computations."
+    },
+    "int": {
+      "desc": "Use recursion for tree traversal and divide-and-conquer algorithms.",
+      "code": "#include <stdio.h>\n\nvoid merge_sort(int *arr, int *tmp, int left, int right) {\n    if (left >= right) return;\n    int mid = (left + right) / 2;\n    merge_sort(arr, tmp, left, mid);\n    merge_sort(arr, tmp, mid+1, right);\n    int i=left, j=mid+1, k=left;\n    while (i<=mid && j<=right)\n        tmp[k++] = arr[i]<=arr[j] ? arr[i++] : arr[j++];\n    while (i<=mid) tmp[k++]=arr[i++];\n    while (j<=right) tmp[k++]=arr[j++];\n    for (int x=left; x<=right; x++) arr[x]=tmp[x];\n}\n\nint main() {\n    int arr[]={5,2,8,1,9,3}; int tmp[6];\n    merge_sort(arr,tmp,0,5);\n    for(int i=0;i<6;i++) printf(\"%d \",arr[i]);\n    return 0;\n}",
+      "usecase": "Real-world use: O(n log n) sorting with merge sort."
+    },
+    "pro": {
+      "desc": "Convert recursion to iteration with explicit stacks for deep call chains.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct { int low, high; } Frame;\n\nvoid quicksort_iterative(int *arr, int n) {\n    Frame *stack = malloc(n * sizeof(Frame));\n    int top = 0;\n    stack[top++] = (Frame){0, n-1};\n    while (top > 0) {\n        Frame f = stack[--top];\n        if (f.low >= f.high) continue;\n        int pivot = arr[f.high], i = f.low;\n        for (int j = f.low; j < f.high; j++)\n            if (arr[j] < pivot) { int t=arr[i]; arr[i]=arr[j]; arr[j]=t; i++; }\n        int t=arr[i]; arr[i]=arr[f.high]; arr[f.high]=t;\n        stack[top++] = (Frame){f.low, i-1};\n        stack[top++] = (Frame){i+1, f.high};\n    }\n    free(stack);\n}\n\nint main() {\n    int arr[]={5,2,8,1,9,3,7,4};\n    quicksort_iterative(arr,8);\n    for(int i=0;i<8;i++) printf(\"%d \",arr[i]);\n    return 0;\n}",
+      "usecase": "Real-world use: Stack-safe quicksort for large datasets."
+    }
+  },
+  {
+    "num": "20",
+    "title": "Function Pointers",
+    "beg": {
+      "desc": "Function pointers store the address of a function, enabling callbacks.",
+      "code": "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\nint sub(int a, int b) { return a - b; }\n\nint main() {\n    int (*op)(int, int) = add;\n    printf(\"Result: %d\\n\", op(10, 3)); // 13\n    op = sub;\n    printf(\"Result: %d\\n\", op(10, 3)); // 7\n    return 0;\n}",
+      "usecase": "Real-world use: Selecting operations at runtime."
+    },
+    "int": {
+      "desc": "Use function pointers for callbacks and plugin-style architectures.",
+      "code": "#include <stdio.h>\n\ntypedef void (*EventHandler)(const char *);\n\nvoid on_click(const char *target) { printf(\"Clicked: %s\\n\", target); }\nvoid on_hover(const char *target) { printf(\"Hovered: %s\\n\", target); }\n\ntypedef struct { const char *event; EventHandler handler; } Binding;\n\nint main() {\n    Binding bindings[] = {\n        {\"click\", on_click}, {\"hover\", on_hover}\n    };\n    \n    const char *event = \"click\";\n    for (int i = 0; i < 2; i++)\n        if (strcmp(bindings[i].event, event) == 0)\n            bindings[i].handler(\"button1\");\n    return 0;\n}",
+      "usecase": "Real-world use: Event handler registration systems."
+    },
+    "pro": {
+      "desc": "Use vtables (arrays of function pointers) to implement polymorphism in C.",
+      "code": "#include <stdio.h>\n\ntypedef struct Shape Shape;\ntypedef struct {\n    double (*area)(const Shape*);\n    void (*draw)(const Shape*);\n    void (*destroy)(Shape*);\n} ShapeVTable;\n\nstruct Shape { const ShapeVTable *vtable; };\n\ntypedef struct { Shape base; double radius; } Circle;\n\ndouble circle_area(const Shape *s) {\n    const Circle *c = (const Circle*)s;\n    return 3.14159 * c->radius * c->radius;\n}\nvoid circle_draw(const Shape *s) { printf(\"Drawing circle r=%.1f\\n\", ((Circle*)s)->radius); }\n\nstatic const ShapeVTable circle_vtable = {circle_area, circle_draw, NULL};\n\nCircle circle_new(double r) {\n    return (Circle){{&circle_vtable}, r};\n}\n\nint main() {\n    Circle c = circle_new(5);\n    Shape *s = (Shape*)&c;\n    printf(\"Area: %.2f\\n\", s->vtable->area(s));\n    s->vtable->draw(s);\n    return 0;\n}",
+      "usecase": "Real-world use: OOP vtable polymorphism in C (used in GTK, Linux kernel)."
+    }
+  },
+  {
+    "num": "21",
+    "title": "Linked Lists",
+    "beg": {
+      "desc": "A linked list is a chain of nodes, where each node points to the next.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct Node { int data; struct Node *next; } Node;\n\nNode* create_node(int data) {\n    Node *n = malloc(sizeof(Node));\n    n->data = data; n->next = NULL;\n    return n;\n}\n\nint main() {\n    Node *head = create_node(10);\n    head->next = create_node(20);\n    head->next->next = create_node(30);\n    \n    for (Node *p = head; p; p = p->next)\n        printf(\"%d -> \", p->data);\n    printf(\"NULL\\n\");\n    return 0;\n}",
+      "usecase": "Real-world use: Dynamic data storage without fixed size limits."
+    },
+    "int": {
+      "desc": "Implement insert, delete, and reverse operations for linked lists.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\ntypedef struct Node { int data; struct Node *next; } Node;\n\nvoid push_front(Node **head, int data) {\n    Node *n = malloc(sizeof(Node));\n    n->data = data; n->next = *head;\n    *head = n;\n}\n\nNode* reverse(Node *head) {\n    Node *prev = NULL, *curr = head;\n    while (curr) {\n        Node *next = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}\n\nint main() {\n    Node *list = NULL;\n    for (int i = 1; i <= 5; i++) push_front(&list, i);\n    list = reverse(list);\n    for (Node *p = list; p; p = p->next) printf(\"%d \", p->data);\n    return 0;\n}",
+      "usecase": "Real-world use: Classic interview problem: reverse a linked list."
+    },
+    "pro": {
+      "desc": "Use intrusive linked lists for zero-allocation container patterns.",
+      "code": "#include <stdio.h>\n#include <stddef.h>\n\n// Intrusive list node (embedded in user struct)\ntypedef struct ListNode { struct ListNode *next, *prev; } ListNode;\n\n#define container_of(ptr, type, member) \\\n    ((type*)((char*)(ptr) - offsetof(type, member)))\n\ntypedef struct {\n    char name[32];\n    int priority;\n    ListNode node; // embedded, no separate allocation\n} Task;\n\nvoid list_add(ListNode *head, ListNode *entry) {\n    entry->next = head->next;\n    entry->prev = head;\n    head->next->prev = entry;\n    head->next = entry;\n}\n\nint main() {\n    ListNode head = {&head, &head}; // circular sentinel\n    Task t1 = {\"compile\", 1};\n    Task t2 = {\"link\", 2};\n    list_add(&head, &t1.node);\n    list_add(&head, &t2.node);\n    \n    for (ListNode *n = head.next; n != &head; n = n->next) {\n        Task *t = container_of(n, Task, node);\n        printf(\"%s (pri %d)\\n\", t->name, t->priority);\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Linux kernel's list_head intrusive linked list."
+    }
+  },
+  {
+    "num": "22",
+    "title": "Stacks & Queues",
+    "beg": {
+      "desc": "Stacks follow LIFO (Last In, First Out). Queues follow FIFO (First In, First Out).",
+      "code": "#include <stdio.h>\n#define MAX 100\n\ntypedef struct { int data[MAX]; int top; } Stack;\n\nvoid push(Stack *s, int val) { s->data[++s->top] = val; }\nint pop(Stack *s) { return s->data[s->top--]; }\nint is_empty(Stack *s) { return s->top < 0; }\n\nint main() {\n    Stack s = { .top = -1 };\n    push(&s, 10); push(&s, 20); push(&s, 30);\n    while (!is_empty(&s)) printf(\"%d \", pop(&s));\n    // Output: 30 20 10\n    return 0;\n}",
+      "usecase": "Real-world use: Undo operations and expression evaluation."
+    },
+    "int": {
+      "desc": "Implement a circular buffer queue for efficient FIFO operations.",
+      "code": "#include <stdio.h>\n#define CAP 8\n\ntypedef struct {\n    int data[CAP];\n    int head, tail, count;\n} Queue;\n\nint enqueue(Queue *q, int val) {\n    if (q->count == CAP) return -1;\n    q->data[q->tail] = val;\n    q->tail = (q->tail + 1) % CAP;\n    q->count++;\n    return 0;\n}\n\nint dequeue(Queue *q, int *val) {\n    if (q->count == 0) return -1;\n    *val = q->data[q->head];\n    q->head = (q->head + 1) % CAP;\n    q->count--;\n    return 0;\n}\n\nint main() {\n    Queue q = {0};\n    for (int i = 1; i <= 5; i++) enqueue(&q, i * 10);\n    int val;\n    while (dequeue(&q, &val) == 0) printf(\"%d \", val);\n    return 0;\n}",
+      "usecase": "Real-world use: Task scheduling and message queues."
+    },
+    "pro": {
+      "desc": "Use lock-free ring buffers for concurrent producer-consumer scenarios.",
+      "code": "#include <stdio.h>\n#include <stdatomic.h>\n#define SIZE 1024\n\ntypedef struct {\n    int buffer[SIZE];\n    _Atomic size_t head;\n    _Atomic size_t tail;\n} SPSCQueue;\n\nint spsc_push(SPSCQueue *q, int val) {\n    size_t tail = atomic_load_explicit(&q->tail, memory_order_relaxed);\n    size_t next = (tail + 1) % SIZE;\n    if (next == atomic_load_explicit(&q->head, memory_order_acquire))\n        return -1; // full\n    q->buffer[tail] = val;\n    atomic_store_explicit(&q->tail, next, memory_order_release);\n    return 0;\n}\n\nint spsc_pop(SPSCQueue *q, int *val) {\n    size_t head = atomic_load_explicit(&q->head, memory_order_relaxed);\n    if (head == atomic_load_explicit(&q->tail, memory_order_acquire))\n        return -1; // empty\n    *val = q->buffer[head];\n    atomic_store_explicit(&q->head, (head+1)%SIZE, memory_order_release);\n    return 0;\n}",
+      "usecase": "Real-world use: Lock-free queues in audio processing and trading systems."
+    }
+  },
+  {
+    "num": "23",
+    "title": "Memory Management",
+    "beg": {
+      "desc": "C requires manual memory management. Always free what you malloc.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int *arr = malloc(5 * sizeof(int));\n    if (!arr) return 1;\n    \n    for (int i = 0; i < 5; i++) arr[i] = i + 1;\n    for (int i = 0; i < 5; i++) printf(\"%d \", arr[i]);\n    \n    free(arr);\n    arr = NULL; // prevent dangling pointer\n    return 0;\n}",
+      "usecase": "Real-world use: Proper memory lifecycle management."
+    },
+    "int": {
+      "desc": "Use valgrind-friendly patterns and RAII-like cleanup with goto.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n\nint process_data(const char *filename) {\n    int result = -1;\n    FILE *f = NULL;\n    char *buffer = NULL;\n    \n    f = fopen(filename, \"r\");\n    if (!f) goto cleanup;\n    \n    buffer = malloc(4096);\n    if (!buffer) goto cleanup;\n    \n    // Process data...\n    result = 0;\n    \ncleanup:\n    free(buffer);\n    if (f) fclose(f);\n    return result;\n}",
+      "usecase": "Real-world use: Centralized cleanup with goto in system programming."
+    },
+    "pro": {
+      "desc": "Implement a simple memory pool for predictable allocation performance.",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\ntypedef struct Pool {\n    void *blocks;\n    void *free_list;\n    size_t block_size;\n    size_t count;\n} Pool;\n\nPool pool_create(size_t block_size, size_t count) {\n    Pool p;\n    p.block_size = block_size < sizeof(void*) ? sizeof(void*) : block_size;\n    p.count = count;\n    p.blocks = malloc(p.block_size * count);\n    p.free_list = NULL;\n    // Build free list\n    for (size_t i = 0; i < count; i++) {\n        void *block = (char*)p.blocks + i * p.block_size;\n        *(void**)block = p.free_list;\n        p.free_list = block;\n    }\n    return p;\n}\n\nvoid *pool_alloc(Pool *p) {\n    if (!p->free_list) return NULL;\n    void *block = p->free_list;\n    p->free_list = *(void**)block;\n    return block;\n}\n\nvoid pool_free(Pool *p, void *ptr) {\n    *(void**)ptr = p->free_list;\n    p->free_list = ptr;\n}",
+      "usecase": "Real-world use: Fixed-size memory pools in game engines and embedded systems."
+    }
+  },
+  {
+    "num": "24",
+    "title": "Error Handling (errno)",
+    "beg": {
+      "desc": "C uses return values and errno for error reporting.",
+      "code": "#include <stdio.h>\n#include <errno.h>\n#include <string.h>\n\nint main() {\n    FILE *f = fopen(\"nonexistent.txt\", \"r\");\n    if (!f) {\n        printf(\"Error %d: %s\\n\", errno, strerror(errno));\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Diagnosing file operation failures."
+    },
+    "int": {
+      "desc": "Use custom error codes and error propagation patterns.",
+      "code": "#include <stdio.h>\n\ntypedef enum {\n    ERR_OK = 0,\n    ERR_NULL_ARG = -1,\n    ERR_OVERFLOW = -2,\n    ERR_NOT_FOUND = -3\n} ErrCode;\n\nconst char* err_str(ErrCode e) {\n    switch (e) {\n        case ERR_OK: return \"OK\";\n        case ERR_NULL_ARG: return \"Null argument\";\n        case ERR_OVERFLOW: return \"Overflow\";\n        case ERR_NOT_FOUND: return \"Not found\";\n    }\n    return \"Unknown\";\n}\n\nErrCode safe_add(int a, int b, int *result) {\n    if (!result) return ERR_NULL_ARG;\n    if ((b > 0 && a > __INT_MAX__ - b)) return ERR_OVERFLOW;\n    *result = a + b;\n    return ERR_OK;\n}",
+      "usecase": "Real-world use: Structured error handling in library APIs."
+    },
+    "pro": {
+      "desc": "Use setjmp/longjmp for exception-like error handling in C.",
+      "code": "#include <stdio.h>\n#include <setjmp.h>\n\nstatic jmp_buf error_handler;\n\ntypedef enum { ERR_NONE, ERR_DIVIDE_ZERO, ERR_OVERFLOW } Error;\n\ndouble safe_divide(double a, double b) {\n    if (b == 0.0) longjmp(error_handler, ERR_DIVIDE_ZERO);\n    return a / b;\n}\n\nint main() {\n    Error err = setjmp(error_handler);\n    if (err != ERR_NONE) {\n        printf(\"Caught error: %d\\n\", err);\n        return 1;\n    }\n    \n    printf(\"10/3 = %.2f\\n\", safe_divide(10, 3));\n    printf(\"10/0 = %.2f\\n\", safe_divide(10, 0)); // jumps to handler\n    return 0;\n}",
+      "usecase": "Real-world use: Non-local jumps for error recovery in parsers."
+    }
+  },
+  {
+    "num": "25",
+    "title": "System Calls & POSIX",
+    "beg": {
+      "desc": "System calls interact directly with the operating system kernel.",
+      "code": "#include <stdio.h>\n#include <time.h>\n\nint main() {\n    time_t now = time(NULL);\n    printf(\"Current time: %s\", ctime(&now));\n    \n    clock_t start = clock();\n    for (volatile int i = 0; i < 10000000; i++);\n    double elapsed = (double)(clock()-start)/CLOCKS_PER_SEC;\n    printf(\"Elapsed: %.3f seconds\\n\", elapsed);\n    return 0;\n}",
+      "usecase": "Real-world use: Time measurement and benchmarking."
+    },
+    "int": {
+      "desc": "Use POSIX file operations and directory traversal for system utilities.",
+      "code": "#include <stdio.h>\n#include <dirent.h>\n#include <sys/stat.h>\n\nint main() {\n    DIR *dir = opendir(\".\");\n    if (!dir) { perror(\"opendir\"); return 1; }\n    \n    struct dirent *entry;\n    while ((entry = readdir(dir))) {\n        struct stat st;\n        if (stat(entry->d_name, &st) == 0) {\n            printf(\"%c %8ld  %s\\n\",\n                S_ISDIR(st.st_mode) ? 'd' : '-',\n                (long)st.st_size,\n                entry->d_name);\n        }\n    }\n    closedir(dir);\n    return 0;\n}",
+      "usecase": "Real-world use: Directory listing tools like ls."
+    },
+    "pro": {
+      "desc": "Use fork/exec for process management and pipes for inter-process communication.",
+      "code": "#include <stdio.h>\n#include <unistd.h>\n#include <sys/wait.h>\n#include <string.h>\n\nint main() {\n    int pipefd[2];\n    pipe(pipefd);\n    \n    pid_t pid = fork();\n    if (pid == 0) {\n        // Child: write to pipe\n        close(pipefd[0]);\n        const char *msg = \"Hello from child!\";\n        write(pipefd[1], msg, strlen(msg));\n        close(pipefd[1]);\n        _exit(0);\n    } else {\n        // Parent: read from pipe\n        close(pipefd[1]);\n        char buf[128];\n        int n = read(pipefd[0], buf, sizeof(buf)-1);\n        buf[n] = '\\0';\n        printf(\"Parent received: %s\\n\", buf);\n        close(pipefd[0]);\n        wait(NULL);\n    }\n    return 0;\n}",
+      "usecase": "Real-world use: Process spawning and IPC in Unix daemons."
+    }
+  }
+]

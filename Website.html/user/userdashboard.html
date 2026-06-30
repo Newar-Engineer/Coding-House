@@ -928,6 +928,26 @@ function updateTierUI(tier) {
 (function() {
   var tier = localStorage.getItem('codinghouse_tier') || 'normal';
   updateTierUI(tier);
+  
+  var sessionUser = localStorage.getItem('codinghouse_currentUser');
+  if (sessionUser) {
+    var userObj = JSON.parse(sessionUser);
+    
+    var sidebarAv = document.querySelector('.sidebar-user .user-av');
+    if (sidebarAv) sidebarAv.textContent = userObj.av || 'US';
+    
+    var sidebarName = document.querySelector('.sidebar-user .user-name');
+    if (sidebarName) sidebarName.textContent = userObj.name.split(' ')[0];
+    
+    var sidebarRole = document.querySelector('.sidebar-user .user-role');
+    if (sidebarRole) sidebarRole.textContent = (userObj.plan || 'Free') + ' Plan';
+    
+    var welcomeTitle = document.querySelector('.topbar-left h1');
+    if (welcomeTitle) welcomeTitle.textContent = 'Good morning, ' + (userObj.name.split(' ')[0]) + ' 👋';
+    
+    var statsVal = document.querySelector('.stat-card .stat-val');
+    if (statsVal && userObj.xp !== undefined) statsVal.textContent = Number(userObj.xp).toLocaleString();
+  }
 })();
 </script>
 </body>

@@ -1,0 +1,572 @@
+[
+  {
+    "num": "01",
+    "title": "Variables & Data Types",
+    "beg": {
+      "desc": "Variables store data. Python is dynamically typed so you don't declare types explicitly.",
+      "code": "name = \"Alice\"\nage = 25\nheight = 5.6\nis_student = True\nprint(name, age, height, is_student)",
+      "usecase": "Real-world use: Storing user profile information in web applications."
+    },
+    "int": {
+      "desc": "Use type hints for documentation and static analysis. Python 3.10+ supports union syntax with |.",
+      "code": "from typing import Optional\n\ndef get_user(user_id: int) -> Optional[dict]:\n    users: dict[int, str] = {1: \"Alice\", 2: \"Bob\"}\n    name = users.get(user_id)\n    return {\"id\": user_id, \"name\": name} if name else None",
+      "usecase": "Real-world use: Building typed APIs with FastAPI or Django REST framework."
+    },
+    "pro": {
+      "desc": "Use dataclasses with frozen=True for immutable value objects. Slots reduce memory footprint.",
+      "code": "from dataclasses import dataclass, field\n\n@dataclass(frozen=True, slots=True)\nclass Config:\n    host: str = \"localhost\"\n    port: int = 8080\n    tags: tuple[str, ...] = field(default_factory=tuple)\n\nconfig = Config(host=\"prod.api.com\", port=443)\nprint(config)  # Immutable, memory-efficient",
+      "usecase": "Real-world use: Configuration objects in microservice architectures."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Strings & Text Processing",
+    "beg": {
+      "desc": "Strings are sequences of characters. Use quotes to create them and f-strings for formatting.",
+      "code": "greeting = \"Hello\"\nname = \"World\"\nmessage = f\"{greeting}, {name}!\"\nprint(message.upper())\nprint(len(message))",
+      "usecase": "Real-world use: Formatting user-facing messages and notifications."
+    },
+    "int": {
+      "desc": "Use string methods for data cleaning. Regular expressions handle complex patterns.",
+      "code": "import re\n\nemail = \"  User@Example.COM  \"\ncleaned = email.strip().lower()\nprint(cleaned)  # user@example.com\n\npattern = r'^[\\w.+-]+@[\\w-]+\\.[\\w.]+$'\nprint(re.match(pattern, cleaned) is not None)",
+      "usecase": "Real-world use: Validating and sanitizing user input in web forms."
+    },
+    "pro": {
+      "desc": "Use string interning, __slots__, and compiled regex for high-performance text processing pipelines.",
+      "code": "import re\nfrom functools import lru_cache\n\n_PATTERN = re.compile(r'<[^>]+>')\n\n@lru_cache(maxsize=1024)\ndef strip_html(text: str) -> str:\n    return _PATTERN.sub('', text).strip()\n\nresult = strip_html(\"<p>Hello <b>World</b></p>\")\nprint(result)  # Hello World",
+      "usecase": "Real-world use: High-throughput HTML sanitization in web scrapers."
+    }
+  },
+  {
+    "num": "03",
+    "title": "Numbers & Math Operations",
+    "beg": {
+      "desc": "Python supports integers, floats, and basic arithmetic operators for calculations.",
+      "code": "a = 10\nb = 3\nprint(a + b)   # 13\nprint(a / b)   # 3.333...\nprint(a // b)  # 3 (floor division)\nprint(a ** b)  # 1000 (power)",
+      "usecase": "Real-world use: Simple calculations in scripts and utilities."
+    },
+    "int": {
+      "desc": "Use the decimal module for financial precision and math module for scientific operations.",
+      "code": "from decimal import Decimal, ROUND_HALF_UP\n\nprice = Decimal(\"19.99\")\ntax = Decimal(\"0.08\")\ntotal = (price * (1 + tax)).quantize(\n    Decimal(\"0.01\"), rounding=ROUND_HALF_UP\n)\nprint(f\"Total: ${total}\")  # $21.59",
+      "usecase": "Real-world use: Financial calculations requiring exact decimal precision."
+    },
+    "pro": {
+      "desc": "Use NumPy for vectorized math operations that are orders of magnitude faster than pure Python loops.",
+      "code": "import numpy as np\n\nprices = np.array([19.99, 29.99, 9.99, 49.99])\ndiscounts = np.where(prices > 20, 0.15, 0.05)\nfinal = prices * (1 - discounts)\nprint(f\"Avg: ${final.mean():.2f}\")\nprint(f\"Total: ${final.sum():.2f}\")",
+      "usecase": "Real-world use: Batch price calculations in e-commerce analytics pipelines."
+    }
+  },
+  {
+    "num": "04",
+    "title": "Boolean Logic & Comparisons",
+    "beg": {
+      "desc": "Booleans represent True or False. Comparison operators return boolean values.",
+      "code": "age = 18\nis_adult = age >= 18\nhas_id = True\ncan_enter = is_adult and has_id\nprint(can_enter)  # True",
+      "usecase": "Real-world use: Simple access control checks in applications."
+    },
+    "int": {
+      "desc": "Use short-circuit evaluation and truthy/falsy values for cleaner conditional logic.",
+      "code": "def get_username(user):\n    return user.get(\"nickname\") or user.get(\"name\") or \"Anonymous\"\n\nuser = {\"name\": \"Alice\", \"nickname\": \"\"}\nprint(get_username(user))  # Alice\n\n# all() and any() for collection checks\nscores = [85, 92, 78, 95]\nprint(all(s >= 70 for s in scores))  # True",
+      "usecase": "Real-world use: Fallback chains for user display names."
+    },
+    "pro": {
+      "desc": "Implement custom comparison protocols with __eq__, __lt__ and total_ordering for domain objects.",
+      "code": "from functools import total_ordering\n\n@total_ordering\nclass Version:\n    def __init__(self, major, minor, patch):\n        self.major, self.minor, self.patch = major, minor, patch\n    def __eq__(self, other):\n        return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)\n    def __lt__(self, other):\n        return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)\n\nprint(Version(2,1,0) > Version(1,9,9))  # True",
+      "usecase": "Real-world use: Semantic versioning comparison in package managers."
+    }
+  },
+  {
+    "num": "05",
+    "title": "Lists & Arrays",
+    "beg": {
+      "desc": "Lists are ordered, mutable collections that can hold items of any type.",
+      "code": "fruits = [\"apple\", \"banana\", \"cherry\"]\nfruits.append(\"date\")\nfruits.insert(1, \"blueberry\")\nprint(fruits[0])    # apple\nprint(len(fruits))  # 5",
+      "usecase": "Real-world use: Storing shopping cart items in an e-commerce app."
+    },
+    "int": {
+      "desc": "Use slicing, list methods, and sorting with custom keys for data manipulation.",
+      "code": "students = [\n    {\"name\": \"Alice\", \"gpa\": 3.8},\n    {\"name\": \"Bob\", \"gpa\": 3.5},\n    {\"name\": \"Carol\", \"gpa\": 3.9}\n]\nhonor_roll = sorted(students, key=lambda s: s[\"gpa\"], reverse=True)\nfor s in honor_roll:\n    print(f\"{s['name']}: {s['gpa']}\")",
+      "usecase": "Real-world use: Sorting and ranking leaderboard entries."
+    },
+    "pro": {
+      "desc": "Use collections.deque for O(1) append/pop from both ends, and array module for memory-efficient typed arrays.",
+      "code": "from collections import deque\n\nclass SlidingWindow:\n    def __init__(self, size: int):\n        self._window: deque[float] = deque(maxlen=size)\n    def add(self, val: float):\n        self._window.append(val)\n    @property\n    def average(self) -> float:\n        return sum(self._window) / len(self._window) if self._window else 0\n\nwin = SlidingWindow(3)\nfor v in [10, 20, 30, 40]:\n    win.add(v)\nprint(f\"Moving avg: {win.average}\")  # 30.0",
+      "usecase": "Real-world use: Real-time moving average for stock price monitoring."
+    }
+  },
+  {
+    "num": "06",
+    "title": "Tuples & Immutable Sequences",
+    "beg": {
+      "desc": "Tuples are ordered, immutable sequences. Once created, their elements cannot be changed.",
+      "code": "coordinates = (40.7128, -74.0060)\nlat, lon = coordinates  # unpacking\nprint(f\"Lat: {lat}, Lon: {lon}\")\n\ncolors = (\"red\", \"green\", \"blue\")\nprint(colors[1])  # green",
+      "usecase": "Real-world use: Representing fixed data like GPS coordinates."
+    },
+    "int": {
+      "desc": "Use named tuples for readable, self-documenting data structures with named fields.",
+      "code": "from collections import namedtuple\n\nPoint = namedtuple(\"Point\", [\"x\", \"y\", \"z\"])\norigin = Point(0, 0, 0)\nposition = Point(x=3.5, y=2.1, z=7.0)\n\ndistance = (sum((a-b)**2 for a,b in zip(origin, position)))**0.5\nprint(f\"Distance: {distance:.2f}\")",
+      "usecase": "Real-world use: 3D coordinate systems in game engines."
+    },
+    "pro": {
+      "desc": "Use typing.NamedTuple for type-safe tuples with default values and methods.",
+      "code": "from typing import NamedTuple\n\nclass HTTPResponse(NamedTuple):\n    status: int\n    body: str\n    headers: dict[str, str] = {}\n    \n    @property\n    def ok(self) -> bool:\n        return 200 <= self.status < 300\n\nresp = HTTPResponse(200, '{\"data\": []}', {\"Content-Type\": \"application/json\"})\nprint(resp.ok, resp.status)  # True 200",
+      "usecase": "Real-world use: Immutable HTTP response wrappers in API clients."
+    }
+  },
+  {
+    "num": "07",
+    "title": "Dictionaries & Hash Maps",
+    "beg": {
+      "desc": "Dictionaries store key-value pairs. Access values by their keys.",
+      "code": "user = {\n    \"name\": \"Alice\",\n    \"age\": 25,\n    \"email\": \"alice@mail.com\"\n}\nprint(user[\"name\"])\nuser[\"role\"] = \"admin\"\nprint(user.get(\"phone\", \"N/A\"))",
+      "usecase": "Real-world use: Storing user profile data."
+    },
+    "int": {
+      "desc": "Use dictionary comprehensions, merging, and defaultdict for advanced data organization.",
+      "code": "from collections import defaultdict\n\nwords = [\"apple\", \"banana\", \"avocado\", \"blueberry\", \"apricot\"]\ngrouped = defaultdict(list)\nfor w in words:\n    grouped[w[0]].append(w)\n\nfor letter, items in sorted(grouped.items()):\n    print(f\"{letter}: {items}\")",
+      "usecase": "Real-world use: Grouping search results by category."
+    },
+    "pro": {
+      "desc": "Use ChainMap for layered configuration and __missing__ for auto-vivifying dictionaries.",
+      "code": "from collections import ChainMap\n\ndefaults = {\"theme\": \"dark\", \"lang\": \"en\", \"timeout\": 30}\nuser_prefs = {\"theme\": \"light\"}\nenv_vars = {\"timeout\": 60}\n\nconfig = ChainMap(env_vars, user_prefs, defaults)\nprint(config[\"theme\"])    # light (user override)\nprint(config[\"lang\"])     # en (default)\nprint(config[\"timeout\"])  # 60 (env override)",
+      "usecase": "Real-world use: Layered configuration systems with environment overrides."
+    }
+  },
+  {
+    "num": "08",
+    "title": "Sets & Unique Collections",
+    "beg": {
+      "desc": "Sets are unordered collections of unique elements. Duplicates are automatically removed.",
+      "code": "tags = {\"python\", \"web\", \"api\", \"python\"}\nprint(tags)  # {'python', 'web', 'api'}\ntags.add(\"database\")\ntags.discard(\"web\")\nprint(\"python\" in tags)  # True",
+      "usecase": "Real-world use: Tracking unique tags or categories."
+    },
+    "int": {
+      "desc": "Use set operations (union, intersection, difference) for comparing collections efficiently.",
+      "code": "enrolled = {\"Alice\", \"Bob\", \"Carol\", \"Dave\"}\ncompleted = {\"Alice\", \"Carol\", \"Eve\"}\n\nstill_active = enrolled - completed\nnew_completions = completed - enrolled\nboth = enrolled & completed\nprint(f\"Active: {still_active}\")\nprint(f\"Completed: {both}\")",
+      "usecase": "Real-world use: Finding users who enrolled but haven't completed a course."
+    },
+    "pro": {
+      "desc": "Use frozenset for hashable immutable sets and set-based deduplication strategies.",
+      "code": "from typing import FrozenSet\n\ndef find_common_skills(\n    teams: list[FrozenSet[str]]\n) -> FrozenSet[str]:\n    if not teams:\n        return frozenset()\n    common = teams[0]\n    for team in teams[1:]:\n        common &= team\n    return common\n\nteams = [\n    frozenset({\"Python\", \"SQL\", \"Docker\"}),\n    frozenset({\"Python\", \"AWS\", \"Docker\"}),\n]\nprint(find_common_skills(teams))  # {'Python', 'Docker'}",
+      "usecase": "Real-world use: Finding overlapping skill requirements across job postings."
+    }
+  },
+  {
+    "num": "09",
+    "title": "If/Elif/Else Conditionals",
+    "beg": {
+      "desc": "Conditionals let your code make decisions based on conditions.",
+      "code": "temperature = 35\nif temperature > 30:\n    print(\"It's hot outside!\")\nelif temperature > 20:\n    print(\"Nice weather.\")\nelse:\n    print(\"It's cold.\")",
+      "usecase": "Real-world use: Weather-based UI themes in apps."
+    },
+    "int": {
+      "desc": "Use dictionary-based dispatch and conditional expressions for cleaner branching.",
+      "code": "def get_pricing(plan: str) -> float:\n    prices = {\n        \"free\": 0,\n        \"basic\": 9.99,\n        \"pro\": 29.99,\n        \"enterprise\": 99.99\n    }\n    return prices.get(plan, -1)\n\nprice = get_pricing(\"pro\")\nstatus = \"valid\" if price >= 0 else \"unknown plan\"\nprint(f\"${price} ({status})\")",
+      "usecase": "Real-world use: Pricing tier lookup in SaaS applications."
+    },
+    "pro": {
+      "desc": "Use structural pattern matching (Python 3.10+) for complex data routing.",
+      "code": "def handle_event(event: dict):\n    match event:\n        case {\"type\": \"click\", \"target\": str(elem)}:\n            print(f\"Clicked: {elem}\")\n        case {\"type\": \"submit\", \"data\": dict(payload)}:\n            print(f\"Form submitted: {list(payload.keys())}\")\n        case {\"type\": \"error\", \"code\": int(c)} if c >= 500:\n            print(f\"Server error: {c}\")\n        case _:\n            print(\"Unknown event\")\n\nhandle_event({\"type\": \"submit\", \"data\": {\"name\": \"Alice\"}})",
+      "usecase": "Real-world use: Event routing in real-time web socket servers."
+    }
+  },
+  {
+    "num": "10",
+    "title": "For Loops & Iterations",
+    "beg": {
+      "desc": "For loops iterate over sequences like lists, strings, and ranges.",
+      "code": "for i in range(1, 6):\n    print(f\"Step {i}\")\n\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor fruit in fruits:\n    print(f\"I like {fruit}\")",
+      "usecase": "Real-world use: Iterating through database query results."
+    },
+    "int": {
+      "desc": "Use enumerate, zip, and itertools for advanced iteration patterns.",
+      "code": "names = [\"Alice\", \"Bob\", \"Carol\"]\nscores = [92, 87, 95]\n\nfor rank, (name, score) in enumerate(zip(names, scores), 1):\n    print(f\"#{rank} {name}: {score}\")\n\n# Flatten nested lists\nnested = [[1,2], [3,4], [5,6]]\nflat = [x for sub in nested for x in sub]\nprint(flat)  # [1,2,3,4,5,6]",
+      "usecase": "Real-world use: Ranking users and transforming nested API responses."
+    },
+    "pro": {
+      "desc": "Use itertools for memory-efficient combinatorial iteration over large datasets.",
+      "code": "from itertools import islice, chain, groupby\nfrom operator import itemgetter\n\ndef chunked(iterable, size):\n    it = iter(iterable)\n    while chunk := list(islice(it, size)):\n        yield chunk\n\n# Process millions of records in batches\nfor batch in chunked(range(100), 25):\n    print(f\"Processing batch of {len(batch)} items\")\n# Output: 4 batches of 25",
+      "usecase": "Real-world use: Batch processing ETL pipelines with constant memory."
+    }
+  },
+  {
+    "num": "11",
+    "title": "While Loops",
+    "beg": {
+      "desc": "While loops repeat code as long as a condition is True.",
+      "code": "count = 0\nwhile count < 5:\n    print(f\"Count: {count}\")\n    count += 1\nprint(\"Done!\")",
+      "usecase": "Real-world use: Retry loops waiting for a condition."
+    },
+    "int": {
+      "desc": "Use while with break/continue and walrus operator for input validation loops.",
+      "code": "while (user_input := input(\"Enter 'quit' to exit: \")) != \"quit\":\n    if not user_input.strip():\n        print(\"Empty input, try again.\")\n        continue\n    print(f\"You entered: {user_input}\")\nprint(\"Goodbye!\")",
+      "usecase": "Real-world use: Interactive CLI tools with input validation."
+    },
+    "pro": {
+      "desc": "Use while loops with exponential backoff for resilient network retries.",
+      "code": "import time\nimport random\n\ndef fetch_with_retry(url: str, max_retries: int = 5):\n    delay = 1.0\n    for attempt in range(max_retries):\n        try:\n            # Simulate network call\n            if random.random() < 0.3:\n                raise ConnectionError(\"Timeout\")\n            return {\"status\": 200}\n        except ConnectionError:\n            print(f\"Retry {attempt+1}, waiting {delay:.1f}s\")\n            time.sleep(delay)\n            delay = min(delay * 2, 30)  # cap at 30s\n    raise Exception(\"Max retries exceeded\")",
+      "usecase": "Real-world use: Resilient API clients with exponential backoff."
+    }
+  },
+  {
+    "num": "12",
+    "title": "List Comprehensions",
+    "beg": {
+      "desc": "List comprehensions create new lists by transforming existing ones in a single line.",
+      "code": "numbers = [1, 2, 3, 4, 5]\nsquares = [n ** 2 for n in numbers]\nprint(squares)  # [1, 4, 9, 16, 25]\n\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)  # [2, 4]",
+      "usecase": "Real-world use: Quick data transformations and filtering."
+    },
+    "int": {
+      "desc": "Use nested comprehensions and dict/set comprehensions for complex transformations.",
+      "code": "matrix = [[1,2,3], [4,5,6], [7,8,9]]\ntransposed = [[row[i] for row in matrix] for i in range(3)]\nprint(transposed)\n\n# Dict comprehension with condition\nusers = {\"Alice\": 85, \"Bob\": 42, \"Carol\": 91}\npassing = {k: v for k, v in users.items() if v >= 60}\nprint(passing)  # {'Alice': 85, 'Carol': 91}",
+      "usecase": "Real-world use: Matrix operations and filtering database results."
+    },
+    "pro": {
+      "desc": "Use generator expressions for lazy evaluation and memory-efficient processing of large datasets.",
+      "code": "import sys\n\n# List vs generator memory comparison\nlist_comp = [x**2 for x in range(1_000_000)]\ngen_expr = (x**2 for x in range(1_000_000))\n\nprint(f\"List: {sys.getsizeof(list_comp):,} bytes\")\nprint(f\"Generator: {sys.getsizeof(gen_expr)} bytes\")\n\n# Chained generators for pipeline processing\ndef pipeline(data):\n    cleaned = (x.strip() for x in data if x.strip())\n    parsed = (int(x) for x in cleaned if x.isdigit())\n    return sum(parsed)",
+      "usecase": "Real-world use: Memory-efficient data pipelines processing GB-scale files."
+    }
+  },
+  {
+    "num": "13",
+    "title": "Functions & Parameters",
+    "beg": {
+      "desc": "Functions are reusable blocks of code defined with the def keyword.",
+      "code": "def greet(name):\n    return f\"Hello, {name}!\"\n\ndef add(a, b):\n    return a + b\n\nprint(greet(\"Alice\"))\nprint(add(3, 7))",
+      "usecase": "Real-world use: Reusable utility functions in any project."
+    },
+    "int": {
+      "desc": "Use default parameters, *args, **kwargs, and docstrings for flexible function signatures.",
+      "code": "def create_user(name: str, role: str = \"viewer\", **metadata):\n    \"\"\"Create a user with optional metadata.\"\"\"\n    user = {\"name\": name, \"role\": role, **metadata}\n    return user\n\nu = create_user(\"Alice\", role=\"admin\", department=\"Eng\")\nprint(u)  # {'name': 'Alice', 'role': 'admin', 'department': 'Eng'}",
+      "usecase": "Real-world use: Flexible factory functions for creating domain objects."
+    },
+    "pro": {
+      "desc": "Use functools for higher-order functions, caching, and function composition.",
+      "code": "from functools import wraps, lru_cache\nimport time\n\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = func(*args, **kwargs)\n        elapsed = time.perf_counter() - start\n        print(f\"{func.__name__}: {elapsed:.4f}s\")\n        return result\n    return wrapper\n\n@timer\n@lru_cache(maxsize=256)\ndef fibonacci(n: int) -> int:\n    return n if n < 2 else fibonacci(n-1) + fibonacci(n-2)",
+      "usecase": "Real-world use: Performance monitoring and memoization in production services."
+    }
+  },
+  {
+    "num": "14",
+    "title": "Lambda & Anonymous Functions",
+    "beg": {
+      "desc": "Lambda creates small anonymous functions in a single expression.",
+      "code": "double = lambda x: x * 2\nprint(double(5))  # 10\n\nnumbers = [3, 1, 4, 1, 5]\nsorted_nums = sorted(numbers, reverse=True)\nprint(sorted_nums)",
+      "usecase": "Real-world use: Quick throwaway functions for sorting."
+    },
+    "int": {
+      "desc": "Use lambdas with map, filter, and sorted for functional-style data processing.",
+      "code": "products = [\n    {\"name\": \"Laptop\", \"price\": 999},\n    {\"name\": \"Mouse\", \"price\": 29},\n    {\"name\": \"Monitor\", \"price\": 399}\n]\n\nby_price = sorted(products, key=lambda p: p[\"price\"])\naffordable = list(filter(lambda p: p[\"price\"] < 500, products))\nnames = list(map(lambda p: p[\"name\"].upper(), affordable))\nprint(names)  # ['MOUSE', 'MONITOR']",
+      "usecase": "Real-world use: Dynamic sorting and filtering in API responses."
+    },
+    "pro": {
+      "desc": "Use operator module and partial for efficient, reusable function composition.",
+      "code": "from functools import partial, reduce\nfrom operator import mul, attrgetter\n\n# Partial application for reusable transformers\ndef apply_discount(rate, price):\n    return price * (1 - rate)\n\nblack_friday = partial(apply_discount, 0.30)\nsummer_sale = partial(apply_discount, 0.15)\n\nprices = [100, 200, 300]\ndiscounted = list(map(black_friday, prices))\nprint(discounted)  # [70.0, 140.0, 210.0]",
+      "usecase": "Real-world use: Configurable pricing engines with partial application."
+    }
+  },
+  {
+    "num": "15",
+    "title": "Recursion",
+    "beg": {
+      "desc": "Recursion is when a function calls itself to break a problem into smaller pieces.",
+      "code": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(5))  # 120",
+      "usecase": "Real-world use: Mathematical computations and tree traversals."
+    },
+    "int": {
+      "desc": "Use recursion for tree structures with proper base cases and accumulation.",
+      "code": "def flatten(nested):\n    result = []\n    for item in nested:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result\n\ndata = [1, [2, [3, 4]], [5, [6, [7]]]]\nprint(flatten(data))  # [1,2,3,4,5,6,7]",
+      "usecase": "Real-world use: Flattening nested JSON responses from APIs."
+    },
+    "pro": {
+      "desc": "Use tail-call optimization patterns and sys.setrecursionlimit for deep recursion scenarios.",
+      "code": "import sys\nfrom functools import lru_cache\n\n# Iterative approach with stack for deep trees\ndef tree_size(node: dict) -> int:\n    stack = [node]\n    count = 0\n    while stack:\n        current = stack.pop()\n        count += 1\n        stack.extend(current.get(\"children\", []))\n    return count\n\ntree = {\"val\": 1, \"children\": [\n    {\"val\": 2, \"children\": [{\"val\": 4, \"children\": []}]},\n    {\"val\": 3, \"children\": []}\n]}\nprint(tree_size(tree))  # 4",
+      "usecase": "Real-world use: Traversing deeply nested organizational hierarchies."
+    }
+  },
+  {
+    "num": "16",
+    "title": "Exception Handling",
+    "beg": {
+      "desc": "Try/except blocks catch errors and prevent your program from crashing.",
+      "code": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nfinally:\n    print(\"Cleanup done.\")",
+      "usecase": "Real-world use: Graceful error handling in user inputs."
+    },
+    "int": {
+      "desc": "Use custom exceptions and multiple except blocks for structured error handling.",
+      "code": "class InsufficientFundsError(Exception):\n    def __init__(self, balance, amount):\n        self.balance = balance\n        self.amount = amount\n        super().__init__(f\"Need ${amount}, have ${balance}\")\n\ndef withdraw(balance, amount):\n    if amount > balance:\n        raise InsufficientFundsError(balance, amount)\n    return balance - amount\n\ntry:\n    withdraw(100, 150)\nexcept InsufficientFundsError as e:\n    print(f\"Error: {e}\")",
+      "usecase": "Real-world use: Domain-specific error types in banking applications."
+    },
+    "pro": {
+      "desc": "Use exception groups (Python 3.11+) and contextlib for production-grade error management.",
+      "code": "import contextlib\nimport logging\n\nlogger = logging.getLogger(__name__)\n\n@contextlib.contextmanager\ndef error_boundary(operation: str):\n    try:\n        yield\n    except Exception as e:\n        logger.error(f\"{operation} failed: {e}\", exc_info=True)\n        raise RuntimeError(f\"{operation} failed\") from e\n\nwith error_boundary(\"database_query\"):\n    # If this fails, it's wrapped with context\n    result = {\"data\": \"success\"}",
+      "usecase": "Real-world use: Structured error boundaries in microservice architectures."
+    }
+  },
+  {
+    "num": "17",
+    "title": "File Input/Output",
+    "beg": {
+      "desc": "Read and write files using open() with context managers for automatic cleanup.",
+      "code": "# Write to a file\nwith open(\"notes.txt\", \"w\") as f:\n    f.write(\"Hello from Python!\\n\")\n\n# Read from a file\nwith open(\"notes.txt\", \"r\") as f:\n    content = f.read()\n    print(content)",
+      "usecase": "Real-world use: Saving and loading user preferences."
+    },
+    "int": {
+      "desc": "Use pathlib for cross-platform file operations and CSV module for structured data.",
+      "code": "from pathlib import Path\nimport csv\n\ndata_dir = Path(\"data\")\ndata_dir.mkdir(exist_ok=True)\n\ncsv_path = data_dir / \"users.csv\"\nwith open(csv_path, \"w\", newline=\"\") as f:\n    writer = csv.DictWriter(f, fieldnames=[\"name\", \"score\"])\n    writer.writeheader()\n    writer.writerow({\"name\": \"Alice\", \"score\": 95})",
+      "usecase": "Real-world use: Exporting reports to CSV files."
+    },
+    "pro": {
+      "desc": "Use memory-mapped files and async I/O for high-performance file processing.",
+      "code": "import mmap\nfrom pathlib import Path\n\ndef count_lines_mmap(filepath: Path) -> int:\n    with open(filepath, \"r+b\") as f:\n        mm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)\n        count = 0\n        while mm.readline():\n            count += 1\n        mm.close()\n    return count\n\n# Processes multi-GB files with minimal RAM\n# path = Path(\"huge_log.txt\")\n# print(count_lines_mmap(path))",
+      "usecase": "Real-world use: Processing multi-gigabyte log files in production servers."
+    }
+  },
+  {
+    "num": "18",
+    "title": "Classes & Objects",
+    "beg": {
+      "desc": "Classes define blueprints for creating objects with attributes and methods.",
+      "code": "class Dog:\n    def __init__(self, name, breed):\n        self.name = name\n        self.breed = breed\n    \n    def bark(self):\n        return f\"{self.name} says Woof!\"\n\ndog = Dog(\"Rex\", \"Labrador\")\nprint(dog.bark())",
+      "usecase": "Real-world use: Modeling real-world entities in applications."
+    },
+    "int": {
+      "desc": "Use properties, class methods, and static methods for encapsulated class design.",
+      "code": "class BankAccount:\n    _interest_rate = 0.05\n    \n    def __init__(self, owner: str, balance: float = 0):\n        self.owner = owner\n        self._balance = balance\n    \n    @property\n    def balance(self) -> float:\n        return self._balance\n    \n    def deposit(self, amount: float):\n        self._balance += amount\n    \n    @classmethod\n    def set_interest_rate(cls, rate: float):\n        cls._interest_rate = rate",
+      "usecase": "Real-world use: Encapsulated business logic in financial systems."
+    },
+    "pro": {
+      "desc": "Use __init_subclass__, descriptors, and metaclasses for framework-level class design.",
+      "code": "class ValidatedField:\n    def __init__(self, min_val=None, max_val=None):\n        self.min_val, self.max_val = min_val, max_val\n    def __set_name__(self, owner, name):\n        self.name = f\"_{name}\"\n    def __get__(self, obj, type=None):\n        return getattr(obj, self.name, None)\n    def __set__(self, obj, value):\n        if self.min_val is not None and value < self.min_val:\n            raise ValueError(f\"Must be >= {self.min_val}\")\n        setattr(obj, self.name, value)\n\nclass Product:\n    price = ValidatedField(min_val=0)\n    stock = ValidatedField(min_val=0)",
+      "usecase": "Real-world use: Descriptor-based validation in ORM frameworks like Django."
+    }
+  },
+  {
+    "num": "19",
+    "title": "Inheritance & Polymorphism",
+    "beg": {
+      "desc": "Inheritance lets classes share behavior. Child classes extend parent classes.",
+      "code": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return \"...\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name} says Meow!\"\n\ncat = Cat(\"Whiskers\")\nprint(cat.speak())",
+      "usecase": "Real-world use: Extending base classes for specific behaviors."
+    },
+    "int": {
+      "desc": "Use abstract base classes to enforce interface contracts across subclasses.",
+      "code": "from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self) -> float: ...\n    @abstractmethod\n    def perimeter(self) -> float: ...\n\nclass Circle(Shape):\n    def __init__(self, radius: float):\n        self.radius = radius\n    def area(self) -> float:\n        return 3.14159 * self.radius ** 2\n    def perimeter(self) -> float:\n        return 2 * 3.14159 * self.radius",
+      "usecase": "Real-world use: Defining consistent interfaces for geometry libraries."
+    },
+    "pro": {
+      "desc": "Use Protocol classes for structural subtyping (duck typing with type checking).",
+      "code": "from typing import Protocol, runtime_checkable\n\n@runtime_checkable\nclass Serializable(Protocol):\n    def to_dict(self) -> dict: ...\n    def to_json(self) -> str: ...\n\nclass User:\n    def __init__(self, name: str):\n        self.name = name\n    def to_dict(self) -> dict:\n        return {\"name\": self.name}\n    def to_json(self) -> str:\n        import json\n        return json.dumps(self.to_dict())\n\ndef save(obj: Serializable):\n    print(obj.to_json())\n\nsave(User(\"Alice\"))  # Works without explicit inheritance",
+      "usecase": "Real-world use: Plugin systems that accept any conforming class."
+    }
+  },
+  {
+    "num": "20",
+    "title": "Magic Methods & Dunder",
+    "beg": {
+      "desc": "Magic methods (dunder methods) let you customize how objects behave with operators.",
+      "code": "class Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    def __str__(self):\n        return f\"Vector({self.x}, {self.y})\"\n    def __add__(self, other):\n        return Vector(self.x+other.x, self.y+other.y)\n\nv = Vector(1,2) + Vector(3,4)\nprint(v)  # Vector(4, 6)",
+      "usecase": "Real-world use: Custom math objects with operator support."
+    },
+    "int": {
+      "desc": "Implement __len__, __getitem__, __contains__ to make objects behave like collections.",
+      "code": "class Playlist:\n    def __init__(self, name, songs=None):\n        self.name = name\n        self._songs = songs or []\n    def __len__(self):\n        return len(self._songs)\n    def __getitem__(self, index):\n        return self._songs[index]\n    def __contains__(self, song):\n        return song in self._songs\n    def __iter__(self):\n        return iter(self._songs)\n\np = Playlist(\"Chill\", [\"Song A\", \"Song B\"])\nprint(len(p), \"Song A\" in p)",
+      "usecase": "Real-world use: Custom collection wrappers for domain models."
+    },
+    "pro": {
+      "desc": "Use __class_getitem__ and __init_subclass__ for generic type-like behaviors.",
+      "code": "class Registry:\n    _registry: dict[str, type] = {}\n    \n    def __init_subclass__(cls, **kwargs):\n        name = kwargs.pop(\"name\", cls.__name__.lower())\n        super().__init_subclass__(**kwargs)\n        Registry._registry[name] = cls\n    \n    @classmethod\n    def create(cls, name: str, *args):\n        return cls._registry[name](*args)\n\nclass EmailNotifier(Registry, name=\"email\"):\n    def __init__(self, to): self.to = to\n\nclass SMSNotifier(Registry, name=\"sms\"):\n    def __init__(self, phone): self.phone = phone\n\nnotifier = Registry.create(\"email\", \"user@mail.com\")",
+      "usecase": "Real-world use: Auto-registering plugin systems in frameworks."
+    }
+  },
+  {
+    "num": "21",
+    "title": "Decorators",
+    "beg": {
+      "desc": "Decorators modify or enhance functions without changing their code.",
+      "code": "def uppercase(func):\n    def wrapper():\n        result = func()\n        return result.upper()\n    return wrapper\n\n@uppercase\ndef greet():\n    return \"hello world\"\n\nprint(greet())  # HELLO WORLD",
+      "usecase": "Real-world use: Simple output transformation decorators."
+    },
+    "int": {
+      "desc": "Build decorators with arguments for flexible, reusable cross-cutting concerns.",
+      "code": "def retry(max_attempts=3):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for attempt in range(1, max_attempts + 1):\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    if attempt == max_attempts:\n                        raise\n                    print(f\"Attempt {attempt} failed: {e}\")\n        return wrapper\n    return decorator\n\n@retry(max_attempts=3)\ndef fetch_data(url):\n    print(f\"Fetching {url}...\")\n    return {\"status\": \"ok\"}",
+      "usecase": "Real-world use: Retry logic for unreliable network calls."
+    },
+    "pro": {
+      "desc": "Use class-based decorators and descriptor protocol for stateful decoration.",
+      "code": "import time\nfrom functools import wraps\n\nclass RateLimiter:\n    def __init__(self, calls_per_second: float):\n        self.min_interval = 1.0 / calls_per_second\n        self.last_call = 0.0\n    \n    def __call__(self, func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            elapsed = time.monotonic() - self.last_call\n            if elapsed < self.min_interval:\n                time.sleep(self.min_interval - elapsed)\n            self.last_call = time.monotonic()\n            return func(*args, **kwargs)\n        return wrapper\n\n@RateLimiter(calls_per_second=5)\ndef call_api(endpoint):\n    return f\"Response from {endpoint}\"",
+      "usecase": "Real-world use: Rate-limiting API calls to prevent throttling."
+    }
+  },
+  {
+    "num": "22",
+    "title": "Generators & Iterators",
+    "beg": {
+      "desc": "Generators create iterators using yield. They produce values one at a time.",
+      "code": "def countdown(n):\n    while n > 0:\n        yield n\n        n -= 1\n\nfor num in countdown(5):\n    print(num)  # 5, 4, 3, 2, 1",
+      "usecase": "Real-world use: Lazy sequences that don't consume memory upfront."
+    },
+    "int": {
+      "desc": "Use yield from for sub-generators and send() for coroutine-like generators.",
+      "code": "def read_chunks(filepath, chunk_size=1024):\n    with open(filepath, 'rb') as f:\n        while chunk := f.read(chunk_size):\n            yield chunk\n\ndef count_bytes(filepath):\n    total = 0\n    for chunk in read_chunks(filepath):\n        total += len(chunk)\n    return total\n\n# Processes any file size with constant memory\n# print(count_bytes(\"large_file.bin\"))",
+      "usecase": "Real-world use: Streaming large files in chunks for upload/download."
+    },
+    "pro": {
+      "desc": "Build async generators and pipeline architectures for real-time data streaming.",
+      "code": "import asyncio\n\nasync def event_stream():\n    events = [\"click\", \"scroll\", \"keypress\", \"click\"]\n    for event in events:\n        await asyncio.sleep(0.1)  # simulate delay\n        yield event\n\nasync def process_events():\n    async for event in event_stream():\n        print(f\"Processing: {event}\")\n\n# asyncio.run(process_events())",
+      "usecase": "Real-world use: Real-time event processing in web socket servers."
+    }
+  },
+  {
+    "num": "23",
+    "title": "Context Managers",
+    "beg": {
+      "desc": "Context managers handle setup and cleanup using the 'with' statement.",
+      "code": "# File automatically closed after block\nwith open(\"data.txt\", \"w\") as f:\n    f.write(\"Hello!\")\n# f is now closed\n\nprint(f.closed)  # True",
+      "usecase": "Real-world use: Automatic resource cleanup for files and connections."
+    },
+    "int": {
+      "desc": "Create custom context managers with __enter__ and __exit__ for resource management.",
+      "code": "import time\n\nclass Timer:\n    def __enter__(self):\n        self.start = time.perf_counter()\n        return self\n    \n    def __exit__(self, *args):\n        self.elapsed = time.perf_counter() - self.start\n        print(f\"Elapsed: {self.elapsed:.4f}s\")\n\nwith Timer() as t:\n    total = sum(range(1_000_000))\nprint(f\"Result: {total}\")",
+      "usecase": "Real-world use: Performance timing blocks in optimization work."
+    },
+    "pro": {
+      "desc": "Use contextlib.asynccontextmanager for async resource management in production systems.",
+      "code": "from contextlib import asynccontextmanager\nimport asyncio\n\n@asynccontextmanager\nasync def db_transaction(pool):\n    conn = await pool.acquire()\n    tx = await conn.begin()\n    try:\n        yield conn\n        await tx.commit()\n    except Exception:\n        await tx.rollback()\n        raise\n    finally:\n        await pool.release(conn)\n\n# async with db_transaction(pool) as conn:\n#     await conn.execute(\"INSERT ...\")",
+      "usecase": "Real-world use: Database transaction management in async web frameworks."
+    }
+  },
+  {
+    "num": "24",
+    "title": "Modules & Packages",
+    "beg": {
+      "desc": "Modules are Python files you can import to reuse code across projects.",
+      "code": "# math_utils.py\nimport math\n\nradius = 5\narea = math.pi * radius ** 2\nprint(f\"Area: {area:.2f}\")\n\nfrom random import randint\nprint(f\"Random: {randint(1, 100)}\")",
+      "usecase": "Real-world use: Organizing code into reusable modules."
+    },
+    "int": {
+      "desc": "Create packages with __init__.py and use relative imports for project structure.",
+      "code": "# project/utils/__init__.py\nfrom .validators import validate_email\nfrom .formatters import format_currency\n\n# project/utils/validators.py\ndef validate_email(email: str) -> bool:\n    return \"@\" in email and \".\" in email.split(\"@\")[1]\n\n# project/main.py\nfrom utils import validate_email\nprint(validate_email(\"user@example.com\"))  # True",
+      "usecase": "Real-world use: Structuring large Python projects into packages."
+    },
+    "pro": {
+      "desc": "Use importlib for dynamic imports and plugin architectures.",
+      "code": "import importlib\nimport pkgutil\n\ndef load_plugins(package_name: str):\n    package = importlib.import_module(package_name)\n    plugins = {}\n    for importer, name, _ in pkgutil.iter_modules(package.__path__):\n        module = importlib.import_module(f\"{package_name}.{name}\")\n        if hasattr(module, \"register\"):\n            plugins[name] = module.register()\n    return plugins\n\n# Dynamically discover and load all plugin modules\n# plugins = load_plugins(\"myapp.plugins\")",
+      "usecase": "Real-world use: Plugin discovery systems in extensible applications."
+    }
+  },
+  {
+    "num": "25",
+    "title": "Regular Expressions",
+    "beg": {
+      "desc": "Regex patterns match and search text. Use re module for pattern matching.",
+      "code": "import re\n\ntext = \"Call me at 555-1234 or 555-5678\"\nphones = re.findall(r'\\d{3}-\\d{4}', text)\nprint(phones)  # ['555-1234', '555-5678']",
+      "usecase": "Real-world use: Extracting phone numbers from text."
+    },
+    "int": {
+      "desc": "Use named groups, substitution, and compiled patterns for robust text processing.",
+      "code": "import re\n\nlog = '2024-01-15 ERROR [auth] Login failed for user=\"admin\"'\npattern = re.compile(\n    r'(?P<date>[\\d-]+)\\s+(?P<level>\\w+)\\s+'\n    r'\\[(?P<module>\\w+)\\]\\s+(?P<msg>.+)'\n)\nmatch = pattern.match(log)\nif match:\n    print(match.group(\"level\"))   # ERROR\n    print(match.group(\"module\"))  # auth",
+      "usecase": "Real-world use: Parsing structured log files for monitoring."
+    },
+    "pro": {
+      "desc": "Use regex with lookahead/lookbehind assertions for complex parsing without consuming characters.",
+      "code": "import re\n\ndef validate_password(pwd: str) -> list[str]:\n    rules = [\n        (r'(?=.*[A-Z])', 'Must have uppercase'),\n        (r'(?=.*[a-z])', 'Must have lowercase'),\n        (r'(?=.*\\d)', 'Must have digit'),\n        (r'(?=.*[!@#$%])', 'Must have special char'),\n        (r'.{8,}', 'Must be 8+ characters'),\n    ]\n    return [msg for pattern, msg in rules\n            if not re.search(pattern, pwd)]\n\nerrors = validate_password(\"weak\")\nprint(errors)  # Lists all failing rules",
+      "usecase": "Real-world use: Password strength validation with detailed feedback."
+    }
+  },
+  {
+    "num": "26",
+    "title": "JSON & Data Serialization",
+    "beg": {
+      "desc": "JSON is the standard data format for web APIs. Python's json module handles it.",
+      "code": "import json\n\nuser = {\"name\": \"Alice\", \"age\": 25}\njson_str = json.dumps(user, indent=2)\nprint(json_str)\n\nparsed = json.loads(json_str)\nprint(parsed[\"name\"])  # Alice",
+      "usecase": "Real-world use: Sending and receiving API responses."
+    },
+    "int": {
+      "desc": "Use custom encoders and object hooks for serializing complex Python objects.",
+      "code": "import json\nfrom datetime import datetime\n\nclass DateEncoder(json.JSONEncoder):\n    def default(self, obj):\n        if isinstance(obj, datetime):\n            return obj.isoformat()\n        return super().default(obj)\n\nevent = {\n    \"name\": \"Meeting\",\n    \"time\": datetime(2024, 6, 15, 14, 30)\n}\nprint(json.dumps(event, cls=DateEncoder, indent=2))",
+      "usecase": "Real-world use: Serializing datetime objects in API responses."
+    },
+    "pro": {
+      "desc": "Use Pydantic for validated, type-safe serialization with automatic schema generation.",
+      "code": "from dataclasses import dataclass, asdict\nimport json\n\n@dataclass\nclass Address:\n    street: str\n    city: str\n    zip_code: str\n\n@dataclass\nclass User:\n    name: str\n    email: str\n    address: Address\n    \n    def to_json(self) -> str:\n        return json.dumps(asdict(self), indent=2)\n    \n    @classmethod\n    def from_json(cls, data: str) -> 'User':\n        d = json.loads(data)\n        d['address'] = Address(**d['address'])\n        return cls(**d)",
+      "usecase": "Real-world use: Type-safe API serialization in production services."
+    }
+  },
+  {
+    "num": "27",
+    "title": "Working with APIs",
+    "beg": {
+      "desc": "Use the requests library to make HTTP calls to web APIs.",
+      "code": "import urllib.request\nimport json\n\nurl = \"https://api.github.com/users/octocat\"\nwith urllib.request.urlopen(url) as resp:\n    data = json.loads(resp.read())\n    print(f\"User: {data['login']}\")\n    print(f\"Repos: {data['public_repos']}\")",
+      "usecase": "Real-world use: Fetching data from public REST APIs."
+    },
+    "int": {
+      "desc": "Use requests with sessions, headers, and error handling for robust API integration.",
+      "code": "import urllib.request\nimport json\n\ndef fetch_repos(username: str) -> list[dict]:\n    url = f\"https://api.github.com/users/{username}/repos\"\n    req = urllib.request.Request(url, headers={\n        \"Accept\": \"application/vnd.github.v3+json\"\n    })\n    try:\n        with urllib.request.urlopen(req) as resp:\n            repos = json.loads(resp.read())\n            return [{\"name\": r[\"name\"], \"stars\": r[\"stargazers_count\"]} for r in repos[:5]]\n    except Exception as e:\n        print(f\"API error: {e}\")\n        return []",
+      "usecase": "Real-world use: Building API client libraries with error handling."
+    },
+    "pro": {
+      "desc": "Use async HTTP clients for concurrent API calls with connection pooling.",
+      "code": "import asyncio\nimport aiohttp\n\nasync def fetch_all(urls: list[str]) -> list[dict]:\n    async with aiohttp.ClientSession() as session:\n        tasks = [fetch_one(session, url) for url in urls]\n        return await asyncio.gather(*tasks, return_exceptions=True)\n\nasync def fetch_one(session, url):\n    async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:\n        return await resp.json()\n\n# urls = [\"https://api.example.com/1\", ...]\n# results = asyncio.run(fetch_all(urls))",
+      "usecase": "Real-world use: Parallel API aggregation for dashboard data."
+    }
+  },
+  {
+    "num": "28",
+    "title": "Database Operations",
+    "beg": {
+      "desc": "Python's sqlite3 module provides a built-in database for local storage.",
+      "code": "import sqlite3\n\nconn = sqlite3.connect(\":memory:\")\ncur = conn.cursor()\ncur.execute(\"CREATE TABLE users (name TEXT, age INT)\")\ncur.execute(\"INSERT INTO users VALUES (?, ?)\", (\"Alice\", 25))\nconn.commit()\n\nfor row in cur.execute(\"SELECT * FROM users\"):\n    print(row)  # ('Alice', 25)\nconn.close()",
+      "usecase": "Real-world use: Local data storage for desktop applications."
+    },
+    "int": {
+      "desc": "Use parameterized queries and context managers for safe database operations.",
+      "code": "import sqlite3\nfrom contextlib import closing\n\ndef get_db():\n    conn = sqlite3.connect(\"app.db\")\n    conn.row_factory = sqlite3.Row\n    return conn\n\nwith closing(get_db()) as db:\n    db.execute(\"CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, title TEXT, done BOOLEAN DEFAULT 0)\")\n    db.execute(\"INSERT INTO tasks (title) VALUES (?)\", (\"Learn Python\",))\n    db.commit()\n    tasks = db.execute(\"SELECT * FROM tasks WHERE done=0\").fetchall()\n    for t in tasks:\n        print(dict(t))",
+      "usecase": "Real-world use: CRUD operations in web application backends."
+    },
+    "pro": {
+      "desc": "Use async ORMs and connection pools for high-concurrency database access.",
+      "code": "# Using SQLAlchemy async pattern\nfrom dataclasses import dataclass\n\n@dataclass\nclass Repository:\n    \"\"\"Generic async repository pattern\"\"\"\n    table: str\n    \n    async def find_by_id(self, conn, id: int):\n        query = f\"SELECT * FROM {self.table} WHERE id = ?\"\n        cursor = await conn.execute(query, (id,))\n        return await cursor.fetchone()\n    \n    async def create(self, conn, **fields):\n        cols = \", \".join(fields.keys())\n        placeholders = \", \".join(\"?\" * len(fields))\n        query = f\"INSERT INTO {self.table} ({cols}) VALUES ({placeholders})\"\n        await conn.execute(query, tuple(fields.values()))\n        await conn.commit()",
+      "usecase": "Real-world use: Repository pattern in async web frameworks like FastAPI."
+    }
+  },
+  {
+    "num": "29",
+    "title": "Multithreading & Async",
+    "beg": {
+      "desc": "Threading lets you run multiple tasks concurrently for I/O-bound operations.",
+      "code": "import threading\nimport time\n\ndef download(name):\n    print(f\"Starting {name}...\")\n    time.sleep(1)\n    print(f\"Finished {name}\")\n\nt1 = threading.Thread(target=download, args=(\"File A\",))\nt2 = threading.Thread(target=download, args=(\"File B\",))\nt1.start(); t2.start()\nt1.join(); t2.join()",
+      "usecase": "Real-world use: Downloading multiple files simultaneously."
+    },
+    "int": {
+      "desc": "Use concurrent.futures for easy parallel execution with thread and process pools.",
+      "code": "from concurrent.futures import ThreadPoolExecutor\nimport time\n\ndef process_item(item):\n    time.sleep(0.1)  # simulate work\n    return item ** 2\n\nitems = list(range(20))\nwith ThreadPoolExecutor(max_workers=5) as executor:\n    results = list(executor.map(process_item, items))\n\nprint(f\"Processed {len(results)} items\")\nprint(results[:5])  # [0, 1, 4, 9, 16]",
+      "usecase": "Real-world use: Parallel processing of API requests or file conversions."
+    },
+    "pro": {
+      "desc": "Use asyncio for high-concurrency I/O with event loops, semaphores, and task groups.",
+      "code": "import asyncio\n\nasync def fetch(url: str, semaphore: asyncio.Semaphore):\n    async with semaphore:\n        await asyncio.sleep(0.1)  # simulate I/O\n        return f\"Response from {url}\"\n\nasync def main():\n    sem = asyncio.Semaphore(10)  # limit concurrency\n    urls = [f\"https://api.example.com/{i}\" for i in range(50)]\n    async with asyncio.TaskGroup() as tg:\n        tasks = [tg.create_task(fetch(u, sem)) for u in urls]\n    results = [t.result() for t in tasks]\n    print(f\"Fetched {len(results)} responses\")\n\n# asyncio.run(main())",
+      "usecase": "Real-world use: High-throughput web scrapers handling thousands of concurrent requests."
+    }
+  },
+  {
+    "num": "30",
+    "title": "Type Hints & Protocols",
+    "beg": {
+      "desc": "Type hints document expected types. They don't enforce types at runtime but help editors.",
+      "code": "def greet(name: str) -> str:\n    return f\"Hello, {name}!\"\n\ndef add(a: int, b: int) -> int:\n    return a + b\n\nresult: str = greet(\"Alice\")\nprint(result)",
+      "usecase": "Real-world use: Self-documenting code with IDE autocomplete support."
+    },
+    "int": {
+      "desc": "Use Generic types, Union, and TypeVar for flexible yet type-safe function signatures.",
+      "code": "from typing import TypeVar, Sequence\n\nT = TypeVar('T')\n\ndef first(items: Sequence[T]) -> T | None:\n    return items[0] if items else None\n\ndef chunk(lst: list[T], size: int) -> list[list[T]]:\n    return [lst[i:i+size] for i in range(0, len(lst), size)]\n\nprint(first([10, 20, 30]))  # 10\nprint(chunk([1,2,3,4,5], 2))  # [[1,2],[3,4],[5]]",
+      "usecase": "Real-world use: Generic utility functions in shared libraries."
+    },
+    "pro": {
+      "desc": "Use ParamSpec and Concatenate for preserving function signatures in decorators.",
+      "code": "from typing import ParamSpec, TypeVar, Callable\nfrom functools import wraps\nimport logging\n\nP = ParamSpec('P')\nR = TypeVar('R')\n\ndef logged(func: Callable[P, R]) -> Callable[P, R]:\n    logger = logging.getLogger(func.__module__)\n    @wraps(func)\n    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:\n        logger.info(f\"Calling {func.__name__}\")\n        result = func(*args, **kwargs)\n        logger.info(f\"{func.__name__} returned {type(result).__name__}\")\n        return result\n    return wrapper\n\n@logged\ndef compute(x: int, y: int) -> float:\n    return x / y",
+      "usecase": "Real-world use: Type-safe decorator factories in production Python libraries."
+    }
+  }
+]

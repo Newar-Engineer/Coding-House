@@ -692,7 +692,7 @@ window.addEventListener('pageshow', (event) => {
     document.querySelector('.loading-screen').classList.remove('active');
   }
 });
-const languages = [
+const defaultLanguages = [
   { name:"Python", tag:"Beginner friendly", ab:"Py", c1:"#3b82f6", c2:"#22d3ee", slug:"python" },
   { name:"Java", tag:"Enterprise & Android", ab:"Jv", c1:"#8b5cf6", c2:"#3b82f6", slug:"java" },
   { name:"C", tag:"Systems fundamentals", ab:"C", c1:"#22d3ee", c2:"#3b82f6", slug:"c" },
@@ -710,6 +710,11 @@ const languages = [
   { name:"R", tag:"Statistics & data", ab:"R", c1:"#3b82f6", c2:"#34e0a1", slug:"r" },
   { name:"MATLAB", tag:"Engineering & math", ab:"Ml", c1:"#f5b942", c2:"#3b82f6", slug:"matlab" },
 ];
+
+if (!localStorage.getItem('codinghouse_languages')) {
+  localStorage.setItem('codinghouse_languages', JSON.stringify(defaultLanguages));
+}
+const languages = JSON.parse(localStorage.getItem('codinghouse_languages'));
 
 const grid = document.getElementById("lang-grid");
 grid.innerHTML = languages.map(l => `

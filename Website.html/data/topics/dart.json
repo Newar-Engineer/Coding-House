@@ -1,0 +1,477 @@
+[
+  {
+    "num": "01",
+    "title": "Hello World & Variables",
+    "beg": {
+      "desc": "Dart is client-focused (Flutter). Programs start with the main() function.",
+      "code": "void main() {\n    print('Hello, Dart!');\n    var name = 'Alice';\n    final age = 25;\n}",
+      "usecase": "Basic variable structures."
+    },
+    "int": {
+      "desc": "Safely handle nullable variables using sound null safety features.",
+      "code": "void greet(String? name) {\n    print('Hello, ' + (name ?? 'Guest'));\n}",
+      "usecase": "Sound null safety parameters."
+    },
+    "pro": {
+      "desc": "Construct list and map arrays for quick data storage.",
+      "code": "void main() {\n    final list = [1, 2, 3];\n    final map = {'id': 1, 'name': 'Alice'};\n    print(map['name']);\n}",
+      "usecase": "Creating lists and maps."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Classes & Asynchronous",
+    "beg": {
+      "desc": "Classes encapsulate parameters. Use constructors to initialize.",
+      "code": "class User {\n    String name;\n    int age;\n    User(this.name, this.age);\n}",
+      "usecase": "Defining model structures."
+    },
+    "int": {
+      "desc": "Write asynchronous routines using Future APIs with async/await.",
+      "code": "Future<String> fetchData() async {\n    return 'Data';\n}\n\nvoid main() async {\n    print(await fetchData());\n}",
+      "usecase": "Non-blocking async tasks."
+    },
+    "pro": {
+      "desc": "Implement interfaces and mixins to reuse behaviors.",
+      "code": "mixin Logger {\n    void log(String msg) => print('[LOG] $msg');\n}\n\nclass App with Logger {}",
+      "usecase": "Reusing behaviors dynamically without nested classes."
+    }
+  },
+  {
+    "num": "03",
+    "title": "Dart Topic 03",
+    "beg": {
+      "desc": "Dart beginner topic description for item 03.",
+      "code": "void main() {\n  // Dart Code 03\n  print(\"Dart 03\");\n}",
+      "usecase": "Usecase detail for 03"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 03.",
+      "code": "void main() {\n  // Dart Code 03\n  print(\"Dart 03\");\n}",
+      "usecase": "Usecase detail for 03"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 03.",
+      "code": "void main() {\n  // Dart Code 03\n  print(\"Dart 03\");\n}",
+      "usecase": "Usecase detail for 03"
+    }
+  },
+  {
+    "num": "04",
+    "title": "Dart Topic 04",
+    "beg": {
+      "desc": "Dart beginner topic description for item 04.",
+      "code": "void main() {\n  // Dart Code 04\n  print(\"Dart 04\");\n}",
+      "usecase": "Usecase detail for 04"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 04.",
+      "code": "void main() {\n  // Dart Code 04\n  print(\"Dart 04\");\n}",
+      "usecase": "Usecase detail for 04"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 04.",
+      "code": "void main() {\n  // Dart Code 04\n  print(\"Dart 04\");\n}",
+      "usecase": "Usecase detail for 04"
+    }
+  },
+  {
+    "num": "05",
+    "title": "Dart Topic 05",
+    "beg": {
+      "desc": "Dart beginner topic description for item 05.",
+      "code": "void main() {\n  // Dart Code 05\n  print(\"Dart 05\");\n}",
+      "usecase": "Usecase detail for 05"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 05.",
+      "code": "void main() {\n  // Dart Code 05\n  print(\"Dart 05\");\n}",
+      "usecase": "Usecase detail for 05"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 05.",
+      "code": "void main() {\n  // Dart Code 05\n  print(\"Dart 05\");\n}",
+      "usecase": "Usecase detail for 05"
+    }
+  },
+  {
+    "num": "06",
+    "title": "Dart Topic 06",
+    "beg": {
+      "desc": "Dart beginner topic description for item 06.",
+      "code": "void main() {\n  // Dart Code 06\n  print(\"Dart 06\");\n}",
+      "usecase": "Usecase detail for 06"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 06.",
+      "code": "void main() {\n  // Dart Code 06\n  print(\"Dart 06\");\n}",
+      "usecase": "Usecase detail for 06"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 06.",
+      "code": "void main() {\n  // Dart Code 06\n  print(\"Dart 06\");\n}",
+      "usecase": "Usecase detail for 06"
+    }
+  },
+  {
+    "num": "07",
+    "title": "Dart Topic 07",
+    "beg": {
+      "desc": "Dart beginner topic description for item 07.",
+      "code": "void main() {\n  // Dart Code 07\n  print(\"Dart 07\");\n}",
+      "usecase": "Usecase detail for 07"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 07.",
+      "code": "void main() {\n  // Dart Code 07\n  print(\"Dart 07\");\n}",
+      "usecase": "Usecase detail for 07"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 07.",
+      "code": "void main() {\n  // Dart Code 07\n  print(\"Dart 07\");\n}",
+      "usecase": "Usecase detail for 07"
+    }
+  },
+  {
+    "num": "08",
+    "title": "Dart Topic 08",
+    "beg": {
+      "desc": "Dart beginner topic description for item 08.",
+      "code": "void main() {\n  // Dart Code 08\n  print(\"Dart 08\");\n}",
+      "usecase": "Usecase detail for 08"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 08.",
+      "code": "void main() {\n  // Dart Code 08\n  print(\"Dart 08\");\n}",
+      "usecase": "Usecase detail for 08"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 08.",
+      "code": "void main() {\n  // Dart Code 08\n  print(\"Dart 08\");\n}",
+      "usecase": "Usecase detail for 08"
+    }
+  },
+  {
+    "num": "09",
+    "title": "Dart Topic 09",
+    "beg": {
+      "desc": "Dart beginner topic description for item 09.",
+      "code": "void main() {\n  // Dart Code 09\n  print(\"Dart 09\");\n}",
+      "usecase": "Usecase detail for 09"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 09.",
+      "code": "void main() {\n  // Dart Code 09\n  print(\"Dart 09\");\n}",
+      "usecase": "Usecase detail for 09"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 09.",
+      "code": "void main() {\n  // Dart Code 09\n  print(\"Dart 09\");\n}",
+      "usecase": "Usecase detail for 09"
+    }
+  },
+  {
+    "num": "10",
+    "title": "Dart Topic 10",
+    "beg": {
+      "desc": "Dart beginner topic description for item 10.",
+      "code": "void main() {\n  // Dart Code 10\n  print(\"Dart 10\");\n}",
+      "usecase": "Usecase detail for 10"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 10.",
+      "code": "void main() {\n  // Dart Code 10\n  print(\"Dart 10\");\n}",
+      "usecase": "Usecase detail for 10"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 10.",
+      "code": "void main() {\n  // Dart Code 10\n  print(\"Dart 10\");\n}",
+      "usecase": "Usecase detail for 10"
+    }
+  },
+  {
+    "num": "11",
+    "title": "Dart Topic 11",
+    "beg": {
+      "desc": "Dart beginner topic description for item 11.",
+      "code": "void main() {\n  // Dart Code 11\n  print(\"Dart 11\");\n}",
+      "usecase": "Usecase detail for 11"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 11.",
+      "code": "void main() {\n  // Dart Code 11\n  print(\"Dart 11\");\n}",
+      "usecase": "Usecase detail for 11"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 11.",
+      "code": "void main() {\n  // Dart Code 11\n  print(\"Dart 11\");\n}",
+      "usecase": "Usecase detail for 11"
+    }
+  },
+  {
+    "num": "12",
+    "title": "Dart Topic 12",
+    "beg": {
+      "desc": "Dart beginner topic description for item 12.",
+      "code": "void main() {\n  // Dart Code 12\n  print(\"Dart 12\");\n}",
+      "usecase": "Usecase detail for 12"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 12.",
+      "code": "void main() {\n  // Dart Code 12\n  print(\"Dart 12\");\n}",
+      "usecase": "Usecase detail for 12"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 12.",
+      "code": "void main() {\n  // Dart Code 12\n  print(\"Dart 12\");\n}",
+      "usecase": "Usecase detail for 12"
+    }
+  },
+  {
+    "num": "13",
+    "title": "Dart Topic 13",
+    "beg": {
+      "desc": "Dart beginner topic description for item 13.",
+      "code": "void main() {\n  // Dart Code 13\n  print(\"Dart 13\");\n}",
+      "usecase": "Usecase detail for 13"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 13.",
+      "code": "void main() {\n  // Dart Code 13\n  print(\"Dart 13\");\n}",
+      "usecase": "Usecase detail for 13"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 13.",
+      "code": "void main() {\n  // Dart Code 13\n  print(\"Dart 13\");\n}",
+      "usecase": "Usecase detail for 13"
+    }
+  },
+  {
+    "num": "14",
+    "title": "Dart Topic 14",
+    "beg": {
+      "desc": "Dart beginner topic description for item 14.",
+      "code": "void main() {\n  // Dart Code 14\n  print(\"Dart 14\");\n}",
+      "usecase": "Usecase detail for 14"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 14.",
+      "code": "void main() {\n  // Dart Code 14\n  print(\"Dart 14\");\n}",
+      "usecase": "Usecase detail for 14"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 14.",
+      "code": "void main() {\n  // Dart Code 14\n  print(\"Dart 14\");\n}",
+      "usecase": "Usecase detail for 14"
+    }
+  },
+  {
+    "num": "15",
+    "title": "Dart Topic 15",
+    "beg": {
+      "desc": "Dart beginner topic description for item 15.",
+      "code": "void main() {\n  // Dart Code 15\n  print(\"Dart 15\");\n}",
+      "usecase": "Usecase detail for 15"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 15.",
+      "code": "void main() {\n  // Dart Code 15\n  print(\"Dart 15\");\n}",
+      "usecase": "Usecase detail for 15"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 15.",
+      "code": "void main() {\n  // Dart Code 15\n  print(\"Dart 15\");\n}",
+      "usecase": "Usecase detail for 15"
+    }
+  },
+  {
+    "num": "16",
+    "title": "Dart Topic 16",
+    "beg": {
+      "desc": "Dart beginner topic description for item 16.",
+      "code": "void main() {\n  // Dart Code 16\n  print(\"Dart 16\");\n}",
+      "usecase": "Usecase detail for 16"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 16.",
+      "code": "void main() {\n  // Dart Code 16\n  print(\"Dart 16\");\n}",
+      "usecase": "Usecase detail for 16"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 16.",
+      "code": "void main() {\n  // Dart Code 16\n  print(\"Dart 16\");\n}",
+      "usecase": "Usecase detail for 16"
+    }
+  },
+  {
+    "num": "17",
+    "title": "Dart Topic 17",
+    "beg": {
+      "desc": "Dart beginner topic description for item 17.",
+      "code": "void main() {\n  // Dart Code 17\n  print(\"Dart 17\");\n}",
+      "usecase": "Usecase detail for 17"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 17.",
+      "code": "void main() {\n  // Dart Code 17\n  print(\"Dart 17\");\n}",
+      "usecase": "Usecase detail for 17"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 17.",
+      "code": "void main() {\n  // Dart Code 17\n  print(\"Dart 17\");\n}",
+      "usecase": "Usecase detail for 17"
+    }
+  },
+  {
+    "num": "18",
+    "title": "Dart Topic 18",
+    "beg": {
+      "desc": "Dart beginner topic description for item 18.",
+      "code": "void main() {\n  // Dart Code 18\n  print(\"Dart 18\");\n}",
+      "usecase": "Usecase detail for 18"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 18.",
+      "code": "void main() {\n  // Dart Code 18\n  print(\"Dart 18\");\n}",
+      "usecase": "Usecase detail for 18"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 18.",
+      "code": "void main() {\n  // Dart Code 18\n  print(\"Dart 18\");\n}",
+      "usecase": "Usecase detail for 18"
+    }
+  },
+  {
+    "num": "19",
+    "title": "Dart Topic 19",
+    "beg": {
+      "desc": "Dart beginner topic description for item 19.",
+      "code": "void main() {\n  // Dart Code 19\n  print(\"Dart 19\");\n}",
+      "usecase": "Usecase detail for 19"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 19.",
+      "code": "void main() {\n  // Dart Code 19\n  print(\"Dart 19\");\n}",
+      "usecase": "Usecase detail for 19"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 19.",
+      "code": "void main() {\n  // Dart Code 19\n  print(\"Dart 19\");\n}",
+      "usecase": "Usecase detail for 19"
+    }
+  },
+  {
+    "num": "20",
+    "title": "Dart Topic 20",
+    "beg": {
+      "desc": "Dart beginner topic description for item 20.",
+      "code": "void main() {\n  // Dart Code 20\n  print(\"Dart 20\");\n}",
+      "usecase": "Usecase detail for 20"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 20.",
+      "code": "void main() {\n  // Dart Code 20\n  print(\"Dart 20\");\n}",
+      "usecase": "Usecase detail for 20"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 20.",
+      "code": "void main() {\n  // Dart Code 20\n  print(\"Dart 20\");\n}",
+      "usecase": "Usecase detail for 20"
+    }
+  },
+  {
+    "num": "21",
+    "title": "Dart Topic 21",
+    "beg": {
+      "desc": "Dart beginner topic description for item 21.",
+      "code": "void main() {\n  // Dart Code 21\n  print(\"Dart 21\");\n}",
+      "usecase": "Usecase detail for 21"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 21.",
+      "code": "void main() {\n  // Dart Code 21\n  print(\"Dart 21\");\n}",
+      "usecase": "Usecase detail for 21"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 21.",
+      "code": "void main() {\n  // Dart Code 21\n  print(\"Dart 21\");\n}",
+      "usecase": "Usecase detail for 21"
+    }
+  },
+  {
+    "num": "22",
+    "title": "Dart Topic 22",
+    "beg": {
+      "desc": "Dart beginner topic description for item 22.",
+      "code": "void main() {\n  // Dart Code 22\n  print(\"Dart 22\");\n}",
+      "usecase": "Usecase detail for 22"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 22.",
+      "code": "void main() {\n  // Dart Code 22\n  print(\"Dart 22\");\n}",
+      "usecase": "Usecase detail for 22"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 22.",
+      "code": "void main() {\n  // Dart Code 22\n  print(\"Dart 22\");\n}",
+      "usecase": "Usecase detail for 22"
+    }
+  },
+  {
+    "num": "23",
+    "title": "Dart Topic 23",
+    "beg": {
+      "desc": "Dart beginner topic description for item 23.",
+      "code": "void main() {\n  // Dart Code 23\n  print(\"Dart 23\");\n}",
+      "usecase": "Usecase detail for 23"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 23.",
+      "code": "void main() {\n  // Dart Code 23\n  print(\"Dart 23\");\n}",
+      "usecase": "Usecase detail for 23"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 23.",
+      "code": "void main() {\n  // Dart Code 23\n  print(\"Dart 23\");\n}",
+      "usecase": "Usecase detail for 23"
+    }
+  },
+  {
+    "num": "24",
+    "title": "Dart Topic 24",
+    "beg": {
+      "desc": "Dart beginner topic description for item 24.",
+      "code": "void main() {\n  // Dart Code 24\n  print(\"Dart 24\");\n}",
+      "usecase": "Usecase detail for 24"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 24.",
+      "code": "void main() {\n  // Dart Code 24\n  print(\"Dart 24\");\n}",
+      "usecase": "Usecase detail for 24"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 24.",
+      "code": "void main() {\n  // Dart Code 24\n  print(\"Dart 24\");\n}",
+      "usecase": "Usecase detail for 24"
+    }
+  },
+  {
+    "num": "25",
+    "title": "Dart Topic 25",
+    "beg": {
+      "desc": "Dart beginner topic description for item 25.",
+      "code": "void main() {\n  // Dart Code 25\n  print(\"Dart 25\");\n}",
+      "usecase": "Usecase detail for 25"
+    },
+    "int": {
+      "desc": "Dart intermediate topic description for item 25.",
+      "code": "void main() {\n  // Dart Code 25\n  print(\"Dart 25\");\n}",
+      "usecase": "Usecase detail for 25"
+    },
+    "pro": {
+      "desc": "Dart professional topic description for item 25.",
+      "code": "void main() {\n  // Dart Code 25\n  print(\"Dart 25\");\n}",
+      "usecase": "Usecase detail for 25"
+    }
+  }
+]

@@ -1,0 +1,477 @@
+[
+  {
+    "num": "01",
+    "title": "Matrices & Arrays",
+    "beg": {
+      "desc": "MATLAB is matrix-focused. Every variable is an array by default.",
+      "code": "A = [1 2 3; 4 5 6; 7 8 9];\nB = A'; % transpose matrix\ndisp(B);",
+      "usecase": "Simple matrix operations."
+    },
+    "int": {
+      "desc": "Solve linear equations dynamically using matrix division techniques.",
+      "code": "A = [1 2; 3 4];\nb = [5; 11];\nx = A\\b; % solve Ax = b\ndisp(x);",
+      "usecase": "Linear algebra solving."
+    },
+    "pro": {
+      "desc": "Filter array coordinates using logical indexing operations.",
+      "code": "A = [1, 5, 8, 12];\nfiltered = A(A > 5);\ndisp(filtered); % 8, 12",
+      "usecase": "Slicing matrices based on logic."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Functions & Loops",
+    "beg": {
+      "desc": "Create loops to iterate through matrix values.",
+      "code": "for i = 1:5\n    disp(i);\nend",
+      "usecase": "Basic looping index parameters."
+    },
+    "int": {
+      "desc": "Construct custom reusable routines by defining functions.",
+      "code": "function res = add(a, b)\n    res = a + b;\nend",
+      "usecase": "Defining local calculation functions."
+    },
+    "pro": {
+      "desc": "Speed up matrix operations using vectorized calculations instead of loops.",
+      "code": "x = 1:1000;\ny = sin(x); % vectorized - runs instantly",
+      "usecase": "Optimizing array execution speeds."
+    }
+  },
+  {
+    "num": "03",
+    "title": "MATLAB Topic 03",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 03.",
+      "code": "% MATLAB Code 03\nA = [1, 2, 3];\ndisp(A);",
+      "usecase": "Usecase detail for 03"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 03.",
+      "code": "% MATLAB Code 03\nA = [1, 2, 3];\ndisp(A);",
+      "usecase": "Usecase detail for 03"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 03.",
+      "code": "% MATLAB Code 03\nA = [1, 2, 3];\ndisp(A);",
+      "usecase": "Usecase detail for 03"
+    }
+  },
+  {
+    "num": "04",
+    "title": "MATLAB Topic 04",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 04.",
+      "code": "% MATLAB Code 04\nA = [1, 2, 4];\ndisp(A);",
+      "usecase": "Usecase detail for 04"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 04.",
+      "code": "% MATLAB Code 04\nA = [1, 2, 4];\ndisp(A);",
+      "usecase": "Usecase detail for 04"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 04.",
+      "code": "% MATLAB Code 04\nA = [1, 2, 4];\ndisp(A);",
+      "usecase": "Usecase detail for 04"
+    }
+  },
+  {
+    "num": "05",
+    "title": "MATLAB Topic 05",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 05.",
+      "code": "% MATLAB Code 05\nA = [1, 2, 5];\ndisp(A);",
+      "usecase": "Usecase detail for 05"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 05.",
+      "code": "% MATLAB Code 05\nA = [1, 2, 5];\ndisp(A);",
+      "usecase": "Usecase detail for 05"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 05.",
+      "code": "% MATLAB Code 05\nA = [1, 2, 5];\ndisp(A);",
+      "usecase": "Usecase detail for 05"
+    }
+  },
+  {
+    "num": "06",
+    "title": "MATLAB Topic 06",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 06.",
+      "code": "% MATLAB Code 06\nA = [1, 2, 6];\ndisp(A);",
+      "usecase": "Usecase detail for 06"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 06.",
+      "code": "% MATLAB Code 06\nA = [1, 2, 6];\ndisp(A);",
+      "usecase": "Usecase detail for 06"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 06.",
+      "code": "% MATLAB Code 06\nA = [1, 2, 6];\ndisp(A);",
+      "usecase": "Usecase detail for 06"
+    }
+  },
+  {
+    "num": "07",
+    "title": "MATLAB Topic 07",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 07.",
+      "code": "% MATLAB Code 07\nA = [1, 2, 7];\ndisp(A);",
+      "usecase": "Usecase detail for 07"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 07.",
+      "code": "% MATLAB Code 07\nA = [1, 2, 7];\ndisp(A);",
+      "usecase": "Usecase detail for 07"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 07.",
+      "code": "% MATLAB Code 07\nA = [1, 2, 7];\ndisp(A);",
+      "usecase": "Usecase detail for 07"
+    }
+  },
+  {
+    "num": "08",
+    "title": "MATLAB Topic 08",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 08.",
+      "code": "% MATLAB Code 08\nA = [1, 2, 8];\ndisp(A);",
+      "usecase": "Usecase detail for 08"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 08.",
+      "code": "% MATLAB Code 08\nA = [1, 2, 8];\ndisp(A);",
+      "usecase": "Usecase detail for 08"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 08.",
+      "code": "% MATLAB Code 08\nA = [1, 2, 8];\ndisp(A);",
+      "usecase": "Usecase detail for 08"
+    }
+  },
+  {
+    "num": "09",
+    "title": "MATLAB Topic 09",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 09.",
+      "code": "% MATLAB Code 09\nA = [1, 2, 9];\ndisp(A);",
+      "usecase": "Usecase detail for 09"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 09.",
+      "code": "% MATLAB Code 09\nA = [1, 2, 9];\ndisp(A);",
+      "usecase": "Usecase detail for 09"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 09.",
+      "code": "% MATLAB Code 09\nA = [1, 2, 9];\ndisp(A);",
+      "usecase": "Usecase detail for 09"
+    }
+  },
+  {
+    "num": "10",
+    "title": "MATLAB Topic 10",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 10.",
+      "code": "% MATLAB Code 10\nA = [1, 2, 10];\ndisp(A);",
+      "usecase": "Usecase detail for 10"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 10.",
+      "code": "% MATLAB Code 10\nA = [1, 2, 10];\ndisp(A);",
+      "usecase": "Usecase detail for 10"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 10.",
+      "code": "% MATLAB Code 10\nA = [1, 2, 10];\ndisp(A);",
+      "usecase": "Usecase detail for 10"
+    }
+  },
+  {
+    "num": "11",
+    "title": "MATLAB Topic 11",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 11.",
+      "code": "% MATLAB Code 11\nA = [1, 2, 11];\ndisp(A);",
+      "usecase": "Usecase detail for 11"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 11.",
+      "code": "% MATLAB Code 11\nA = [1, 2, 11];\ndisp(A);",
+      "usecase": "Usecase detail for 11"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 11.",
+      "code": "% MATLAB Code 11\nA = [1, 2, 11];\ndisp(A);",
+      "usecase": "Usecase detail for 11"
+    }
+  },
+  {
+    "num": "12",
+    "title": "MATLAB Topic 12",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 12.",
+      "code": "% MATLAB Code 12\nA = [1, 2, 12];\ndisp(A);",
+      "usecase": "Usecase detail for 12"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 12.",
+      "code": "% MATLAB Code 12\nA = [1, 2, 12];\ndisp(A);",
+      "usecase": "Usecase detail for 12"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 12.",
+      "code": "% MATLAB Code 12\nA = [1, 2, 12];\ndisp(A);",
+      "usecase": "Usecase detail for 12"
+    }
+  },
+  {
+    "num": "13",
+    "title": "MATLAB Topic 13",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 13.",
+      "code": "% MATLAB Code 13\nA = [1, 2, 13];\ndisp(A);",
+      "usecase": "Usecase detail for 13"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 13.",
+      "code": "% MATLAB Code 13\nA = [1, 2, 13];\ndisp(A);",
+      "usecase": "Usecase detail for 13"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 13.",
+      "code": "% MATLAB Code 13\nA = [1, 2, 13];\ndisp(A);",
+      "usecase": "Usecase detail for 13"
+    }
+  },
+  {
+    "num": "14",
+    "title": "MATLAB Topic 14",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 14.",
+      "code": "% MATLAB Code 14\nA = [1, 2, 14];\ndisp(A);",
+      "usecase": "Usecase detail for 14"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 14.",
+      "code": "% MATLAB Code 14\nA = [1, 2, 14];\ndisp(A);",
+      "usecase": "Usecase detail for 14"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 14.",
+      "code": "% MATLAB Code 14\nA = [1, 2, 14];\ndisp(A);",
+      "usecase": "Usecase detail for 14"
+    }
+  },
+  {
+    "num": "15",
+    "title": "MATLAB Topic 15",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 15.",
+      "code": "% MATLAB Code 15\nA = [1, 2, 15];\ndisp(A);",
+      "usecase": "Usecase detail for 15"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 15.",
+      "code": "% MATLAB Code 15\nA = [1, 2, 15];\ndisp(A);",
+      "usecase": "Usecase detail for 15"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 15.",
+      "code": "% MATLAB Code 15\nA = [1, 2, 15];\ndisp(A);",
+      "usecase": "Usecase detail for 15"
+    }
+  },
+  {
+    "num": "16",
+    "title": "MATLAB Topic 16",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 16.",
+      "code": "% MATLAB Code 16\nA = [1, 2, 16];\ndisp(A);",
+      "usecase": "Usecase detail for 16"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 16.",
+      "code": "% MATLAB Code 16\nA = [1, 2, 16];\ndisp(A);",
+      "usecase": "Usecase detail for 16"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 16.",
+      "code": "% MATLAB Code 16\nA = [1, 2, 16];\ndisp(A);",
+      "usecase": "Usecase detail for 16"
+    }
+  },
+  {
+    "num": "17",
+    "title": "MATLAB Topic 17",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 17.",
+      "code": "% MATLAB Code 17\nA = [1, 2, 17];\ndisp(A);",
+      "usecase": "Usecase detail for 17"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 17.",
+      "code": "% MATLAB Code 17\nA = [1, 2, 17];\ndisp(A);",
+      "usecase": "Usecase detail for 17"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 17.",
+      "code": "% MATLAB Code 17\nA = [1, 2, 17];\ndisp(A);",
+      "usecase": "Usecase detail for 17"
+    }
+  },
+  {
+    "num": "18",
+    "title": "MATLAB Topic 18",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 18.",
+      "code": "% MATLAB Code 18\nA = [1, 2, 18];\ndisp(A);",
+      "usecase": "Usecase detail for 18"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 18.",
+      "code": "% MATLAB Code 18\nA = [1, 2, 18];\ndisp(A);",
+      "usecase": "Usecase detail for 18"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 18.",
+      "code": "% MATLAB Code 18\nA = [1, 2, 18];\ndisp(A);",
+      "usecase": "Usecase detail for 18"
+    }
+  },
+  {
+    "num": "19",
+    "title": "MATLAB Topic 19",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 19.",
+      "code": "% MATLAB Code 19\nA = [1, 2, 19];\ndisp(A);",
+      "usecase": "Usecase detail for 19"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 19.",
+      "code": "% MATLAB Code 19\nA = [1, 2, 19];\ndisp(A);",
+      "usecase": "Usecase detail for 19"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 19.",
+      "code": "% MATLAB Code 19\nA = [1, 2, 19];\ndisp(A);",
+      "usecase": "Usecase detail for 19"
+    }
+  },
+  {
+    "num": "20",
+    "title": "MATLAB Topic 20",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 20.",
+      "code": "% MATLAB Code 20\nA = [1, 2, 20];\ndisp(A);",
+      "usecase": "Usecase detail for 20"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 20.",
+      "code": "% MATLAB Code 20\nA = [1, 2, 20];\ndisp(A);",
+      "usecase": "Usecase detail for 20"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 20.",
+      "code": "% MATLAB Code 20\nA = [1, 2, 20];\ndisp(A);",
+      "usecase": "Usecase detail for 20"
+    }
+  },
+  {
+    "num": "21",
+    "title": "MATLAB Topic 21",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 21.",
+      "code": "% MATLAB Code 21\nA = [1, 2, 21];\ndisp(A);",
+      "usecase": "Usecase detail for 21"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 21.",
+      "code": "% MATLAB Code 21\nA = [1, 2, 21];\ndisp(A);",
+      "usecase": "Usecase detail for 21"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 21.",
+      "code": "% MATLAB Code 21\nA = [1, 2, 21];\ndisp(A);",
+      "usecase": "Usecase detail for 21"
+    }
+  },
+  {
+    "num": "22",
+    "title": "MATLAB Topic 22",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 22.",
+      "code": "% MATLAB Code 22\nA = [1, 2, 22];\ndisp(A);",
+      "usecase": "Usecase detail for 22"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 22.",
+      "code": "% MATLAB Code 22\nA = [1, 2, 22];\ndisp(A);",
+      "usecase": "Usecase detail for 22"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 22.",
+      "code": "% MATLAB Code 22\nA = [1, 2, 22];\ndisp(A);",
+      "usecase": "Usecase detail for 22"
+    }
+  },
+  {
+    "num": "23",
+    "title": "MATLAB Topic 23",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 23.",
+      "code": "% MATLAB Code 23\nA = [1, 2, 23];\ndisp(A);",
+      "usecase": "Usecase detail for 23"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 23.",
+      "code": "% MATLAB Code 23\nA = [1, 2, 23];\ndisp(A);",
+      "usecase": "Usecase detail for 23"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 23.",
+      "code": "% MATLAB Code 23\nA = [1, 2, 23];\ndisp(A);",
+      "usecase": "Usecase detail for 23"
+    }
+  },
+  {
+    "num": "24",
+    "title": "MATLAB Topic 24",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 24.",
+      "code": "% MATLAB Code 24\nA = [1, 2, 24];\ndisp(A);",
+      "usecase": "Usecase detail for 24"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 24.",
+      "code": "% MATLAB Code 24\nA = [1, 2, 24];\ndisp(A);",
+      "usecase": "Usecase detail for 24"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 24.",
+      "code": "% MATLAB Code 24\nA = [1, 2, 24];\ndisp(A);",
+      "usecase": "Usecase detail for 24"
+    }
+  },
+  {
+    "num": "25",
+    "title": "MATLAB Topic 25",
+    "beg": {
+      "desc": "MATLAB beginner topic description for item 25.",
+      "code": "% MATLAB Code 25\nA = [1, 2, 25];\ndisp(A);",
+      "usecase": "Usecase detail for 25"
+    },
+    "int": {
+      "desc": "MATLAB intermediate topic description for item 25.",
+      "code": "% MATLAB Code 25\nA = [1, 2, 25];\ndisp(A);",
+      "usecase": "Usecase detail for 25"
+    },
+    "pro": {
+      "desc": "MATLAB professional topic description for item 25.",
+      "code": "% MATLAB Code 25\nA = [1, 2, 25];\ndisp(A);",
+      "usecase": "Usecase detail for 25"
+    }
+  }
+]

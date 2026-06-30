@@ -1,0 +1,477 @@
+[
+  {
+    "num": "01",
+    "title": "Variables & Constants",
+    "beg": {
+      "desc": "Use let for values that never change (constants) and var for mutable values.",
+      "code": "let name = \"Alice\"\nvar age = 25\nage = 26",
+      "usecase": "Storing local variables safely."
+    },
+    "int": {
+      "desc": "Understand Swift's type inference and explicit type annotations.",
+      "code": "let pi: Double = 3.14159\nvar greeting: String = \"Hello\"\nlet active = true // inferred as Bool",
+      "usecase": "Defining strict parameters in APIs."
+    },
+    "pro": {
+      "desc": "Use computed properties inside structures or classes.",
+      "code": "struct Point {\n    var x = 0.0, y = 0.0\n    var magnitude: Double {\n        get {\n            return sqrt(x*x + y*y)\n        }\n    }\n}",
+      "usecase": "Representing state with derived parameters."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Optionals & Unwrapping",
+    "beg": {
+      "desc": "Optionals represent variables that might contain a value or nil.",
+      "code": "var name: String? = \"Alice\"\nname = nil // works perfectly",
+      "usecase": "Allowing nullable parameters."
+    },
+    "int": {
+      "desc": "Use if-let to unwrap optionals safely inside conditional blocks.",
+      "code": "let code: String? = \"123\"\nif let unwrapped = code {\n    print(\"Code: \\(unwrapped)\")\n}",
+      "usecase": "Safe variable unwrapping flow."
+    },
+    "pro": {
+      "desc": "Use nil-coalescing and optional chaining for quick fallback updates.",
+      "code": "let input: String? = nil\nlet greeting = \"Hello \" + (input ?? \"Guest\")",
+      "usecase": "Graceful defaults setup."
+    }
+  },
+  {
+    "num": "03",
+    "title": "Guard Statements",
+    "beg": {
+      "desc": "Use guard statements to exit early if requirements are not met.",
+      "code": "func greet(name: String?) {\n    guard let unwrapped = name else {\n        print(\"No name\")\n        return\n    }\n    print(\"Hello \\(unwrapped)\")\n}",
+      "usecase": "Ensuring requirements before function runs."
+    },
+    "int": {
+      "desc": "Unwrap multiple variables concurrently inside a single guard check.",
+      "code": "func process(id: Int?, token: String?) {\n    guard let id = id, let token = token else { return }\n    // use id and token here safely\n}",
+      "usecase": "Validating complex parameters cleanly."
+    },
+    "pro": {
+      "desc": "Validate conditions using guard to reduce block indent nesting.",
+      "code": "func withdraw(amount: Double, balance: Double) {\n    guard amount <= balance else { return }\n    // proceed\n}",
+      "usecase": "Replacing nested if-checks with exit-first guards."
+    }
+  },
+  {
+    "num": "04",
+    "title": "Control Flow",
+    "beg": {
+      "desc": "Swift's switch requires cases to be exhaustive and doesn't fall through.",
+      "code": "let score = 85\nswitch score {\ncase 90...100: print(\"A\")\ndefault: print(\"Pass\")\n}",
+      "usecase": "Basic branching structures."
+    },
+    "int": {
+      "desc": "Use value binding and where clauses inside switch cases.",
+      "code": "let point = (2, 0)\nswitch point {\ncase (let x, 0) where x > 0:\n    print(\"On X-axis at \\(x)\")\ndefault:\n    break\n}",
+      "usecase": "Evaluating multi-variable dimensions."
+    },
+    "pro": {
+      "desc": "Use labeled loops to break out of nested loop scopes.",
+      "code": "outerLoop: for i in 1...3 {\n    for j in 1...3 {\n        if i * j > 4 { break outerLoop }\n    }\n}",
+      "usecase": "Deep nested loop control structures."
+    }
+  },
+  {
+    "num": "05",
+    "title": "Functions & Parameters",
+    "beg": {
+      "desc": "Define functions with custom arguments and return types.",
+      "code": "func add(a: Int, b: Int) -> Int {\n    return a + b\n}",
+      "usecase": "Creating simple routines."
+    },
+    "int": {
+      "desc": "Use argument labels to design readable function calls.",
+      "code": "func greet(to name: String, with message: String) {\n    print(\"\\(message), \\(name)!\")\n}\ngreet(to: \"Alice\", with: \"Hello\")",
+      "usecase": "Designing clean APIs."
+    },
+    "pro": {
+      "desc": "Use inout parameters to modify values passed to functions.",
+      "code": "func doubleVal(_ number: inout Int) {\n    number *= 2\n}\nvar val = 5\ndoubleVal(&val) // val is now 10",
+      "usecase": "Mutating primitive variables in place."
+    }
+  },
+  {
+    "num": "06",
+    "title": "Closures",
+    "beg": {
+      "desc": "Closures are self-contained blocks of functionality (lambda).",
+      "code": "let greet = { print(\"Hello!\") }\ngreet()",
+      "usecase": "Creating quick inline closures."
+    },
+    "int": {
+      "desc": "Use shorthand argument names ($0, $1) to write compact closure filters.",
+      "code": "let numbers = [5, 2, 8, 1]\nlet sorted = numbers.sorted(by: { $0 < $1 })",
+      "usecase": "Compact array sorting configurations."
+    },
+    "pro": {
+      "desc": "Write escaping closures to run tasks asynchronously after function returns.",
+      "code": "func load(completion: @escaping (String) -> Void) {\n    DispatchQueue.global().async {\n        completion(\"Done\")\n    }\n}",
+      "usecase": "Asynchronous call completions."
+    }
+  },
+  {
+    "num": "07",
+    "title": "Arrays & Collections",
+    "beg": {
+      "desc": "Swift provides type-safe arrays, sets, and dictionaries.",
+      "code": "var list = [1, 2, 3]\nlist.append(4)",
+      "usecase": "Basic array lists."
+    },
+    "int": {
+      "desc": "Retrieve key-value properties from dictionaries safely.",
+      "code": "var scores = [\"Alice\": 95]\nif let val = scores[\"Alice\"] {\n    print(val)\n}",
+      "usecase": "Key-value mapping data sets."
+    },
+    "pro": {
+      "desc": "Manage unique item sets using Set collections for membership tests.",
+      "code": "var unique = Set([1, 2, 2, 3])\nprint(unique.contains(2)) // true",
+      "usecase": "Checking element uniqueness."
+    }
+  },
+  {
+    "num": "08",
+    "title": "Swift Topic 08",
+    "beg": {
+      "desc": "Swift beginner topic description for item 08.",
+      "code": "// Swift Code 08\nprint(\"Swift 08\")",
+      "usecase": "Usecase detail for 08"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 08.",
+      "code": "// Swift Code 08\nprint(\"Swift 08\")",
+      "usecase": "Usecase detail for 08"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 08.",
+      "code": "// Swift Code 08\nprint(\"Swift 08\")",
+      "usecase": "Usecase detail for 08"
+    }
+  },
+  {
+    "num": "09",
+    "title": "Swift Topic 09",
+    "beg": {
+      "desc": "Swift beginner topic description for item 09.",
+      "code": "// Swift Code 09\nprint(\"Swift 09\")",
+      "usecase": "Usecase detail for 09"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 09.",
+      "code": "// Swift Code 09\nprint(\"Swift 09\")",
+      "usecase": "Usecase detail for 09"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 09.",
+      "code": "// Swift Code 09\nprint(\"Swift 09\")",
+      "usecase": "Usecase detail for 09"
+    }
+  },
+  {
+    "num": "10",
+    "title": "Swift Topic 10",
+    "beg": {
+      "desc": "Swift beginner topic description for item 10.",
+      "code": "// Swift Code 10\nprint(\"Swift 10\")",
+      "usecase": "Usecase detail for 10"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 10.",
+      "code": "// Swift Code 10\nprint(\"Swift 10\")",
+      "usecase": "Usecase detail for 10"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 10.",
+      "code": "// Swift Code 10\nprint(\"Swift 10\")",
+      "usecase": "Usecase detail for 10"
+    }
+  },
+  {
+    "num": "11",
+    "title": "Swift Topic 11",
+    "beg": {
+      "desc": "Swift beginner topic description for item 11.",
+      "code": "// Swift Code 11\nprint(\"Swift 11\")",
+      "usecase": "Usecase detail for 11"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 11.",
+      "code": "// Swift Code 11\nprint(\"Swift 11\")",
+      "usecase": "Usecase detail for 11"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 11.",
+      "code": "// Swift Code 11\nprint(\"Swift 11\")",
+      "usecase": "Usecase detail for 11"
+    }
+  },
+  {
+    "num": "12",
+    "title": "Swift Topic 12",
+    "beg": {
+      "desc": "Swift beginner topic description for item 12.",
+      "code": "// Swift Code 12\nprint(\"Swift 12\")",
+      "usecase": "Usecase detail for 12"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 12.",
+      "code": "// Swift Code 12\nprint(\"Swift 12\")",
+      "usecase": "Usecase detail for 12"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 12.",
+      "code": "// Swift Code 12\nprint(\"Swift 12\")",
+      "usecase": "Usecase detail for 12"
+    }
+  },
+  {
+    "num": "13",
+    "title": "Swift Topic 13",
+    "beg": {
+      "desc": "Swift beginner topic description for item 13.",
+      "code": "// Swift Code 13\nprint(\"Swift 13\")",
+      "usecase": "Usecase detail for 13"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 13.",
+      "code": "// Swift Code 13\nprint(\"Swift 13\")",
+      "usecase": "Usecase detail for 13"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 13.",
+      "code": "// Swift Code 13\nprint(\"Swift 13\")",
+      "usecase": "Usecase detail for 13"
+    }
+  },
+  {
+    "num": "14",
+    "title": "Swift Topic 14",
+    "beg": {
+      "desc": "Swift beginner topic description for item 14.",
+      "code": "// Swift Code 14\nprint(\"Swift 14\")",
+      "usecase": "Usecase detail for 14"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 14.",
+      "code": "// Swift Code 14\nprint(\"Swift 14\")",
+      "usecase": "Usecase detail for 14"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 14.",
+      "code": "// Swift Code 14\nprint(\"Swift 14\")",
+      "usecase": "Usecase detail for 14"
+    }
+  },
+  {
+    "num": "15",
+    "title": "Swift Topic 15",
+    "beg": {
+      "desc": "Swift beginner topic description for item 15.",
+      "code": "// Swift Code 15\nprint(\"Swift 15\")",
+      "usecase": "Usecase detail for 15"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 15.",
+      "code": "// Swift Code 15\nprint(\"Swift 15\")",
+      "usecase": "Usecase detail for 15"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 15.",
+      "code": "// Swift Code 15\nprint(\"Swift 15\")",
+      "usecase": "Usecase detail for 15"
+    }
+  },
+  {
+    "num": "16",
+    "title": "Swift Topic 16",
+    "beg": {
+      "desc": "Swift beginner topic description for item 16.",
+      "code": "// Swift Code 16\nprint(\"Swift 16\")",
+      "usecase": "Usecase detail for 16"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 16.",
+      "code": "// Swift Code 16\nprint(\"Swift 16\")",
+      "usecase": "Usecase detail for 16"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 16.",
+      "code": "// Swift Code 16\nprint(\"Swift 16\")",
+      "usecase": "Usecase detail for 16"
+    }
+  },
+  {
+    "num": "17",
+    "title": "Swift Topic 17",
+    "beg": {
+      "desc": "Swift beginner topic description for item 17.",
+      "code": "// Swift Code 17\nprint(\"Swift 17\")",
+      "usecase": "Usecase detail for 17"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 17.",
+      "code": "// Swift Code 17\nprint(\"Swift 17\")",
+      "usecase": "Usecase detail for 17"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 17.",
+      "code": "// Swift Code 17\nprint(\"Swift 17\")",
+      "usecase": "Usecase detail for 17"
+    }
+  },
+  {
+    "num": "18",
+    "title": "Swift Topic 18",
+    "beg": {
+      "desc": "Swift beginner topic description for item 18.",
+      "code": "// Swift Code 18\nprint(\"Swift 18\")",
+      "usecase": "Usecase detail for 18"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 18.",
+      "code": "// Swift Code 18\nprint(\"Swift 18\")",
+      "usecase": "Usecase detail for 18"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 18.",
+      "code": "// Swift Code 18\nprint(\"Swift 18\")",
+      "usecase": "Usecase detail for 18"
+    }
+  },
+  {
+    "num": "19",
+    "title": "Swift Topic 19",
+    "beg": {
+      "desc": "Swift beginner topic description for item 19.",
+      "code": "// Swift Code 19\nprint(\"Swift 19\")",
+      "usecase": "Usecase detail for 19"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 19.",
+      "code": "// Swift Code 19\nprint(\"Swift 19\")",
+      "usecase": "Usecase detail for 19"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 19.",
+      "code": "// Swift Code 19\nprint(\"Swift 19\")",
+      "usecase": "Usecase detail for 19"
+    }
+  },
+  {
+    "num": "20",
+    "title": "Swift Topic 20",
+    "beg": {
+      "desc": "Swift beginner topic description for item 20.",
+      "code": "// Swift Code 20\nprint(\"Swift 20\")",
+      "usecase": "Usecase detail for 20"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 20.",
+      "code": "// Swift Code 20\nprint(\"Swift 20\")",
+      "usecase": "Usecase detail for 20"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 20.",
+      "code": "// Swift Code 20\nprint(\"Swift 20\")",
+      "usecase": "Usecase detail for 20"
+    }
+  },
+  {
+    "num": "21",
+    "title": "Swift Topic 21",
+    "beg": {
+      "desc": "Swift beginner topic description for item 21.",
+      "code": "// Swift Code 21\nprint(\"Swift 21\")",
+      "usecase": "Usecase detail for 21"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 21.",
+      "code": "// Swift Code 21\nprint(\"Swift 21\")",
+      "usecase": "Usecase detail for 21"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 21.",
+      "code": "// Swift Code 21\nprint(\"Swift 21\")",
+      "usecase": "Usecase detail for 21"
+    }
+  },
+  {
+    "num": "22",
+    "title": "Swift Topic 22",
+    "beg": {
+      "desc": "Swift beginner topic description for item 22.",
+      "code": "// Swift Code 22\nprint(\"Swift 22\")",
+      "usecase": "Usecase detail for 22"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 22.",
+      "code": "// Swift Code 22\nprint(\"Swift 22\")",
+      "usecase": "Usecase detail for 22"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 22.",
+      "code": "// Swift Code 22\nprint(\"Swift 22\")",
+      "usecase": "Usecase detail for 22"
+    }
+  },
+  {
+    "num": "23",
+    "title": "Swift Topic 23",
+    "beg": {
+      "desc": "Swift beginner topic description for item 23.",
+      "code": "// Swift Code 23\nprint(\"Swift 23\")",
+      "usecase": "Usecase detail for 23"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 23.",
+      "code": "// Swift Code 23\nprint(\"Swift 23\")",
+      "usecase": "Usecase detail for 23"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 23.",
+      "code": "// Swift Code 23\nprint(\"Swift 23\")",
+      "usecase": "Usecase detail for 23"
+    }
+  },
+  {
+    "num": "24",
+    "title": "Swift Topic 24",
+    "beg": {
+      "desc": "Swift beginner topic description for item 24.",
+      "code": "// Swift Code 24\nprint(\"Swift 24\")",
+      "usecase": "Usecase detail for 24"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 24.",
+      "code": "// Swift Code 24\nprint(\"Swift 24\")",
+      "usecase": "Usecase detail for 24"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 24.",
+      "code": "// Swift Code 24\nprint(\"Swift 24\")",
+      "usecase": "Usecase detail for 24"
+    }
+  },
+  {
+    "num": "25",
+    "title": "Swift Topic 25",
+    "beg": {
+      "desc": "Swift beginner topic description for item 25.",
+      "code": "// Swift Code 25\nprint(\"Swift 25\")",
+      "usecase": "Usecase detail for 25"
+    },
+    "int": {
+      "desc": "Swift intermediate topic description for item 25.",
+      "code": "// Swift Code 25\nprint(\"Swift 25\")",
+      "usecase": "Usecase detail for 25"
+    },
+    "pro": {
+      "desc": "Swift professional topic description for item 25.",
+      "code": "// Swift Code 25\nprint(\"Swift 25\")",
+      "usecase": "Usecase detail for 25"
+    }
+  }
+]

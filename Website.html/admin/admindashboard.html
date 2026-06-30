@@ -917,6 +917,16 @@ function adminUpdateTierUI(tier) {
 (function() {
   var tier = localStorage.getItem('codinghouse_tier') || 'normal';
   adminUpdateTierUI(tier);
+  
+  var sessionUser = localStorage.getItem('codinghouse_currentUser');
+  if (sessionUser) {
+    var userObj = JSON.parse(sessionUser);
+    var sidebarName = document.querySelector('.sidebar-user .user-name');
+    if (sidebarName) sidebarName.textContent = userObj.name.split(' ')[0];
+    
+    var sidebarAv = document.querySelector('.sidebar-user .user-av');
+    if (sidebarAv) sidebarAv.textContent = userObj.av || 'AD';
+  }
 })();
 </script>
 </body>

@@ -9,7 +9,6 @@
     constructor(containerId, topicsData, options) {
       options = options || {};
       this.container = document.getElementById(containerId);
-      this.allTopics = topicsData || [];
       this.currentLevel = 'beg';
       this.currentPage = 1;
       this.perPage = options.perPage || 10;
@@ -19,10 +18,68 @@
       
       var defaultLang = window.location.pathname.split('/').pop().replace('.html', '') || 'javascript';
       this.lang = options.lang || defaultLang;
-
+ 
+      this.allTopics = [];
       var self = this;
+      
       this._loadPrism(function () {
-        self._init();
+        var onFetchError = function (err) {
+          console.error('Failed to load backend topics data:', err);
+          if (window.location.protocol === 'file:') {
+            self.container.innerHTML = 
+              '<div class="topic-card" style="border-color:#f59e0b; background:rgba(245,158,11,0.06); text-align:center; padding:32px;">' +
+                '<h3 style="color:#f59e0b; margin-bottom:12px; font-family:\'Space Grotesk\', sans-serif;">⚠️ Local Security Block (CORS)</h3>' +
+                '<p class="code-desc" style="margin-bottom:16px;">Browsers restrict loading external JSON backend database files when opening HTML pages directly via <code>file://</code> protocol.</p>' +
+                '<div class="code-usecase" style="border-left-color:#f59e0b; color:#f59e0b; text-align:left; background:rgba(245,158,11,0.1);">' +
+                  '<strong>How to run professionally:</strong><br>' +
+                  '1. Open this workspace in <strong>VS Code</strong>.<br>' +
+                  '2. Right-click <code>index.html</code> and select <strong>"Open with Live Server"</strong>.<br>' +
+                  '3. Or run a local terminal command: <code>npx http-server</code> or <code>python -m http.server</code>.' +
+                '</div>' +
+              '</div>';
+          } else {
+            self.container.innerHTML = '<p class="code-desc" style="text-align:center;">Failed to load course contents. Please refresh or check server status.</p>';
+          }
+        };
+
+        if (!topicsData) {
+          var localKey = 'codinghouse_topics_' + self.lang;
+          var cached = localStorage.getItem(localKey);
+          if (cached) {
+            self.allTopics = JSON.parse(cached);
+            self._init();
+          } else {
+            fetch('data/topics/' + self.lang + '.json')
+              .then(function (res) { return res.json(); })
+              .then(function (data) {
+                self.allTopics = data;
+                localStorage.setItem(localKey, JSON.stringify(data));
+                self._init();
+              })
+              .catch(onFetchError);
+          }
+        } else if (typeof topicsData === 'string') {
+          var localKey = 'codinghouse_topics_' + self.lang;
+          var cached = localStorage.getItem(localKey);
+          if (cached) {
+            self.allTopics = JSON.parse(cached);
+            self._init();
+          } else {
+            fetch(topicsData)
+              .then(function (res) { return res.json(); })
+              .then(function (data) {
+                self.allTopics = data;
+                localStorage.setItem(localKey, JSON.stringify(data));
+                self._init();
+              })
+              .catch(onFetchError);
+          }
+        } else if (Array.isArray(topicsData)) {
+          self.allTopics = topicsData;
+          self._init();
+        } else {
+          self._init();
+        }
       });
     }
 

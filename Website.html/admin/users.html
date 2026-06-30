@@ -254,14 +254,6 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
     <a class="nav-item" href="courses-manage.html"><span class="ni">📚</span> Courses</a>
     <a class="nav-item" href="challenges-manage.html"><span class="ni">⚡</span> Challenges</a>
     <a class="nav-item" href="projects-manage.html"><span class="ni">🏗️</span> Projects</a>
-    <a class="nav-item" href="moderation.html"><span class="ni">🚨</span> Moderation <span class="badge">3</span></a>
-
-    <div class="nav-section" style="margin-top:12px">System</div>
-    <a class="nav-item" href="permissions.html"><span class="ni">🔒</span> Permissions</a>
-    <a class="nav-item" href="security.html"><span class="ni">🛡️</span> Security</a>
-    <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
-    <a class="nav-item" href="audit-log.html"><span class="ni">📜</span> Audit Log</a>
-  </nav>
   <div class="sidebar-user">
     <div class="user-av">AD</div>
     <div class="user-info">
@@ -292,13 +284,57 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
         <h2>👥 User Accounts Management</h2>
-        <button class="approve-btn" onclick="alert('Opening new user form...')">+ Add User</button>
+        <button class="approve-btn" onclick="openUserModal()">+ Add User</button>
     </div>
 
+    <!-- USER FORM CARD -->
+    <div id="user-modal" class="card" style="display:none; margin-bottom:24px; border-color:var(--primary);">
+      <h3 style="margin-bottom:16px;" id="user-modal-title">Add / Edit User Account</h3>
+      <form id="user-form" onsubmit="saveUser(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <input type="hidden" id="user-index">
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Full Name</label>
+          <input type="text" id="u-name" required style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Email Address</label>
+          <input type="email" id="u-email" required style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Plan Tier</label>
+          <select id="u-plan" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none; cursor:pointer;">
+            <option value="Free">Free</option>
+            <option value="Pro">Pro</option>
+            <option value="Lifetime">Lifetime</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Account Status</label>
+          <select id="u-status" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none; cursor:pointer;">
+            <option value="Active">Active</option>
+            <option value="New">New</option>
+            <option value="Banned">Banned</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--xp)">XP Progress</label>
+          <input type="number" id="u-xp" required value="0" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--mute);">Avatar Initials (e.g. AB)</label>
+          <input type="text" id="u-av-init" required maxLength="2" style="width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
+        </div>
+        <div style="grid-column: span 2; display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
+          <button type="button" class="action-btn" onclick="closeUserModal()">Cancel</button>
+          <button type="submit" class="approve-btn">Save Account</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- USERS TABLE CARD -->
     <div class="card" style="margin-bottom:24px;">
         <div style="display:flex; gap:16px; margin-bottom:16px;">
-            <input type="text" placeholder="Search user accounts by email or name..." style="flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
-            <button class="btn-sm2" style="padding:10px 20px;">Search</button>
+            <input type="text" id="user-search" oninput="renderUsersList()" placeholder="Search user accounts by email or name..." style="flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:10px; color:var(--text); outline:none;">
         </div>
         
         <table style="width:100%; border-collapse:collapse;">
@@ -312,31 +348,8 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
               <th style="text-align:left; padding:8px;">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td style="padding:8px;"><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#6366f1,#22d3ee)">SR</div> Shrestha R.</div></td>
-              <td style="color:var(--mute);font-size:12px; padding:8px;">shrestha@email.com</td>
-              <td style="padding:8px;"><span class="status s-active">Pro</span></td>
-              <td style="padding:8px;"><span class="status s-active">Active</span></td>
-              <td style="padding:8px;">2,840</td>
-              <td style="padding:8px;"><button class="action-btn" onclick="alert('Details for Shrestha...')">Edit</button></td>
-            </tr>
-            <tr>
-              <td style="padding:8px;"><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#f5b942,#f97316)">AK</div> Aryan K.</div></td>
-              <td style="color:var(--mute);font-size:12px; padding:8px;">aryan@email.com</td>
-              <td style="padding:8px;"><span class="status s-new">Free</span></td>
-              <td style="padding:8px;"><span class="status s-new">New</span></td>
-              <td style="padding:8px;">4,210</td>
-              <td style="padding:8px;"><button class="action-btn" onclick="alert('Details for Aryan...')">Edit</button></td>
-            </tr>
-            <tr>
-              <td style="padding:8px;"><div style="display:flex;align-items:center;gap:8px"><div class="u-av" style="background:linear-gradient(135deg,#10b981,#22d3ee)">PS</div> Priya S.</div></td>
-              <td style="color:var(--mute);font-size:12px; padding:8px;">priya@email.com</td>
-              <td style="padding:8px;"><span class="status s-active">Lifetime</span></td>
-              <td style="padding:8px;"><span class="status s-active">Active</span></td>
-              <td style="padding:8px;">3,880</td>
-              <td style="padding:8px;"><button class="action-btn" onclick="alert('Details for Priya...')">Edit</button></td>
-            </tr>
+          <tbody id="users-table-body">
+              <!-- Dynamic rows -->
           </tbody>
         </table>
     </div>
@@ -611,7 +624,7 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
   // center text
   ctx.fillStyle='#e2e8f0';
   ctx.font='bold 13px Space Grotesk,sans-serif';
-  ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('$4,210',cx,cy-6);
   ctx.font='9px Inter,sans-serif';ctx.fillStyle='#64748b';
   ctx.fillText('TODAY',cx,cy+9);
@@ -628,6 +641,118 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
     ly+=14;
   });
 })();
+
+/* ═══════════════════════ USER ACCOUNTS CONTROLLER ═══════════════════════ */
+var defaultUsers = [
+  { name: "Shrestha R.", email: "shrestha@email.com", plan: "Pro", status: "Active", xp: 2840, av: "SR" },
+  { name: "Aryan K.", email: "aryan@email.com", plan: "Free", status: "New", xp: 4210, av: "AK" },
+  { name: "Priya S.", email: "priya@email.com", plan: "Lifetime", status: "Active", xp: 3880, av: "PS" }
+];
+
+if (!localStorage.getItem('codinghouse_users')) {
+  localStorage.setItem('codinghouse_users', JSON.stringify(defaultUsers));
+}
+
+var users = JSON.parse(localStorage.getItem('codinghouse_users'));
+
+function renderUsersList() {
+  var search = document.getElementById('user-search').value.toLowerCase();
+  var html = '';
+  
+  var filtered = users.filter(u => {
+    return u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
+  });
+
+  filtered.forEach((u, idx) => {
+    var planClass = u.plan === 'Pro' ? 's-active' : (u.plan === 'Lifetime' ? 's-active' : 's-new');
+    var statusClass = u.status === 'Active' ? 's-active' : (u.status === 'New' ? 's-new' : 's-ban');
+    
+    // Find absolute index in the main users array
+    var mainIndex = users.indexOf(u);
+    
+    html += `
+      <tr>
+        <td style="padding:12px 8px;">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="u-av" style="background:linear-gradient(135deg, var(--primary), var(--accent))">${u.av}</div>
+            ${u.name}
+          </div>
+        </td>
+        <td style="color:var(--mute);font-size:12px; padding:12px 8px;">${u.email}</td>
+        <td style="padding:12px 8px;"><span class="status ${planClass}">${u.plan}</span></td>
+        <td style="padding:12px 8px;"><span class="status ${statusClass}">${u.status}</span></td>
+        <td style="padding:12px 8px; font-family:'JetBrains Mono',monospace;">${Number(u.xp).toLocaleString()}</td>
+        <td style="padding:12px 8px; display:flex; gap:6px;">
+          <button class="action-btn" onclick="openUserModal(${mainIndex})">Edit</button>
+          <button class="action-btn danger" onclick="deleteUser(${mainIndex})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById('users-table-body').innerHTML = html || '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--mute);">No users match search criteria.</td></tr>';
+}
+
+function openUserModal(index) {
+  var modal = document.getElementById('user-modal');
+  modal.style.display = 'block';
+  modal.scrollIntoView({ behavior: 'smooth' });
+
+  if (index !== undefined) {
+    document.getElementById('user-modal-title').textContent = 'Edit User Account Config';
+    document.getElementById('user-index').value = index;
+    var u = users[index];
+    document.getElementById('u-name').value = u.name;
+    document.getElementById('u-email').value = u.email;
+    document.getElementById('u-plan').value = u.plan;
+    document.getElementById('u-status').value = u.status;
+    document.getElementById('u-xp').value = u.xp;
+    document.getElementById('u-av-init').value = u.av;
+  } else {
+    document.getElementById('user-modal-title').textContent = 'Create New User Account';
+    document.getElementById('user-index').value = '';
+    document.getElementById('user-form').reset();
+    document.getElementById('u-xp').value = 0;
+  }
+}
+
+function closeUserModal() {
+  document.getElementById('user-modal').style.display = 'none';
+}
+
+function saveUser(event) {
+  event.preventDefault();
+  var idx = document.getElementById('user-index').value;
+  var name = document.getElementById('u-name').value;
+  var email = document.getElementById('u-email').value;
+  var plan = document.getElementById('u-plan').value;
+  var status = document.getElementById('u-status').value;
+  var xp = parseInt(document.getElementById('u-xp').value) || 0;
+  var av = document.getElementById('u-av-init').value.toUpperCase();
+
+  var newUser = { name, email, plan, status, xp, av };
+
+  if (idx !== '') {
+    users[idx] = newUser;
+  } else {
+    users.push(newUser);
+  }
+
+  localStorage.setItem('codinghouse_users', JSON.stringify(users));
+  renderUsersList();
+  closeUserModal();
+}
+
+function deleteUser(index) {
+  if (confirm('Are you sure you want to delete ' + users[index].name + '\'s account?')) {
+    users.splice(index, 1);
+    localStorage.setItem('codinghouse_users', JSON.stringify(users));
+    renderUsersList();
+  }
+}
+
+// Initial render
+renderUsersList();
 </script>
 </body>
 </html>

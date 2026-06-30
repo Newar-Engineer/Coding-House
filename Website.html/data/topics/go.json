@@ -1,0 +1,477 @@
+[
+  {
+    "num": "01",
+    "title": "Hello World & Packages",
+    "beg": {
+      "desc": "Go programs start with package main. Every package defines its dependencies using imports.",
+      "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, Go!\")\n}",
+      "usecase": "Standard entry point for Go programs."
+    },
+    "int": {
+      "desc": "Use grouped imports and custom functions outside the main entry.",
+      "code": "package main\n\nimport (\n    \"fmt\"\n    \"strings\"\n)\n\nfunc greet(name string) string {\n    return \"Hello, \" + strings.Title(name) + \"!\"\n}\n\nfunc main() {\n    fmt.Println(greet(\"alice\"))\n}",
+      "usecase": "Organizing simple utility methods and libraries."
+    },
+    "pro": {
+      "desc": "Initialize sub-packages and run tasks using init() functions.",
+      "code": "package main\n\nimport \"fmt\"\n\nvar setting string\n\nfunc init() {\n    setting = \"production\"\n}\n\nfunc main() {\n    fmt.Printf(\"System running in %s mode\\n\", setting)\n}",
+      "usecase": "Setting up application environments or drivers before main runs."
+    }
+  },
+  {
+    "num": "02",
+    "title": "Variables & Types",
+    "beg": {
+      "desc": "Declare variables with var or type-inferred := inside functions.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    var name string = \"Alice\"\n    age := 25\n    fmt.Println(name, \"is\", age)\n}",
+      "usecase": "Defining parameters and values inside routines."
+    },
+    "int": {
+      "desc": "Use typed constants and understand zero value defaults.",
+      "code": "package main\nimport \"fmt\"\n\nconst TaxRate = 0.08\n\nfunc main() {\n    var active bool // defaults to false\n    var score float64 // defaults to 0.0\n    fmt.Println(active, score, TaxRate)\n}",
+      "usecase": "Declaring application defaults and status values."
+    },
+    "pro": {
+      "desc": "Use custom type definitions and basic struct modeling.",
+      "code": "package main\nimport \"fmt\"\n\ntype ID string\ntype User struct {\n    Name string\n    Role ID\n}\n\nfunc main() {\n    u := User{Name: \"Alice\", Role: \"Admin\"}\n    fmt.Printf(\"%+v\\n\", u)\n}",
+      "usecase": "Creating strong typed entities for clean domain structures."
+    }
+  },
+  {
+    "num": "03",
+    "title": "Control Flow (If/Switch)",
+    "beg": {
+      "desc": "Go's if and switch statements don't require parentheses around conditions.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    score := 85\n    if score >= 90 {\n        fmt.Println(\"A\")\n    } else {\n        fmt.Println(\"Pass\")\n    }\n}",
+      "usecase": "Basic branching conditions."
+    },
+    "int": {
+      "desc": "Use switch statements without an expression to handle long if-else chains.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    hour := 15\n    switch {\n    case hour < 12:\n        fmt.Println(\"Morning\")\n    case hour < 18:\n        fmt.Println(\"Afternoon\")\n    default:\n        fmt.Println(\"Evening\")\n    }\n}",
+      "usecase": "Replacing heavy nested if/else statements."
+    },
+    "pro": {
+      "desc": "Execute dynamic checks inside statements using initialization conditions.",
+      "code": "package main\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nfunc loadData() (string, error) {\n    return \"\", errors.New(\"auth failed\")\n}\n\nfunc main() {\n    if data, err := loadData(); err != nil {\n        fmt.Println(\"Error:\", err)\n    } else {\n        fmt.Println(\"Data:\", data)\n    }\n}",
+      "usecase": "Evaluating errors inline with conditional expressions."
+    }
+  },
+  {
+    "num": "04",
+    "title": "Loops (For)",
+    "beg": {
+      "desc": "Go only has the for loop, which replaces while loops.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    for i := 0; i < 5; i++ {\n        fmt.Println(i)\n    }\n}",
+      "usecase": "Basic looping structures."
+    },
+    "int": {
+      "desc": "Implement a while-equivalent or infinite loop using simplified for conditions.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    sum := 1\n    for sum < 100 {\n        sum += sum\n    }\n    fmt.Println(sum)\n}",
+      "usecase": "Running looping checks until conditions are met."
+    },
+    "pro": {
+      "desc": "Iterate through ranges using index and value parameters.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    items := []string{\"apple\", \"banana\", \"cherry\"}\n    for idx, val := range items {\n        fmt.Printf(\"Index %d: %s\\n\", idx, val)\n    }\n}",
+      "usecase": "Iterating slices, arrays, or maps safely."
+    }
+  },
+  {
+    "num": "05",
+    "title": "Arrays & Slices",
+    "beg": {
+      "desc": "Arrays have a fixed size. Slices are dynamic wrappers around arrays.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    var arr [3]int = [3]int{1, 2, 3}\n    slice := []int{4, 5, 6}\n    slice = append(slice, 7)\n    fmt.Println(arr, slice)\n}",
+      "usecase": "Dynamic resizing lists of items."
+    },
+    "int": {
+      "desc": "Use make() to pre-allocate slice size and capacity to avoid resizing overhead.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    s := make([]int, 0, 10)\n    fmt.Printf(\"Len: %d, Cap: %d\\n\", len(s), cap(s))\n    s = append(s, 1, 2, 3)\n    sub := s[1:3] // slicing syntax\n    fmt.Println(sub)\n}",
+      "usecase": "Efficient array generation and memory management."
+    },
+    "pro": {
+      "desc": "Understand under-the-hood array sharing when slicing a slice.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    base := []int{10, 20, 30, 40}\n    sub := base[1:3] // shares memory!\n    sub[0] = 99\n    fmt.Println(base) // [10, 99, 30, 40] - mutated!\n    \n    // Prevent modifications using copy\n    independent := make([]int, len(sub))\n    copy(independent, sub)\n}",
+      "usecase": "Preventing side-effect modifications in nested arrays."
+    }
+  },
+  {
+    "num": "06",
+    "title": "Maps",
+    "beg": {
+      "desc": "Maps store key-value structures. Create them using make().",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    scores := make(map[string]int)\n    scores[\"Alice\"] = 95\n    fmt.Println(scores[\"Alice\"])\n}",
+      "usecase": "Saving and retrieving properties by key."
+    },
+    "int": {
+      "desc": "Check for key existence using the 'comma ok' pattern and delete keys.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    users := map[string]string{\"id1\": \"Alice\", \"id2\": \"Bob\"}\n    name, ok := users[\"id3\"]\n    if !ok {\n        fmt.Println(\"User not found\")\n    } else {\n        fmt.Println(name)\n    }\n    delete(users, \"id1\")\n}",
+      "usecase": "Safely reading map entries without default value mixups."
+    },
+    "pro": {
+      "desc": "Initialize thread-safe key-value collections using Sync Map.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc main() {\n    var m sync.Map\n    m.Store(\"token\", \"abc123\")\n    if val, ok := m.Load(\"token\"); ok {\n        fmt.Println(val.(string))\n    }\n}",
+      "usecase": "Preventing runtime fatal panic crashes due to concurrent map writes."
+    }
+  },
+  {
+    "num": "07",
+    "title": "Structs & Fields",
+    "beg": {
+      "desc": "Structs allow grouping fields to model complex objects.",
+      "code": "package main\nimport \"fmt\"\n\ntype User struct {\n    Name string\n    Age  int\n}\n\nfunc main() {\n    u := User{Name: \"Alice\", Age: 25}\n    fmt.Println(u.Name)\n}",
+      "usecase": "Modeling data entities."
+    },
+    "int": {
+      "desc": "Embed structs within other structs for composition (inheritance replacement).",
+      "code": "package main\nimport \"fmt\"\n\ntype Address struct {\n    City, State string\n}\ntype Employee struct {\n    Name    string\n    Address // Anonymous field embedding\n}\n\nfunc main() {\n    emp := Employee{Name: \"Bob\"}\n    emp.City = \"Seattle\" // directly access promoted field\n    fmt.Println(emp.Name, \"lives in\", emp.City)\n}",
+      "usecase": "Cleaner structural composition and decoupling."
+    },
+    "pro": {
+      "desc": "Create anonymous structs for quick inline models or testing mocks.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    point := struct {\n        X, Y int\n    }{X: 10, Y: 20}\n    fmt.Printf(\"Point at (%d, %d)\\n\", point.X, point.Y)\n}",
+      "usecase": "Defining fast structured data payloads without declaring full types."
+    }
+  },
+  {
+    "num": "08",
+    "title": "Pointers",
+    "beg": {
+      "desc": "Pointers store the memory address of values. Use & to get address, * to read.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    val := 42\n    ptr := &val\n    fmt.Println(*ptr) // dereference to read 42\n}",
+      "usecase": "Accessing variable memory locations directly."
+    },
+    "int": {
+      "desc": "Pass pointers to functions to mutate values directly inside functions.",
+      "code": "package main\nimport \"fmt\"\n\nfunc increment(n *int) {\n    *n++\n}\n\nfunc main() {\n    num := 10\n    increment(&num)\n    fmt.Println(num) // 11\n}",
+      "usecase": "Passing large models without copying structures in memory."
+    },
+    "pro": {
+      "desc": "Avoid dangling pointer errors by understanding compiler escapes.",
+      "code": "package main\nimport \"fmt\"\n\nfunc getPointer() *int {\n    val := 100\n    return &val // Safe! Go compiler puts this on the heap automatically (escape analysis)\n}\n\nfunc main() {\n    p := getPointer()\n    fmt.Println(*p)\n}",
+      "usecase": "Writing memory-safe APIs without memory allocation worries."
+    }
+  },
+  {
+    "num": "09",
+    "title": "Methods & Receivers",
+    "beg": {
+      "desc": "Methods are functions attached to specific types via receivers.",
+      "code": "package main\nimport \"fmt\"\n\ntype Circle struct {\n    Radius float64\n}\n\nfunc (c Circle) Area() float64 {\n    return 3.14159 * c.Radius * c.Radius\n}",
+      "usecase": "Attaching behavior to structural data models."
+    },
+    "int": {
+      "desc": "Use pointer receivers to modify object state or avoid struct copies.",
+      "code": "package main\nimport \"fmt\"\n\ntype Counter struct {\n    Value int\n}\n\nfunc (c *Counter) Increment() {\n    c.Value++ // directly mutates receiver data\n}\n\nfunc main() {\n    cnt := Counter{Value: 0}\n    cnt.Increment()\n    fmt.Println(cnt.Value) // 1\n}",
+      "usecase": "Modifying struct states efficiently."
+    },
+    "pro": {
+      "desc": "Compose custom types with basic primitive types and attach methods to them.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"strings\"\n)\n\ntype MyString string\n\nfunc (ms MyString) IsEmpty() bool {\n    return len(strings.TrimSpace(string(ms))) == 0\n}\n\nfunc main() {\n    var s MyString = \"  \"\n    fmt.Println(s.IsEmpty()) // true\n}",
+      "usecase": "Extending built-in primitives with domain methods."
+    }
+  },
+  {
+    "num": "10",
+    "title": "Interfaces",
+    "beg": {
+      "desc": "Interfaces define behavior. Types implement interfaces implicitly.",
+      "code": "package main\nimport \"fmt\"\n\ntype Greeter interface {\n    Greet() string\n}\ntype Human struct{} \nfunc (h Human) Greet() string { return \"Hello!\" }\n\nfunc run(g Greeter) { fmt.Println(g.Greet()) }",
+      "usecase": "Abstracting code interfaces for dependency inversion."
+    },
+    "int": {
+      "desc": "Use the empty interface interface{} (or 'any') to accept any type.",
+      "code": "package main\nimport \"fmt\"\n\nfunc describe(val interface{}) {\n    switch v := val.(type) {\n    case int:\n        fmt.Println(\"Integer:\", v)\n    case string:\n        fmt.Println(\"String:\", v)\n    }\n}",
+      "usecase": "Handling dynamic input parameters securely."
+    },
+    "pro": {
+      "desc": "Implement interfaces using pointer receivers and understand nil interface values.",
+      "code": "package main\nimport \"fmt\"\n\ntype Reader interface {\n    Read() string\n}\ntype File struct { Name string }\nfunc (f *File) Read() string { return f.Name }\n\nfunc main() {\n    var r Reader\n    // r.Read() would panic: nil pointer dereference\n    r = &File{Name: \"doc.txt\"}\n    fmt.Println(r.Read())\n}",
+      "usecase": "Preventing runtime interface initialization bugs."
+    }
+  },
+  {
+    "num": "11",
+    "title": "Goroutines",
+    "beg": {
+      "desc": "Goroutines are lightweight threads managed by the Go runtime.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc printMessage() {\n    fmt.Println(\"Running asynchronously!\")\n}\n\nfunc main() {\n    go printMessage()\n    time.Sleep(10 * time.Millisecond) // wait for routine to run\n}",
+      "usecase": "Spawning fast parallel computations."
+    },
+    "int": {
+      "desc": "Understand dynamic stack sizes and routine scheduler optimizations.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"runtime\"\n)\n\nfunc main() {\n    fmt.Println(\"Cores active:\", runtime.NumCPU())\n    for i := 0; i < 10; i++ {\n        go func(id int) {\n            // lightweight: uses only ~2KB memory initially\n        }(i)\n    }\n}",
+      "usecase": "Massively scaling threads beyond standard OS limitations."
+    },
+    "pro": {
+      "desc": "Avoid race conditions inside goroutines by passing loop index variables.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    for i := 0; i < 3; i++ {\n        go func(val int) {\n            fmt.Println(val) // prints 0, 1, 2 safely\n        }(i) \n    }\n    time.Sleep(10 * time.Millisecond)\n}",
+      "usecase": "Preventing loop iteration variable capture bugs inside concurrent functions."
+    }
+  },
+  {
+    "num": "12",
+    "title": "Channels",
+    "beg": {
+      "desc": "Channels are typed pipes used to send and receive data between goroutines.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan string)\n    go func() {\n        ch <- \"Ping!\" // send\n    }()\n    msg := <-ch // receive (blocks until ready)\n    fmt.Println(msg)\n}",
+      "usecase": "Synchronizing threads safely without complex locks."
+    },
+    "int": {
+      "desc": "Use buffered channels to prevent block conditions on send.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan int, 2) // buffer capacity 2\n    ch <- 10\n    ch <- 20 // does not block because of buffer capacity\n    fmt.Println(<-ch, <-ch)\n}",
+      "usecase": "Creating non-blocking task channels."
+    },
+    "pro": {
+      "desc": "Close channels to notify receivers that no more data will be sent.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan int, 3)\n    go func() {\n        for i := 1; i <= 3; i++ { ch <- i }\n        close(ch)\n    }()\n    for val := range ch { // loops until channel closed\n        fmt.Println(val)\n    }\n}",
+      "usecase": "Graceful cleanup of pipeline streams."
+    }
+  },
+  {
+    "num": "13",
+    "title": "Select",
+    "beg": {
+      "desc": "Select statement multiplexes multiple channel operations.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    c1 := make(chan string)\n    select {\n    case msg := <-c1:\n        fmt.Println(msg)\n    case <-time.After(10 * time.Millisecond):\n        fmt.Println(\"Timeout\")\n    }\n}",
+      "usecase": "Multiplexing channel streams."
+    },
+    "int": {
+      "desc": "Use default cases inside select for non-blocking channel polling.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    ch := make(chan string)\n    select {\n    case msg := <-ch:\n        fmt.Println(msg)\n    default:\n        fmt.Println(\"No messages waiting\")\n    }\n}",
+      "usecase": "Reading channels without blocking runtime threads."
+    },
+    "pro": {
+      "desc": "Implement coordination mechanisms with empty cancellation channels.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    abort := make(chan struct{})\n    go func() {\n        time.Sleep(20 * time.Millisecond)\n        close(abort) // cancel signals to all\n    }()\n    select {\n    case <-abort:\n        fmt.Println(\"Operation aborted!\")\n    }\n}",
+      "usecase": "Cancelling concurrent task workers instantly."
+    }
+  },
+  {
+    "num": "14",
+    "title": "Defer",
+    "beg": {
+      "desc": "Defer delays function execution until the surrounding function returns.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    defer fmt.Println(\"Last\")\n    fmt.Println(\"First\")\n}",
+      "usecase": "Scheduling function execution routines."
+    },
+    "int": {
+      "desc": "Use defer for guaranteed resource cleanups, such as files and database connections.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"os\"\n)\n\nfunc main() {\n    f, _ := os.Open(\"go.mod\")\n    defer f.Close() // runs even if error occurs below\n    fmt.Println(\"File opened successfully\")\n}",
+      "usecase": "Preventing leaks of file handles or DB connection resources."
+    },
+    "pro": {
+      "desc": "Understand LIFO (Last In First Out) evaluation order of defer chains.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    for i := 0; i < 3; i++ {\n        defer fmt.Println(i) // prints 2, 1, 0\n    }\n}",
+      "usecase": "Executing stacked cleanup hooks in reverse order."
+    }
+  },
+  {
+    "num": "15",
+    "title": "Error Handling",
+    "beg": {
+      "desc": "Errors are represented by values in Go. Check them manually using if blocks.",
+      "code": "package main\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nfunc check(n int) error {\n    if n < 0 { return errors.New(\"negative value\") }\n    return nil\n}",
+      "usecase": "Explicit error checking flow."
+    },
+    "int": {
+      "desc": "Return custom error types or wrap them using errors.New and fmt.Errorf.",
+      "code": "package main\nimport \"fmt\"\n\nfunc divide(a, b int) (int, error) {\n    if b == 0 {\n        return 0, fmt.Errorf(\"divide error: denominator cannot be %d\", b)\n    }\n    return a / b, nil\n}",
+      "usecase": "Constructing readable error details."
+    },
+    "pro": {
+      "desc": "Unwrap errors and check specific errors using errors.Is and errors.As.",
+      "code": "package main\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nvar ErrNotFound = errors.New(\"not found\")\n\nfunc main() {\n    err := fmt.Errorf(\"wrap error: %w\", ErrNotFound)\n    if errors.Is(err, ErrNotFound) {\n        fmt.Println(\"It is a Not Found error\")\n    }\n}",
+      "usecase": "Verifying error classes within multi-level architectures."
+    }
+  },
+  {
+    "num": "16",
+    "title": "Panic & Recover",
+    "beg": {
+      "desc": "Panic stops normal execution flows. Recover regains program control.",
+      "code": "package main\nimport \"fmt\"\n\nfunc main() {\n    defer func() {\n        if r := recover(); r != nil {\n            fmt.Println(\"Recovered:\", r)\n        }\n    }()\n    panic(\"critical failure\")\n}",
+      "usecase": "Recovering from runtime crashes."
+    },
+    "int": {
+      "desc": "Only use panic/recover for unrecoverable errors (like out of memory).",
+      "code": "package main\nimport \"fmt\"\n\nfunc safeRun() {\n    defer func() {\n        if err := recover(); err != nil {\n            fmt.Println(\"Internal crash protected\")\n        }\n    }()\n    var list []int\n    _ = list[1] // triggers bounds panic\n}",
+      "usecase": "Keeping web servers running despite unexpected bugs."
+    },
+    "pro": {
+      "desc": "Propagate errors cleanly from panic hooks instead of crashing threads.",
+      "code": "package main\nimport (\n    \"errors\"\n    \"fmt\"\n)\n\nfunc execute() (err error) {\n    defer func() {\n        if r := recover(); r != nil {\n            err = errors.New(\"operation panicked\")\n        }\n    }()\n    panic(\"fatal system halt\")\n}",
+      "usecase": "Gracefully transforming internal crashes into standard error outputs."
+    }
+  },
+  {
+    "num": "17",
+    "title": "Modules & Imports",
+    "beg": {
+      "desc": "Initialize packages using go mod. Import internal and external modules.",
+      "code": "module myapp\n\ngo 1.20\n\n// Run: go mod init myapp",
+      "usecase": "Creating modules and tracking dependencies."
+    },
+    "int": {
+      "desc": "Organize modules by creating packages in separate subfolders.",
+      "code": "package utils\n// utils/math.go\nfunc Add(a, b int) int { return a + b } // capitalized functions are exported",
+      "usecase": "Splitting application logic into components."
+    },
+    "pro": {
+      "desc": "Use package alias imports to avoid package name conflicts.",
+      "code": "package main\nimport (\n    f \"fmt\"\n    alias \"net/http\"\n)\n\nfunc main() {\n    f.Println(alias.MethodGet)\n}",
+      "usecase": "Importing third-party packages with custom identifiers."
+    }
+  },
+  {
+    "num": "18",
+    "title": "JSON Parsing",
+    "beg": {
+      "desc": "Convert structs to JSON strings and parse them back in Go.",
+      "code": "package main\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\ntype User struct {\n    Name string `json:\"name\"`\n}\n\nfunc main() {\n    u := User{Name: \"Alice\"}\n    data, _ := json.Marshal(u)\n    fmt.Println(string(data))\n}",
+      "usecase": "Serializing data structure entities."
+    },
+    "int": {
+      "desc": "Parse raw JSON streams into map structures when schema is dynamic.",
+      "code": "package main\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\nfunc main() {\n    raw := []byte(`{\"id\": 1, \"active\": true}`)\n    var data map[string]interface{}\n    json.Unmarshal(raw, &data)\n    fmt.Println(data[\"active\"])\n}",
+      "usecase": "Parsing dynamic payloads from client request interfaces."
+    },
+    "pro": {
+      "desc": "Implement custom Marshaller and Unmarshaller interfaces for precise output formats.",
+      "code": "package main\nimport (\n    \"encoding/json\"\n    \"strings\"\n)\n\ntype UpperString string\nfunc (u UpperString) MarshalJSON() ([]byte, error) {\n    return json.Marshal(strings.ToUpper(string(u)))\n}",
+      "usecase": "Customizing data formats for API standardizations."
+    }
+  },
+  {
+    "num": "19",
+    "title": "Web Servers",
+    "beg": {
+      "desc": "Create basic web servers using the net/http package.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc main() {\n    http.HandleFunc(\"/\", func(w http.ResponseWriter, r *http.Request) {\n        fmt.Fprint(w, \"Hello World!\")\n    })\n    http.ListenAndServe(\":8080\", nil)\n}",
+      "usecase": "Spinning up simple REST services."
+    },
+    "int": {
+      "desc": "Implement custom Router multiplexers and serve JSON response formats.",
+      "code": "package main\nimport (\n    \"encoding/json\"\n    \"net/http\"\n)\n\nfunc main() {\n    mux := http.NewServeMux()\n    mux.HandleFunc(\"/api\", func(w http.ResponseWriter, r *http.Request) {\n        w.Header().Set(\"Content-Type\", \"application/json\")\n        json.NewEncoder(w).Encode(map[string]string{\"status\": \"ok\"})\n    })\n}",
+      "usecase": "Building REST APIs with correct header returns."
+    },
+    "pro": {
+      "desc": "Construct custom HTTP middleware to intercept requests (for logging or auth check).",
+      "code": "package main\nimport (\n    \"log\"\n    \"net/http\"\n)\n\nfunc logger(next http.Handler) http.Handler {\n    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        log.Println(\"Request received:\", r.URL.Path)\n        next.ServeHTTP(w, r)\n    })\n}",
+      "usecase": "Developing modular HTTP request filters."
+    }
+  },
+  {
+    "num": "20",
+    "title": "WaitGroups",
+    "beg": {
+      "desc": "Use WaitGroups to block execution until multiple goroutines finish.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc main() {\n    var wg sync.WaitGroup\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fmt.Println(\"Worker done\")\n    }()\n    wg.Wait()\n}",
+      "usecase": "Awaiting a batch of parallel tasks."
+    },
+    "int": {
+      "desc": "Implement batch updates by launching parallel task routines with WaitGroups.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 1; i <= 3; i++ {\n        wg.Add(1)\n        go func(id int) {\n            defer wg.Done()\n            fmt.Println(\"Running task\", id)\n        }(i)\n    }\n    wg.Wait()\n}",
+      "usecase": "Running multiple fast scrapers or background workers parallelly."
+    },
+    "pro": {
+      "desc": "Avoid Deadlocks by passing WaitGroups using pointers.",
+      "code": "package main\nimport \"sync\"\n\nfunc worker(id int, wg *sync.WaitGroup) {\n    defer wg.Done()\n    // do work\n}\n\nfunc main() {\n    var wg sync.WaitGroup\n    wg.Add(1)\n    go worker(1, &wg) // must use pointer reference\n    wg.Wait()\n}",
+      "usecase": "Preventing duplicate copied sync blocks which cause program freezes."
+    }
+  },
+  {
+    "num": "21",
+    "title": "Mutexes",
+    "beg": {
+      "desc": "Use Mutexes to serialize access to shared resources.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nvar (\n    counter int\n    mtx     sync.Mutex\n)\n\nfunc main() {\n    mtx.Lock()\n    counter++\n    mtx.Unlock()\n    fmt.Println(counter)\n}",
+      "usecase": "Synchronizing variables in thread-shared environments."
+    },
+    "int": {
+      "desc": "Use RWMutex to allow multiple read routines to run concurrently, but single write locks.",
+      "code": "package main\nimport (\n    \"sync\"\n    \"time\"\n)\n\ntype Cache struct {\n    sync.RWMutex\n    data map[string]string\n}\n\nfunc (c *Cache) Get(key string) string {\n    c.RLock()\n    defer c.RUnlock()\n    return c.data[key]\n}",
+      "usecase": "Improving performance in read-heavy shared caching scenarios."
+    },
+    "pro": {
+      "desc": "Build thread-safe operations using double lock checking or transactional updates.",
+      "code": "package main\nimport \"sync\"\n\ntype Bank struct {\n    sync.Mutex\n    accounts map[string]int\n}\n\nfunc (b *Bank) Transfer(from, to string, amt int) {\n    b.Lock() // single global transaction lock\n    defer b.Unlock()\n    b.accounts[from] -= amt\n    b.accounts[to] += amt\n}",
+      "usecase": "Ensuring atomic data updates across banking ledgers."
+    }
+  },
+  {
+    "num": "22",
+    "title": "Context",
+    "beg": {
+      "desc": "Use Context to carry cancellation signals and timeouts across APIs.",
+      "code": "package main\nimport (\n    \"context\"\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)\n    defer cancel()\n    <-ctx.Done()\n    fmt.Println(\"Timeout hit:\", ctx.Err())\n}",
+      "usecase": "Propagating cancel calls through processes."
+    },
+    "int": {
+      "desc": "Propagate cancellation hooks using Context throughout API handler chains.",
+      "code": "package main\nimport (\n    \"context\"\n    \"net/http\"\n    \"time\"\n)\n\nfunc handle(w http.ResponseWriter, r *http.Request) {\n    ctx, cancel := context.WithTimeout(r.Context(), 1*time.Second)\n    defer cancel()\n    // pass ctx down to Database queries\n    _ = ctx\n}",
+      "usecase": "Automatically cancelling server queries when client drops the connection."
+    },
+    "pro": {
+      "desc": "Store context request-scoped variables safely using typed keys.",
+      "code": "package main\nimport (\n    \"context\"\n    \"fmt\"\n)\n\ntype key int\nconst sessionKey key = 0\n\nfunc main() {\n    ctx := context.WithValue(context.Background(), sessionKey, \"userID123\")\n    val := ctx.Value(sessionKey).(string)\n    fmt.Println(\"UserID:\", val)\n}",
+      "usecase": "Injecting auth identifiers or tracer IDs across function calls safely."
+    }
+  },
+  {
+    "num": "23",
+    "title": "Reflection",
+    "beg": {
+      "desc": "Reflection inspects interface types at runtime via reflect package.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"reflect\"\n)\n\nfunc main() {\n    var x float64 = 3.4\n    fmt.Println(\"type:\", reflect.TypeOf(x))\n}",
+      "usecase": "Inspecting underlying variable types dynamically."
+    },
+    "int": {
+      "desc": "Inspect custom struct fields and read struct tags dynamically at runtime.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"reflect\"\n)\n\ntype Config struct {\n    Port int `default:\"8080\"`\n}\n\nfunc main() {\n    cfg := Config{}\n    t := reflect.TypeOf(cfg)\n    field, _ := t.FieldByName(\"Port\")\n    fmt.Println(\"Default:\", field.Tag.Get(\"default\"))\n}",
+      "usecase": "Building generic model validators or automappers."
+    },
+    "pro": {
+      "desc": "Modify variables dynamically using reflection by passing pointers.",
+      "code": "package main\nimport (\n    \"fmt\"\n    \"reflect\"\n)\n\nfunc main() {\n    var x float64 = 3.4\n    p := reflect.ValueOf(&x) // pass pointer address\n    v := p.Elem()\n    v.SetFloat(7.1)\n    fmt.Println(x) // 7.1\n}",
+      "usecase": "Writing advanced custom serializing libraries."
+    }
+  },
+  {
+    "num": "24",
+    "title": "Generics",
+    "beg": {
+      "desc": "Generics parameterize functions or structs to work with any type (Go 1.18+).",
+      "code": "package main\nimport \"fmt\"\n\nfunc Print[T any](val T) {\n    fmt.Println(val)\n}\n\nfunc main() {\n    Print[int](10)\n    Print[string](\"Hello\")\n}",
+      "usecase": "Eliminating boilerplate code using dynamic template parameters."
+    },
+    "int": {
+      "desc": "Construct generic functions that accept custom comparable type bounds.",
+      "code": "package main\nimport \"fmt\"\n\nfunc FindIndex[T comparable](arr []T, val T) int {\n    for i, item := range arr {\n        if item == val { return i }\n    }\n    return -1\n}",
+      "usecase": "Implementing generic search structures."
+    },
+    "pro": {
+      "desc": "Build complex generic models using custom constraints.",
+      "code": "package main\n\ntype Number interface {\n    ~int | ~float64\n}\n\ntype Vector[T Number] struct {\n    data []T\n}\n\nfunc (v *Vector[T]) Push(val T) {\n    v.data = append(v.data, val)\n}",
+      "usecase": "Building math or database components that work with custom primitive sets."
+    }
+  },
+  {
+    "num": "25",
+    "title": "Testing & Benchmarks",
+    "beg": {
+      "desc": "Create tests by naming files with _test.go extension.",
+      "code": "package main\nimport \"testing\"\n\nfunc TestAdd(t *testing.T) {\n    if 1 + 1 != 2 {\n        t.Error(\"Math broken!\")\n    }\n}",
+      "usecase": "Unit testing API calls. Run via: go test"
+    },
+    "int": {
+      "desc": "Create automated execution speed checks using Benchmark functions.",
+      "code": "package main\nimport \"testing\"\n\nfunc BenchmarkSum(b *testing.B) {\n    for i := 0; i < b.N; i++ {\n        // run calculation code\n    }\n}",
+      "usecase": "Testing code performance speeds. Run via: go test -bench=."
+    },
+    "pro": {
+      "desc": "Configure custom Setup and Teardown checks inside TestMain hooks.",
+      "code": "package main\nimport (\n    \"os\"\n    \"testing\"\n)\n\nfunc TestMain(m *testing.M) {\n    // Setup database connection\n    code := m.Run()\n    // Teardown connections\n    os.Exit(code)\n}",
+      "usecase": "Setting up localized integration test suites."
+    }
+  }
+]

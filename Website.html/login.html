@@ -323,9 +323,57 @@ function selectTier(tier, el){
 
 function handleLogin(e){
   e.preventDefault();
-  // Save role and tier to localStorage
+  
+  var email = document.getElementById('email').value;
+  var matchedUser = null;
+  
+  if (currentRole === 'user') {
+    // Load local storage users database
+    var defaultUsers = [
+      { name: "Shrestha R.", email: "shrestha@email.com", plan: "Pro", status: "Active", xp: 2840, av: "SR" },
+      { name: "Aryan K.", email: "aryan@email.com", plan: "Free", status: "New", xp: 4210, av: "AK" },
+      { name: "Priya S.", email: "priya@email.com", plan: "Lifetime", status: "Active", xp: 3880, av: "PS" }
+    ];
+    if (!localStorage.getItem('codinghouse_users')) {
+      localStorage.setItem('codinghouse_users', JSON.stringify(defaultUsers));
+    }
+    
+    var userList = JSON.parse(localStorage.getItem('codinghouse_users'));
+    matchedUser = userList.find(function(u) { return u.email.toLowerCase() === email.toLowerCase(); });
+    
+    if (!matchedUser) {
+      // Auto-create new student account for demo
+      var namePart = email.split('@')[0];
+      var formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      matchedUser = {
+        name: formattedName + " K.",
+        email: email,
+        plan: currentTier === 'normal' ? 'Free' : (currentTier === 'intermediate' ? 'Pro' : 'Lifetime'),
+        status: 'New',
+        xp: 120,
+        av: namePart.substring(0, 2).toUpperCase()
+      };
+      userList.push(matchedUser);
+      localStorage.setItem('codinghouse_users', JSON.stringify(userList));
+    }
+    
+    localStorage.setItem('codinghouse_currentUser', JSON.stringify(matchedUser));
+    // map plan string to tier key
+    var mappedTier = matchedUser.plan === 'Pro' ? 'intermediate' : (matchedUser.plan === 'Lifetime' ? 'professional' : 'normal');
+    localStorage.setItem('codinghouse_tier', mappedTier);
+  } else {
+    // Admin user session
+    var adminUser = {
+      name: "Admin Profile",
+      email: email,
+      role: "Super Admin",
+      av: "AD"
+    };
+    localStorage.setItem('codinghouse_currentUser', JSON.stringify(adminUser));
+    localStorage.setItem('codinghouse_tier', 'professional');
+  }
+  
   localStorage.setItem('codinghouse_role', currentRole);
-  localStorage.setItem('codinghouse_tier', currentTier);
   
   const btn = document.getElementById('submitBtn');
   btn.textContent = 'Signing in...';
