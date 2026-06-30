@@ -267,6 +267,7 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
     <div class="user-info">
       <div class="user-name">Admin</div>
       <div class="user-role">Super Admin</div>
+      <div id="adminTierBadge" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:2px;display:inline-block;background:rgba(168,85,247,.15);color:#c084fc">🟢 Normal</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='../login.html'" title="Log out">↩</button>
   </div>
@@ -281,6 +282,11 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
       <p>Coding House · All systems operational · Last sync 2 min ago</p>
     </div>
     <div class="topbar-right">
+      <div id="adminTierSwitcher" style="display:flex;gap:4px;padding:4px;background:var(--surface2);border:1px solid var(--border);border-radius:10px">
+        <button onclick="adminSwitchTier('normal')" data-tier="normal" style="padding:4px 10px;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;transition:all .3s;background:transparent;color:var(--mute)">🟢 Normal</button>
+        <button onclick="adminSwitchTier('intermediate')" data-tier="intermediate" style="padding:4px 10px;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;transition:all .3s;background:transparent;color:var(--mute)">🟡 Intermediate</button>
+        <button onclick="adminSwitchTier('professional')" data-tier="professional" style="padding:4px 10px;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;transition:all .3s;background:transparent;color:var(--mute)">🔴 Professional</button>
+      </div>
       <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green)">
         <div class="live-dot"></div> Live
       </div>
@@ -329,6 +335,33 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
         <div class="stat-val" style="color:#f43f5e">3</div>
         <div class="stat-label">Pending Flags</div>
         <span class="stat-trend dn">Needs review</span>
+      </div>
+    </div>
+
+    <!-- TIER DISTRIBUTION CARD -->
+    <div class="card" style="margin-bottom:20px;animation-delay:.12s">
+      <div class="card-title"><div class="card-title-left"><span>🎯</span> Tier Distribution</div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px">
+        <div style="text-align:center;padding:16px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px">
+          <div style="font-size:28px;font-weight:700;color:#10b981;font-family:'Space Grotesk',sans-serif">14,210</div>
+          <div style="font-size:12px;color:var(--mute);margin-top:4px">🟢 Normal Users</div>
+          <div style="font-size:11px;color:#10b981;margin-top:4px">57.2%</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:rgba(245,185,66,.08);border:1px solid rgba(245,185,66,.2);border-radius:12px">
+          <div style="font-size:28px;font-weight:700;color:#f5b942;font-family:'Space Grotesk',sans-serif">7,428</div>
+          <div style="font-size:12px;color:var(--mute);margin-top:4px">🟡 Intermediate Users</div>
+          <div style="font-size:11px;color:#f5b942;margin-top:4px">29.9%</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:12px">
+          <div style="font-size:28px;font-weight:700;color:#f87171;font-family:'Space Grotesk',sans-serif">3,193</div>
+          <div style="font-size:12px;color:var(--mute);margin-top:4px">🔴 Professional Users</div>
+          <div style="font-size:11px;color:#f87171;margin-top:4px">12.9%</div>
+        </div>
+      </div>
+      <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px">
+        <div style="width:57.2%;background:linear-gradient(90deg,#10b981,#059669);border-radius:6px;transition:width .5s"></div>
+        <div style="width:29.9%;background:linear-gradient(90deg,#f5b942,#f97316);border-radius:6px;transition:width .5s"></div>
+        <div style="width:12.9%;background:linear-gradient(90deg,#f87171,#ef4444);border-radius:6px;transition:width .5s"></div>
       </div>
     </div>
 
@@ -845,6 +878,45 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
     ctx.fillText(`${s.label} ${s.pct}%`,22,ly+5);
     ly+=14;
   });
+})();
+
+/* ═══════════════════════ ADMIN TIER MANAGEMENT ═══════════════════════ */
+function adminSwitchTier(tier) {
+  localStorage.setItem('codinghouse_tier', tier);
+  adminUpdateTierUI(tier);
+}
+
+function adminUpdateTierUI(tier) {
+  var colors = {normal:'#10b981',intermediate:'#f5b942',professional:'#f87171'};
+  var bgColors = {normal:'rgba(16,185,129,.2)',intermediate:'rgba(245,185,66,.2)',professional:'rgba(248,113,113,.2)'};
+  var icons = {normal:'\ud83d\udfe2',intermediate:'\ud83d\udfe1',professional:'\ud83d\udd34'};
+  var labels = {normal:'Normal',intermediate:'Intermediate',professional:'Professional'};
+  
+  // Update topbar buttons
+  document.querySelectorAll('#adminTierSwitcher button').forEach(function(btn) {
+    if(btn.dataset.tier === tier) {
+      btn.style.background = bgColors[tier];
+      btn.style.color = colors[tier];
+      btn.style.boxShadow = '0 0 12px ' + bgColors[tier];
+    } else {
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--mute)';
+      btn.style.boxShadow = 'none';
+    }
+  });
+  
+  // Update sidebar badge
+  var badge = document.getElementById('adminTierBadge');
+  if(badge) {
+    badge.textContent = icons[tier] + ' ' + labels[tier];
+    badge.style.background = bgColors[tier].replace('.2','.15');
+    badge.style.color = colors[tier];
+  }
+}
+
+(function() {
+  var tier = localStorage.getItem('codinghouse_tier') || 'normal';
+  adminUpdateTierUI(tier);
 })();
 </script>
 </body>

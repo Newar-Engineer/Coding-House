@@ -1,285 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PHP Portal — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <style>
-  body {
-    animation: pageIn 0.5s ease;
-  }
-  @keyframes pageIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .lang-hero-wrap {
-    position: relative;
-    height: 280px;
-    border-radius: 20px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #070913 0%, #11152c 50%, #080a14 100%);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    margin-bottom: 36px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(99, 102, 241, 0.1);
-  }
-  
-  .lang-hero-label {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .lang-hero-label h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  }
-  .lang-hero-label p {
-    font-size: 14px;
-    color: var(--primary2);
-    margin-top: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .level-controller {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 16px 24px;
-    border-radius: 14px;
-    margin-bottom: 28px;
-  }
-  .level-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-  }
-  .level-selector {
-    display: flex;
-    gap: 8px;
-  }
-  .level-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-mute);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.3s ease;
-  }
-  .level-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary2));
-    border-color: var(--primary);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  }
-
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    transition: all 0.3s ease;
-  }
-  .topic-card:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  }
-  .topic-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .topic-num {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--primary2);
-    font-weight: 700;
-    font-size: 18px;
-  }
-  .topic-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    flex: 1;
-    margin-left: 12px;
-  }
-  
-  .code-container {
-    background: #04060b;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13.5px;
-    line-height: 1.6;
-    overflow-x: auto;
-    margin-bottom: 16px;
-    position: relative;
-  }
-  
-  .code-desc {
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: var(--text-soft);
-  }
-  .code-usecase {
-    font-size: 12px;
-    color: var(--primary2);
-    background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid var(--primary);
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-top: 12px;
-    font-weight: 500;
-  }
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.lang-hero-wrap{position:relative;height:280px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#07080f 0%,#0f1224 50%,#05060a 100%);border:1px solid rgba(79,91,147,.2);margin-bottom:36px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lang-hero-label{position:absolute;top:20px;left:24px;z-index:10;pointer-events:none}
+.lang-hero-label h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,.5)}
+.lang-hero-label p{font-size:14px;color:#4f5b93;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.level-controller{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);padding:16px 24px;border-radius:14px;margin-bottom:28px}
+.level-title{font-family:'Space Grotesk',sans-serif;font-weight:600}.level-selector{display:flex;gap:8px}
+.level-btn{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text-mute);cursor:pointer;font-weight:600;font-size:13px;transition:all .3s}
+.level-btn.active{background:linear-gradient(135deg,#4f5b93,#4f5b93dd);border-color:#4f5b93;color:#fff;box-shadow:0 4px 12px #4f5b934d}
+.topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;transition:all .3s}.topic-card:hover{border-color:#4f5b9366;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.topic-header{display:flex;align-items:center;margin-bottom:16px}.topic-num{font-family:'JetBrains Mono',monospace;color:#4f5b93;font-weight:700;font-size:18px}.topic-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;flex:1;margin-left:12px}
+.code-container{background:#04060b;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;margin-bottom:16px}
+.code-desc{font-size:13.5px;line-height:1.6;color:var(--text-soft)}.code-usecase{font-size:12px;color:#4f5b93;background:#4f5b9314;border-left:3px solid #4f5b93;padding:10px 14px;border-radius:4px;margin-top:12px;font-weight:500}
 </style>
 </head>
 <body>
-
-<header>
-  <nav>
-    <a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#languages">Languages</a></li>
-      <li><a href="index.html#tracks">Roadmaps</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="index.html#pricing">Pricing</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
-      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
-      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
-</header>
-
-<section>
-  <div class="wrap" style="padding-top:36px;">
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / PHP</div>
-
-    <!-- CANVAS HERO AREA -->
-    <div class="lang-hero-wrap">
-      <div class="lang-hero-label">
-        <p>🌐 Animated PHP Portal</p>
-        <h1>PHP Masterclass</h1>
-      </div>
-      <canvas id="langCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-    </div>
-
-    <!-- LEVEL CONTROLLER -->
-    <div class="level-controller">
-      <div class="level-title">Select Learning Tier:</div>
-      <div class="level-selector">
-        <button class="level-btn active" data-level="beg">🟢 Beginner</button>
-        <button class="level-btn" data-level="int">🟡 Intermediate</button>
-        <button class="level-btn" data-level="pro">🔴 Professional</button>
-      </div>
-    </div>
-
-    <!-- TOPIC LIST -->
-    <div id="topics-root">
-      
-    <div class="topic-card">
-      <div class="topic-header">
-        <span class="topic-num">01</span>
-        <h3 class="topic-title">Request Processing & Form Handling</h3>
-        <span style="font-size:12px; color:var(--mute); text-transform:uppercase; font-weight:700;">Php Tier</span>
-      </div>
-      <p class="code-desc" id="desc-01"></p>
-      <div class="code-container">
-        <pre style="margin:0;"><code id="code-01" style="color:#22d3ee;"></code></pre>
-      </div>
-      <div class="code-usecase" id="use-01"></div>
-    </div>
-  
-    </div>
-
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-bottom" style="border-top:none; padding-top:0;">
-      <span>© 2026 Coding House. All rights reserved.</span>
-      <div class="foot-social">
-        <a href="index.html">Back to home</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+<header><nav><a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="index.html#tracks">Roadmaps</a></li><li><a href="index.html#projects">Projects</a></li><li><a href="index.html#pricing">Pricing</a></li></ul><div class="nav-cta"><a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav></header>
+<section><div class="wrap" style="padding-top:36px;">
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / PHP</div>
+<div class="lang-hero-wrap"><div class="lang-hero-label"><p>🐘 PHP Portal</p><h1>PHP Masterclass</h1></div><canvas id="langCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas></div>
+<div class="level-controller"><div class="level-title">Select Learning Tier: <span id="topic-total-badge"></span></div><div class="level-selector"><button class="level-btn active" data-level="beg">🟢 Beginner</button><button class="level-btn" data-level="int">🟡 Intermediate</button><button class="level-btn" data-level="pro">🔴 Professional</button></div></div>
+<div id="topics-root"></div>
+</div></section>
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House.</span><div class="foot-social"><a href="index.html">Back to home</a></div></div></div></footer>
+<script>const TOPICS_DATA=[{"num":"01","title":"Hello World & Variables","beg":{"desc":"PHP is web-focused. Variables start with the $ symbol.","code":"<?php\necho \"Hello, PHP!\";\n\n$name = \"Alice\";\n$age = 25;","usecase":"Basic variables initialization."},"int":{"desc":"Work with associative arrays to store key-value datasets.","code":"$user = [\n    \"name\" => \"Alice\",\n    \"role\" => \"Admin\"\n];\necho $user[\"name\"];","usecase":"Declaring associative lists."},"pro":{"desc":"Handle parameters safely using type declarations (strict types).","code":"declare(strict_types=1);\n\nfunction add(int $a, int $b): int {\n    return $a + $b;\n}","usecase":"Adding strong type safety."}},{"num":"02","title":"Classes & Interfaces","beg":{"desc":"Classes encapsulate parameters. Use constructors to initialize.","code":"class User {\n    public function __construct(\n        public string $name,\n        public int $age\n    ) {}\n}","usecase":"Creating simple entity structures."},"int":{"desc":"Implement interfaces and extend classes using inheritances.","code":"interface Logger {\n    public function log(string $msg): void;\n}\n\nclass ConsoleLogger implements Logger {\n    public function log(string $msg): void { echo $msg; }\n}","usecase":"Abstracting APIs using interfaces."},"pro":{"desc":"Manage namespaces to avoid name collisions in larger applications.","code":"namespace App\\Utils;\n\nclass Helper {\n    public static function clean(string $s) { return trim($s); }\n}","usecase":"Grouping helper libraries into packages."}},{"num":"03","title":"PDO & Web Forms","beg":{"desc":"Connect to databases safely using PDO drivers.","code":"$db = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');\n$stmt = $db->query('SELECT * FROM users');","usecase":"Simple database queries."},"int":{"desc":"Avoid SQL injection attacks by running prepared statement queries.","code":"$stmt = $db->prepare('SELECT * FROM users WHERE id = :id');\n$stmt->execute(['id' => 1]);\n$user = $stmt->fetch();","usecase":"Running safe database queries."},"pro":{"desc":"Access global forms parameters using $_POST and $_GET filters.","code":"$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);\nif ($email) {\n    echo \"Valid email: \" . htmlspecialchars($email);\n}","usecase":"Reading user request payloads safely."}},{"num":"04","title":"PHP Topic 04","beg":{"desc":"PHP beginner topic description for item 04.","code":"<?php\n// PHP Code 04\necho \"PHP 04\";","usecase":"Usecase detail for 04"},"int":{"desc":"PHP intermediate topic description for item 04.","code":"<?php\n// PHP Code 04\necho \"PHP 04\";","usecase":"Usecase detail for 04"},"pro":{"desc":"PHP professional topic description for item 04.","code":"<?php\n// PHP Code 04\necho \"PHP 04\";","usecase":"Usecase detail for 04"}},{"num":"05","title":"PHP Topic 05","beg":{"desc":"PHP beginner topic description for item 05.","code":"<?php\n// PHP Code 05\necho \"PHP 05\";","usecase":"Usecase detail for 05"},"int":{"desc":"PHP intermediate topic description for item 05.","code":"<?php\n// PHP Code 05\necho \"PHP 05\";","usecase":"Usecase detail for 05"},"pro":{"desc":"PHP professional topic description for item 05.","code":"<?php\n// PHP Code 05\necho \"PHP 05\";","usecase":"Usecase detail for 05"}},{"num":"06","title":"PHP Topic 06","beg":{"desc":"PHP beginner topic description for item 06.","code":"<?php\n// PHP Code 06\necho \"PHP 06\";","usecase":"Usecase detail for 06"},"int":{"desc":"PHP intermediate topic description for item 06.","code":"<?php\n// PHP Code 06\necho \"PHP 06\";","usecase":"Usecase detail for 06"},"pro":{"desc":"PHP professional topic description for item 06.","code":"<?php\n// PHP Code 06\necho \"PHP 06\";","usecase":"Usecase detail for 06"}},{"num":"07","title":"PHP Topic 07","beg":{"desc":"PHP beginner topic description for item 07.","code":"<?php\n// PHP Code 07\necho \"PHP 07\";","usecase":"Usecase detail for 07"},"int":{"desc":"PHP intermediate topic description for item 07.","code":"<?php\n// PHP Code 07\necho \"PHP 07\";","usecase":"Usecase detail for 07"},"pro":{"desc":"PHP professional topic description for item 07.","code":"<?php\n// PHP Code 07\necho \"PHP 07\";","usecase":"Usecase detail for 07"}},{"num":"08","title":"PHP Topic 08","beg":{"desc":"PHP beginner topic description for item 08.","code":"<?php\n// PHP Code 08\necho \"PHP 08\";","usecase":"Usecase detail for 08"},"int":{"desc":"PHP intermediate topic description for item 08.","code":"<?php\n// PHP Code 08\necho \"PHP 08\";","usecase":"Usecase detail for 08"},"pro":{"desc":"PHP professional topic description for item 08.","code":"<?php\n// PHP Code 08\necho \"PHP 08\";","usecase":"Usecase detail for 08"}},{"num":"09","title":"PHP Topic 09","beg":{"desc":"PHP beginner topic description for item 09.","code":"<?php\n// PHP Code 09\necho \"PHP 09\";","usecase":"Usecase detail for 09"},"int":{"desc":"PHP intermediate topic description for item 09.","code":"<?php\n// PHP Code 09\necho \"PHP 09\";","usecase":"Usecase detail for 09"},"pro":{"desc":"PHP professional topic description for item 09.","code":"<?php\n// PHP Code 09\necho \"PHP 09\";","usecase":"Usecase detail for 09"}},{"num":"10","title":"PHP Topic 10","beg":{"desc":"PHP beginner topic description for item 10.","code":"<?php\n// PHP Code 10\necho \"PHP 10\";","usecase":"Usecase detail for 10"},"int":{"desc":"PHP intermediate topic description for item 10.","code":"<?php\n// PHP Code 10\necho \"PHP 10\";","usecase":"Usecase detail for 10"},"pro":{"desc":"PHP professional topic description for item 10.","code":"<?php\n// PHP Code 10\necho \"PHP 10\";","usecase":"Usecase detail for 10"}},{"num":"11","title":"PHP Topic 11","beg":{"desc":"PHP beginner topic description for item 11.","code":"<?php\n// PHP Code 11\necho \"PHP 11\";","usecase":"Usecase detail for 11"},"int":{"desc":"PHP intermediate topic description for item 11.","code":"<?php\n// PHP Code 11\necho \"PHP 11\";","usecase":"Usecase detail for 11"},"pro":{"desc":"PHP professional topic description for item 11.","code":"<?php\n// PHP Code 11\necho \"PHP 11\";","usecase":"Usecase detail for 11"}},{"num":"12","title":"PHP Topic 12","beg":{"desc":"PHP beginner topic description for item 12.","code":"<?php\n// PHP Code 12\necho \"PHP 12\";","usecase":"Usecase detail for 12"},"int":{"desc":"PHP intermediate topic description for item 12.","code":"<?php\n// PHP Code 12\necho \"PHP 12\";","usecase":"Usecase detail for 12"},"pro":{"desc":"PHP professional topic description for item 12.","code":"<?php\n// PHP Code 12\necho \"PHP 12\";","usecase":"Usecase detail for 12"}},{"num":"13","title":"PHP Topic 13","beg":{"desc":"PHP beginner topic description for item 13.","code":"<?php\n// PHP Code 13\necho \"PHP 13\";","usecase":"Usecase detail for 13"},"int":{"desc":"PHP intermediate topic description for item 13.","code":"<?php\n// PHP Code 13\necho \"PHP 13\";","usecase":"Usecase detail for 13"},"pro":{"desc":"PHP professional topic description for item 13.","code":"<?php\n// PHP Code 13\necho \"PHP 13\";","usecase":"Usecase detail for 13"}},{"num":"14","title":"PHP Topic 14","beg":{"desc":"PHP beginner topic description for item 14.","code":"<?php\n// PHP Code 14\necho \"PHP 14\";","usecase":"Usecase detail for 14"},"int":{"desc":"PHP intermediate topic description for item 14.","code":"<?php\n// PHP Code 14\necho \"PHP 14\";","usecase":"Usecase detail for 14"},"pro":{"desc":"PHP professional topic description for item 14.","code":"<?php\n// PHP Code 14\necho \"PHP 14\";","usecase":"Usecase detail for 14"}},{"num":"15","title":"PHP Topic 15","beg":{"desc":"PHP beginner topic description for item 15.","code":"<?php\n// PHP Code 15\necho \"PHP 15\";","usecase":"Usecase detail for 15"},"int":{"desc":"PHP intermediate topic description for item 15.","code":"<?php\n// PHP Code 15\necho \"PHP 15\";","usecase":"Usecase detail for 15"},"pro":{"desc":"PHP professional topic description for item 15.","code":"<?php\n// PHP Code 15\necho \"PHP 15\";","usecase":"Usecase detail for 15"}},{"num":"16","title":"PHP Topic 16","beg":{"desc":"PHP beginner topic description for item 16.","code":"<?php\n// PHP Code 16\necho \"PHP 16\";","usecase":"Usecase detail for 16"},"int":{"desc":"PHP intermediate topic description for item 16.","code":"<?php\n// PHP Code 16\necho \"PHP 16\";","usecase":"Usecase detail for 16"},"pro":{"desc":"PHP professional topic description for item 16.","code":"<?php\n// PHP Code 16\necho \"PHP 16\";","usecase":"Usecase detail for 16"}},{"num":"17","title":"PHP Topic 17","beg":{"desc":"PHP beginner topic description for item 17.","code":"<?php\n// PHP Code 17\necho \"PHP 17\";","usecase":"Usecase detail for 17"},"int":{"desc":"PHP intermediate topic description for item 17.","code":"<?php\n// PHP Code 17\necho \"PHP 17\";","usecase":"Usecase detail for 17"},"pro":{"desc":"PHP professional topic description for item 17.","code":"<?php\n// PHP Code 17\necho \"PHP 17\";","usecase":"Usecase detail for 17"}},{"num":"18","title":"PHP Topic 18","beg":{"desc":"PHP beginner topic description for item 18.","code":"<?php\n// PHP Code 18\necho \"PHP 18\";","usecase":"Usecase detail for 18"},"int":{"desc":"PHP intermediate topic description for item 18.","code":"<?php\n// PHP Code 18\necho \"PHP 18\";","usecase":"Usecase detail for 18"},"pro":{"desc":"PHP professional topic description for item 18.","code":"<?php\n// PHP Code 18\necho \"PHP 18\";","usecase":"Usecase detail for 18"}},{"num":"19","title":"PHP Topic 19","beg":{"desc":"PHP beginner topic description for item 19.","code":"<?php\n// PHP Code 19\necho \"PHP 19\";","usecase":"Usecase detail for 19"},"int":{"desc":"PHP intermediate topic description for item 19.","code":"<?php\n// PHP Code 19\necho \"PHP 19\";","usecase":"Usecase detail for 19"},"pro":{"desc":"PHP professional topic description for item 19.","code":"<?php\n// PHP Code 19\necho \"PHP 19\";","usecase":"Usecase detail for 19"}},{"num":"20","title":"PHP Topic 20","beg":{"desc":"PHP beginner topic description for item 20.","code":"<?php\n// PHP Code 20\necho \"PHP 20\";","usecase":"Usecase detail for 20"},"int":{"desc":"PHP intermediate topic description for item 20.","code":"<?php\n// PHP Code 20\necho \"PHP 20\";","usecase":"Usecase detail for 20"},"pro":{"desc":"PHP professional topic description for item 20.","code":"<?php\n// PHP Code 20\necho \"PHP 20\";","usecase":"Usecase detail for 20"}},{"num":"21","title":"PHP Topic 21","beg":{"desc":"PHP beginner topic description for item 21.","code":"<?php\n// PHP Code 21\necho \"PHP 21\";","usecase":"Usecase detail for 21"},"int":{"desc":"PHP intermediate topic description for item 21.","code":"<?php\n// PHP Code 21\necho \"PHP 21\";","usecase":"Usecase detail for 21"},"pro":{"desc":"PHP professional topic description for item 21.","code":"<?php\n// PHP Code 21\necho \"PHP 21\";","usecase":"Usecase detail for 21"}},{"num":"22","title":"PHP Topic 22","beg":{"desc":"PHP beginner topic description for item 22.","code":"<?php\n// PHP Code 22\necho \"PHP 22\";","usecase":"Usecase detail for 22"},"int":{"desc":"PHP intermediate topic description for item 22.","code":"<?php\n// PHP Code 22\necho \"PHP 22\";","usecase":"Usecase detail for 22"},"pro":{"desc":"PHP professional topic description for item 22.","code":"<?php\n// PHP Code 22\necho \"PHP 22\";","usecase":"Usecase detail for 22"}},{"num":"23","title":"PHP Topic 23","beg":{"desc":"PHP beginner topic description for item 23.","code":"<?php\n// PHP Code 23\necho \"PHP 23\";","usecase":"Usecase detail for 23"},"int":{"desc":"PHP intermediate topic description for item 23.","code":"<?php\n// PHP Code 23\necho \"PHP 23\";","usecase":"Usecase detail for 23"},"pro":{"desc":"PHP professional topic description for item 23.","code":"<?php\n// PHP Code 23\necho \"PHP 23\";","usecase":"Usecase detail for 23"}},{"num":"24","title":"PHP Topic 24","beg":{"desc":"PHP beginner topic description for item 24.","code":"<?php\n// PHP Code 24\necho \"PHP 24\";","usecase":"Usecase detail for 24"},"int":{"desc":"PHP intermediate topic description for item 24.","code":"<?php\n// PHP Code 24\necho \"PHP 24\";","usecase":"Usecase detail for 24"},"pro":{"desc":"PHP professional topic description for item 24.","code":"<?php\n// PHP Code 24\necho \"PHP 24\";","usecase":"Usecase detail for 24"}},{"num":"25","title":"PHP Topic 25","beg":{"desc":"PHP beginner topic description for item 25.","code":"<?php\n// PHP Code 25\necho \"PHP 25\";","usecase":"Usecase detail for 25"},"int":{"desc":"PHP intermediate topic description for item 25.","code":"<?php\n// PHP Code 25\necho \"PHP 25\";","usecase":"Usecase detail for 25"},"pro":{"desc":"PHP professional topic description for item 25.","code":"<?php\n// PHP Code 25\necho \"PHP 25\";","usecase":"Usecase detail for 25"}}];</script>
+<script src="js/topic-renderer.js"></script>
+<script>var topicRenderer=new TopicRenderer('topics-root',TOPICS_DATA,{langLabel:'PHP Tier',accentColor:'#4f5b93'});</script>
 <script>
-// --- LEVEL RENDER LOGIC ---
-const topics = [{"num":"01","title":"Request Processing & Form Handling","beg":{"desc":"PHP dynamically processes client requests using superglobals.","code":"<?php\nif (isset($_POST['username'])) {\n    echo \"Hello, \" . htmlspecialchars($_POST['username']);\n}\n?>","usecase":"Real-world use: Basic form submissions."},"int":{"desc":"Intermediate PHP uses secure PDO bindings to query MySQL databases safely from hacker injection.","code":"<?php\n$pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');\n$stmt = $pdo->prepare('SELECT * FROM users WHERE id = :id');\n$stmt->execute(['id' => $userId]);\n$user = $stmt->fetch();\n?>","usecase":"Real-world use: Safely authentication of client profiles."},"pro":{"desc":"Professional PHP uses Dependency Injection and PSR standards to design robust enterprise architectures.","code":"<?php\nclass UserController {\n    private $db;\n    public function __construct(DatabaseInterface $db) {\n        this->db = $db;\n    }\n}\n?>","usecase":"Real-world use: Deploying REST microservices on Laravel framework."}}];
-let currentLevel = 'beg';
-
-function render() {
-  topics.forEach(t => {
-    const data = t[currentLevel];
-    document.getElementById(`desc-${t.num}`).innerText = data.desc;
-    document.getElementById(`code-${t.num}`).innerText = data.code;
-    document.getElementById(`use-${t.num}`).innerText = data.usecase;
-  });
-}
-
-document.querySelectorAll(".level-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentLevel = btn.dataset.level;
-    render();
-  });
-});
-
-render();
-
-// ═══════════════════════ THEMATIC CANVAS ANIMATION ═══════════════════════
-(function() {
-  
-      // CLIENT-SERVER PACKETS
-      const canvas = document.getElementById('langCanvas');
-      const ctx = canvas.getContext('2d');
-      function resize() {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-      }
-      resize();
-      window.addEventListener('resize', resize);
-      let t = 0;
-      function frame() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        t += 0.02;
-        const cx = canvas.width - 240;
-        const cy = 120;
-        ctx.fillStyle = '#8b5cf6';
-        ctx.fillRect(cx, cy - 20, 40, 40);
-        ctx.fillStyle = '#f5b942';
-        ctx.fillRect(cx + 160, cy - 20, 40, 40);
-        const pX = cx + 40 + (t * 100) % 120;
-        ctx.beginPath();
-        ctx.arc(pX, cy, 6, 0, Math.PI*2);
-        ctx.fillStyle = '#ffffff';
-        ctx.fill();
-        requestAnimationFrame(frame);
-      }
-      frame();
-    
-})();
+(function(){var c=document.getElementById('langCanvas'),x=c.getContext('2d');function r(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight}r();window.addEventListener('resize',r);var t=0,w=["function","class","interface","namespace","use","extends","implements","public","private","protected","return","echo","null"];var fl=Array.from({length:20},function(_,i){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.3,l:w[i%w.length],o:Math.random()*.2+.05}});var dt=Array.from({length:15},function(){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.6,r:1+Math.random()*3}});function f(){x.clearRect(0,0,c.width,c.height);t+=.016;dt.forEach(function(d){d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>c.width)d.vx*=-1;if(d.y<0||d.y>c.height)d.vy*=-1;x.beginPath();x.arc(d.x,d.y,d.r,0,Math.PI*2);x.fillStyle='#4f5b93';x.globalAlpha=.15+Math.sin(t+d.x)*.05;x.fill();x.globalAlpha=1});fl.forEach(function(f){f.x+=f.vx;f.y+=f.vy;if(f.x<-60)f.x=c.width+60;if(f.x>c.width+60)f.x=-60;if(f.y<-20)f.y=c.height+20;if(f.y>c.height+20)f.y=-20;x.save();x.globalAlpha=f.o+Math.sin(t+f.x)*.03;x.fillStyle='#4f5b93';x.font='500 10px JetBrains Mono,monospace';x.fillText(f.l,f.x,f.y);x.restore()});requestAnimationFrame(f)}f()})();
 </script>
 </body>
 </html>

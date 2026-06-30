@@ -1187,6 +1187,125 @@ footer {
   color: var(--secondary);
 }
 
+/* ============================= TOPIC RENDERER ============================= */
+
+/* Search */
+.tr-search-wrap{margin-bottom:20px}
+.tr-search-box{position:relative;display:flex;align-items:center}
+.tr-search-icon{position:absolute;left:16px;font-size:16px;pointer-events:none;z-index:2}
+.tr-search-input{
+  width:100%;padding:14px 18px 14px 46px;
+  background:var(--surface,#0f1830);border:1.5px solid var(--border,#1d2a4d);
+  border-radius:12px;color:var(--text,#eef1fb);font-size:14px;
+  font-family:var(--font-body,'Inter',sans-serif);outline:none;
+  transition:border-color .25s,box-shadow .25s;
+}
+.tr-search-input::placeholder{color:var(--text-mute,#6f7aa0)}
+.tr-search-input:focus{border-color:var(--cyan,#22d3ee);box-shadow:0 0 0 3px rgba(34,211,238,.12)}
+
+/* Counter bar */
+.tr-counter{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;margin-bottom:8px;
+  font-size:13px;color:var(--text-mute,#6f7aa0);
+}
+.tr-counter em{color:var(--cyan,#22d3ee);font-style:normal}
+.tr-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:32px;height:24px;padding:0 10px;
+  background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(34,211,238,.15));
+  border:1px solid rgba(99,102,241,.3);border-radius:20px;
+  font-family:var(--font-mono,'JetBrains Mono',monospace);
+  font-size:12px;font-weight:700;color:var(--cyan,#22d3ee);
+  margin-right:6px;
+}
+.tr-counter-right{
+  font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:12px;
+}
+
+/* Tier label */
+.tr-tier-label{
+  font-size:11px;color:var(--text-mute,#6f7aa0);
+  text-transform:uppercase;font-weight:700;letter-spacing:.06em;
+  white-space:nowrap;
+}
+
+/* Card entry animation */
+@keyframes trSlideIn{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.tr-enter{animation:trSlideIn .45s ease both}
+
+/* Copy button */
+.tr-copy{
+  position:absolute;top:10px;right:10px;
+  padding:5px 12px;font-size:11px;font-weight:600;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:6px;color:var(--text-mute,#6f7aa0);cursor:pointer;
+  transition:all .2s;z-index:3;font-family:var(--font-mono,'JetBrains Mono',monospace);
+}
+.tr-copy:hover{background:rgba(34,211,238,.15);color:var(--cyan,#22d3ee);border-color:rgba(34,211,238,.3)}
+.tr-copy.copied{background:rgba(16,185,129,.2);color:#10b981;border-color:rgba(16,185,129,.4)}
+
+/* Pagination */
+.tr-pagination{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:28px 0 12px;margin-top:12px;
+}
+.tr-page-nums{display:flex;align-items:center;gap:4px}
+.tr-page-btn{
+  padding:8px 18px;font-size:13px;font-weight:600;
+  background:var(--surface,#0f1830);border:1px solid var(--border,#1d2a4d);
+  border-radius:8px;color:var(--text-soft,#aab4d4);
+  transition:all .2s;cursor:pointer;
+}
+.tr-page-btn:hover:not(:disabled){border-color:var(--cyan,#22d3ee);color:var(--cyan,#22d3ee)}
+.tr-page-btn:disabled{opacity:.35;cursor:not-allowed}
+.tr-page-num{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;border-radius:8px;
+  background:transparent;border:1px solid transparent;
+  color:var(--text-mute,#6f7aa0);transition:all .2s;cursor:pointer;
+}
+.tr-page-num:hover{background:rgba(34,211,238,.08);color:var(--text,#eef1fb)}
+.tr-page-num.active{
+  background:linear-gradient(135deg,#6366f1,#22d3ee);
+  color:#fff;font-weight:700;border-color:transparent;
+  box-shadow:0 4px 14px rgba(99,102,241,.35);
+}
+.tr-dots{color:var(--text-mute,#6f7aa0);padding:0 6px;font-size:14px}
+
+/* Topic total badge (in level controller) */
+#topic-total-badge{
+  font-family:var(--font-mono,'JetBrains Mono',monospace);
+  font-size:12px;color:var(--cyan,#22d3ee);
+  background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);
+  padding:4px 12px;border-radius:20px;font-weight:600;
+}
+
+/* Scroll-triggered reveal */
+@keyframes revealUp{
+  from{opacity:0;transform:translateY(40px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.reveal{opacity:0;transform:translateY(40px);transition:all .6s cubic-bezier(.25,.46,.45,.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* Level button pulse on hover */
+.level-btn{transition:all .3s cubic-bezier(.34,1.56,.64,1) !important}
+.level-btn:hover:not(.active){
+  transform:scale(1.05);
+  box-shadow:0 4px 16px rgba(99,102,241,.2);
+}
+.level-btn.active{
+  animation:levelPulse 2s ease infinite;
+}
+@keyframes levelPulse{
+  0%,100%{box-shadow:0 4px 12px rgba(16,185,129,.3)}
+  50%{box-shadow:0 4px 20px rgba(16,185,129,.5)}
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   nav {
@@ -1227,4 +1346,51 @@ footer {
   .wrap {
     padding: 0 20px;
   }
+  
+  .tr-pagination{flex-wrap:wrap}
+  .tr-page-nums{flex-wrap:wrap;justify-content:center}
+  .level-controller{flex-direction:column;gap:12px;text-align:center}
+  .level-selector{justify-content:center}
 }
+
+/* ===== PRISM WORKSPACE OVERRIDES (VS CODE STYLE) ===== */
+pre[class*="language-"] {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+code[class*="language-"] {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13.5px !important;
+  text-shadow: none !important;
+  color: #e4e6eb !important;
+}
+.token.comment, .token.prolog, .token.doctype, .token.cdata {
+  color: #6a737d !important;
+  font-style: italic;
+}
+.token.punctuation {
+  color: #e4e6eb !important;
+}
+.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.deleted {
+  color: #ff79c6 !important;
+}
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted {
+  color: #a8ff60 !important;
+}
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string {
+  color: #22d3ee !important;
+}
+.token.atrule, .token.attr-value, .token.keyword {
+  color: #ff2a6d !important;
+  font-weight: bold;
+}
+.token.function, .token.class-name {
+  color: #05d9e8 !important;
+}
+.token.regex, .token.important, .token.variable {
+  color: #f5b942 !important;
+}

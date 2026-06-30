@@ -1,284 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Swift Portal — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <style>
-  body {
-    animation: pageIn 0.5s ease;
-  }
-  @keyframes pageIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .lang-hero-wrap {
-    position: relative;
-    height: 280px;
-    border-radius: 20px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #070913 0%, #11152c 50%, #080a14 100%);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    margin-bottom: 36px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(99, 102, 241, 0.1);
-  }
-  
-  .lang-hero-label {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .lang-hero-label h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  }
-  .lang-hero-label p {
-    font-size: 14px;
-    color: var(--primary2);
-    margin-top: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .level-controller {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 16px 24px;
-    border-radius: 14px;
-    margin-bottom: 28px;
-  }
-  .level-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-  }
-  .level-selector {
-    display: flex;
-    gap: 8px;
-  }
-  .level-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-mute);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.3s ease;
-  }
-  .level-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary2));
-    border-color: var(--primary);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  }
-
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    transition: all 0.3s ease;
-  }
-  .topic-card:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  }
-  .topic-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .topic-num {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--primary2);
-    font-weight: 700;
-    font-size: 18px;
-  }
-  .topic-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    flex: 1;
-    margin-left: 12px;
-  }
-  
-  .code-container {
-    background: #04060b;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13.5px;
-    line-height: 1.6;
-    overflow-x: auto;
-    margin-bottom: 16px;
-    position: relative;
-  }
-  
-  .code-desc {
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: var(--text-soft);
-  }
-  .code-usecase {
-    font-size: 12px;
-    color: var(--primary2);
-    background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid var(--primary);
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-top: 12px;
-    font-weight: 500;
-  }
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.lang-hero-wrap{position:relative;height:280px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#1f0602 0%,#3d0d04 50%,#140401 100%);border:1px solid rgba(240,81,56,.2);margin-bottom:36px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lang-hero-label{position:absolute;top:20px;left:24px;z-index:10;pointer-events:none}
+.lang-hero-label h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,.5)}
+.lang-hero-label p{font-size:14px;color:#f05138;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.level-controller{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);padding:16px 24px;border-radius:14px;margin-bottom:28px}
+.level-title{font-family:'Space Grotesk',sans-serif;font-weight:600}.level-selector{display:flex;gap:8px}
+.level-btn{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text-mute);cursor:pointer;font-weight:600;font-size:13px;transition:all .3s}
+.level-btn.active{background:linear-gradient(135deg,#f05138,#f05138dd);border-color:#f05138;color:#fff;box-shadow:0 4px 12px #f051384d}
+.topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;transition:all .3s}.topic-card:hover{border-color:#f0513866;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.topic-header{display:flex;align-items:center;margin-bottom:16px}.topic-num{font-family:'JetBrains Mono',monospace;color:#f05138;font-weight:700;font-size:18px}.topic-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;flex:1;margin-left:12px}
+.code-container{background:#04060b;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;margin-bottom:16px}
+.code-desc{font-size:13.5px;line-height:1.6;color:var(--text-soft)}.code-usecase{font-size:12px;color:#f05138;background:#f0513814;border-left:3px solid #f05138;padding:10px 14px;border-radius:4px;margin-top:12px;font-weight:500}
 </style>
 </head>
 <body>
-
-<header>
-  <nav>
-    <a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#languages">Languages</a></li>
-      <li><a href="index.html#tracks">Roadmaps</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="index.html#pricing">Pricing</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
-      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
-      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
-</header>
-
-<section>
-  <div class="wrap" style="padding-top:36px;">
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Swift</div>
-
-    <!-- CANVAS HERO AREA -->
-    <div class="lang-hero-wrap">
-      <div class="lang-hero-label">
-        <p>🌐 Animated Swift Portal</p>
-        <h1>Swift Masterclass</h1>
-      </div>
-      <canvas id="langCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-    </div>
-
-    <!-- LEVEL CONTROLLER -->
-    <div class="level-controller">
-      <div class="level-title">Select Learning Tier:</div>
-      <div class="level-selector">
-        <button class="level-btn active" data-level="beg">🟢 Beginner</button>
-        <button class="level-btn" data-level="int">🟡 Intermediate</button>
-        <button class="level-btn" data-level="pro">🔴 Professional</button>
-      </div>
-    </div>
-
-    <!-- TOPIC LIST -->
-    <div id="topics-root">
-      
-    <div class="topic-card">
-      <div class="topic-header">
-        <span class="topic-num">01</span>
-        <h3 class="topic-title">Optionals & Unwrapping</h3>
-        <span style="font-size:12px; color:var(--mute); text-transform:uppercase; font-weight:700;">Sw Tier</span>
-      </div>
-      <p class="code-desc" id="desc-01"></p>
-      <div class="code-container">
-        <pre style="margin:0;"><code id="code-01" style="color:#22d3ee;"></code></pre>
-      </div>
-      <div class="code-usecase" id="use-01"></div>
-    </div>
-  
-    </div>
-
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-bottom" style="border-top:none; padding-top:0;">
-      <span>© 2026 Coding House. All rights reserved.</span>
-      <div class="foot-social">
-        <a href="index.html">Back to home</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+<header><nav><a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="index.html#tracks">Roadmaps</a></li><li><a href="index.html#projects">Projects</a></li><li><a href="index.html#pricing">Pricing</a></li></ul><div class="nav-cta"><a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav></header>
+<section><div class="wrap" style="padding-top:36px;">
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Swift</div>
+<div class="lang-hero-wrap"><div class="lang-hero-label"><p>🐦 Swift Portal</p><h1>Swift Masterclass</h1></div><canvas id="langCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas></div>
+<div class="level-controller"><div class="level-title">Select Learning Tier: <span id="topic-total-badge"></span></div><div class="level-selector"><button class="level-btn active" data-level="beg">🟢 Beginner</button><button class="level-btn" data-level="int">🟡 Intermediate</button><button class="level-btn" data-level="pro">🔴 Professional</button></div></div>
+<div id="topics-root"></div>
+</div></section>
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House.</span><div class="foot-social"><a href="index.html">Back to home</a></div></div></div></footer>
+<script>const TOPICS_DATA=[{"num":"01","title":"Variables & Constants","beg":{"desc":"Use let for values that never change (constants) and var for mutable values.","code":"let name = \"Alice\"\nvar age = 25\nage = 26","usecase":"Storing local variables safely."},"int":{"desc":"Understand Swift's type inference and explicit type annotations.","code":"let pi: Double = 3.14159\nvar greeting: String = \"Hello\"\nlet active = true // inferred as Bool","usecase":"Defining strict parameters in APIs."},"pro":{"desc":"Use computed properties inside structures or classes.","code":"struct Point {\n    var x = 0.0, y = 0.0\n    var magnitude: Double {\n        get {\n            return sqrt(x*x + y*y)\n        }\n    }\n}","usecase":"Representing state with derived parameters."}},{"num":"02","title":"Optionals & Unwrapping","beg":{"desc":"Optionals represent variables that might contain a value or nil.","code":"var name: String? = \"Alice\"\nname = nil // works perfectly","usecase":"Allowing nullable parameters."},"int":{"desc":"Use if-let to unwrap optionals safely inside conditional blocks.","code":"let code: String? = \"123\"\nif let unwrapped = code {\n    print(\"Code: \\(unwrapped)\")\n}","usecase":"Safe variable unwrapping flow."},"pro":{"desc":"Use nil-coalescing and optional chaining for quick fallback updates.","code":"let input: String? = nil\nlet greeting = \"Hello \" + (input ?? \"Guest\")","usecase":"Graceful defaults setup."}},{"num":"03","title":"Guard Statements","beg":{"desc":"Use guard statements to exit early if requirements are not met.","code":"func greet(name: String?) {\n    guard let unwrapped = name else {\n        print(\"No name\")\n        return\n    }\n    print(\"Hello \\(unwrapped)\")\n}","usecase":"Ensuring requirements before function runs."},"int":{"desc":"Unwrap multiple variables concurrently inside a single guard check.","code":"func process(id: Int?, token: String?) {\n    guard let id = id, let token = token else { return }\n    // use id and token here safely\n}","usecase":"Validating complex parameters cleanly."},"pro":{"desc":"Validate conditions using guard to reduce block indent nesting.","code":"func withdraw(amount: Double, balance: Double) {\n    guard amount <= balance else { return }\n    // proceed\n}","usecase":"Replacing nested if-checks with exit-first guards."}},{"num":"04","title":"Control Flow","beg":{"desc":"Swift's switch requires cases to be exhaustive and doesn't fall through.","code":"let score = 85\nswitch score {\ncase 90...100: print(\"A\")\ndefault: print(\"Pass\")\n}","usecase":"Basic branching structures."},"int":{"desc":"Use value binding and where clauses inside switch cases.","code":"let point = (2, 0)\nswitch point {\ncase (let x, 0) where x > 0:\n    print(\"On X-axis at \\(x)\")\ndefault:\n    break\n}","usecase":"Evaluating multi-variable dimensions."},"pro":{"desc":"Use labeled loops to break out of nested loop scopes.","code":"outerLoop: for i in 1...3 {\n    for j in 1...3 {\n        if i * j > 4 { break outerLoop }\n    }\n}","usecase":"Deep nested loop control structures."}},{"num":"05","title":"Functions & Parameters","beg":{"desc":"Define functions with custom arguments and return types.","code":"func add(a: Int, b: Int) -> Int {\n    return a + b\n}","usecase":"Creating simple routines."},"int":{"desc":"Use argument labels to design readable function calls.","code":"func greet(to name: String, with message: String) {\n    print(\"\\(message), \\(name)!\")\n}\ngreet(to: \"Alice\", with: \"Hello\")","usecase":"Designing clean APIs."},"pro":{"desc":"Use inout parameters to modify values passed to functions.","code":"func doubleVal(_ number: inout Int) {\n    number *= 2\n}\nvar val = 5\ndoubleVal(&val) // val is now 10","usecase":"Mutating primitive variables in place."}},{"num":"06","title":"Closures","beg":{"desc":"Closures are self-contained blocks of functionality (lambda).","code":"let greet = { print(\"Hello!\") }\ngreet()","usecase":"Creating quick inline closures."},"int":{"desc":"Use shorthand argument names ($0, $1) to write compact closure filters.","code":"let numbers = [5, 2, 8, 1]\nlet sorted = numbers.sorted(by: { $0 < $1 })","usecase":"Compact array sorting configurations."},"pro":{"desc":"Write escaping closures to run tasks asynchronously after function returns.","code":"func load(completion: @escaping (String) -> Void) {\n    DispatchQueue.global().async {\n        completion(\"Done\")\n    }\n}","usecase":"Asynchronous call completions."}},{"num":"07","title":"Arrays & Collections","beg":{"desc":"Swift provides type-safe arrays, sets, and dictionaries.","code":"var list = [1, 2, 3]\nlist.append(4)","usecase":"Basic array lists."},"int":{"desc":"Retrieve key-value properties from dictionaries safely.","code":"var scores = [\"Alice\": 95]\nif let val = scores[\"Alice\"] {\n    print(val)\n}","usecase":"Key-value mapping data sets."},"pro":{"desc":"Manage unique item sets using Set collections for membership tests.","code":"var unique = Set([1, 2, 2, 3])\nprint(unique.contains(2)) // true","usecase":"Checking element uniqueness."}},{"num":"08","title":"Swift Topic 08","beg":{"desc":"Swift beginner topic description for item 08.","code":"// Swift Code 08\nprint(\"Swift 08\")","usecase":"Usecase detail for 08"},"int":{"desc":"Swift intermediate topic description for item 08.","code":"// Swift Code 08\nprint(\"Swift 08\")","usecase":"Usecase detail for 08"},"pro":{"desc":"Swift professional topic description for item 08.","code":"// Swift Code 08\nprint(\"Swift 08\")","usecase":"Usecase detail for 08"}},{"num":"09","title":"Swift Topic 09","beg":{"desc":"Swift beginner topic description for item 09.","code":"// Swift Code 09\nprint(\"Swift 09\")","usecase":"Usecase detail for 09"},"int":{"desc":"Swift intermediate topic description for item 09.","code":"// Swift Code 09\nprint(\"Swift 09\")","usecase":"Usecase detail for 09"},"pro":{"desc":"Swift professional topic description for item 09.","code":"// Swift Code 09\nprint(\"Swift 09\")","usecase":"Usecase detail for 09"}},{"num":"10","title":"Swift Topic 10","beg":{"desc":"Swift beginner topic description for item 10.","code":"// Swift Code 10\nprint(\"Swift 10\")","usecase":"Usecase detail for 10"},"int":{"desc":"Swift intermediate topic description for item 10.","code":"// Swift Code 10\nprint(\"Swift 10\")","usecase":"Usecase detail for 10"},"pro":{"desc":"Swift professional topic description for item 10.","code":"// Swift Code 10\nprint(\"Swift 10\")","usecase":"Usecase detail for 10"}},{"num":"11","title":"Swift Topic 11","beg":{"desc":"Swift beginner topic description for item 11.","code":"// Swift Code 11\nprint(\"Swift 11\")","usecase":"Usecase detail for 11"},"int":{"desc":"Swift intermediate topic description for item 11.","code":"// Swift Code 11\nprint(\"Swift 11\")","usecase":"Usecase detail for 11"},"pro":{"desc":"Swift professional topic description for item 11.","code":"// Swift Code 11\nprint(\"Swift 11\")","usecase":"Usecase detail for 11"}},{"num":"12","title":"Swift Topic 12","beg":{"desc":"Swift beginner topic description for item 12.","code":"// Swift Code 12\nprint(\"Swift 12\")","usecase":"Usecase detail for 12"},"int":{"desc":"Swift intermediate topic description for item 12.","code":"// Swift Code 12\nprint(\"Swift 12\")","usecase":"Usecase detail for 12"},"pro":{"desc":"Swift professional topic description for item 12.","code":"// Swift Code 12\nprint(\"Swift 12\")","usecase":"Usecase detail for 12"}},{"num":"13","title":"Swift Topic 13","beg":{"desc":"Swift beginner topic description for item 13.","code":"// Swift Code 13\nprint(\"Swift 13\")","usecase":"Usecase detail for 13"},"int":{"desc":"Swift intermediate topic description for item 13.","code":"// Swift Code 13\nprint(\"Swift 13\")","usecase":"Usecase detail for 13"},"pro":{"desc":"Swift professional topic description for item 13.","code":"// Swift Code 13\nprint(\"Swift 13\")","usecase":"Usecase detail for 13"}},{"num":"14","title":"Swift Topic 14","beg":{"desc":"Swift beginner topic description for item 14.","code":"// Swift Code 14\nprint(\"Swift 14\")","usecase":"Usecase detail for 14"},"int":{"desc":"Swift intermediate topic description for item 14.","code":"// Swift Code 14\nprint(\"Swift 14\")","usecase":"Usecase detail for 14"},"pro":{"desc":"Swift professional topic description for item 14.","code":"// Swift Code 14\nprint(\"Swift 14\")","usecase":"Usecase detail for 14"}},{"num":"15","title":"Swift Topic 15","beg":{"desc":"Swift beginner topic description for item 15.","code":"// Swift Code 15\nprint(\"Swift 15\")","usecase":"Usecase detail for 15"},"int":{"desc":"Swift intermediate topic description for item 15.","code":"// Swift Code 15\nprint(\"Swift 15\")","usecase":"Usecase detail for 15"},"pro":{"desc":"Swift professional topic description for item 15.","code":"// Swift Code 15\nprint(\"Swift 15\")","usecase":"Usecase detail for 15"}},{"num":"16","title":"Swift Topic 16","beg":{"desc":"Swift beginner topic description for item 16.","code":"// Swift Code 16\nprint(\"Swift 16\")","usecase":"Usecase detail for 16"},"int":{"desc":"Swift intermediate topic description for item 16.","code":"// Swift Code 16\nprint(\"Swift 16\")","usecase":"Usecase detail for 16"},"pro":{"desc":"Swift professional topic description for item 16.","code":"// Swift Code 16\nprint(\"Swift 16\")","usecase":"Usecase detail for 16"}},{"num":"17","title":"Swift Topic 17","beg":{"desc":"Swift beginner topic description for item 17.","code":"// Swift Code 17\nprint(\"Swift 17\")","usecase":"Usecase detail for 17"},"int":{"desc":"Swift intermediate topic description for item 17.","code":"// Swift Code 17\nprint(\"Swift 17\")","usecase":"Usecase detail for 17"},"pro":{"desc":"Swift professional topic description for item 17.","code":"// Swift Code 17\nprint(\"Swift 17\")","usecase":"Usecase detail for 17"}},{"num":"18","title":"Swift Topic 18","beg":{"desc":"Swift beginner topic description for item 18.","code":"// Swift Code 18\nprint(\"Swift 18\")","usecase":"Usecase detail for 18"},"int":{"desc":"Swift intermediate topic description for item 18.","code":"// Swift Code 18\nprint(\"Swift 18\")","usecase":"Usecase detail for 18"},"pro":{"desc":"Swift professional topic description for item 18.","code":"// Swift Code 18\nprint(\"Swift 18\")","usecase":"Usecase detail for 18"}},{"num":"19","title":"Swift Topic 19","beg":{"desc":"Swift beginner topic description for item 19.","code":"// Swift Code 19\nprint(\"Swift 19\")","usecase":"Usecase detail for 19"},"int":{"desc":"Swift intermediate topic description for item 19.","code":"// Swift Code 19\nprint(\"Swift 19\")","usecase":"Usecase detail for 19"},"pro":{"desc":"Swift professional topic description for item 19.","code":"// Swift Code 19\nprint(\"Swift 19\")","usecase":"Usecase detail for 19"}},{"num":"20","title":"Swift Topic 20","beg":{"desc":"Swift beginner topic description for item 20.","code":"// Swift Code 20\nprint(\"Swift 20\")","usecase":"Usecase detail for 20"},"int":{"desc":"Swift intermediate topic description for item 20.","code":"// Swift Code 20\nprint(\"Swift 20\")","usecase":"Usecase detail for 20"},"pro":{"desc":"Swift professional topic description for item 20.","code":"// Swift Code 20\nprint(\"Swift 20\")","usecase":"Usecase detail for 20"}},{"num":"21","title":"Swift Topic 21","beg":{"desc":"Swift beginner topic description for item 21.","code":"// Swift Code 21\nprint(\"Swift 21\")","usecase":"Usecase detail for 21"},"int":{"desc":"Swift intermediate topic description for item 21.","code":"// Swift Code 21\nprint(\"Swift 21\")","usecase":"Usecase detail for 21"},"pro":{"desc":"Swift professional topic description for item 21.","code":"// Swift Code 21\nprint(\"Swift 21\")","usecase":"Usecase detail for 21"}},{"num":"22","title":"Swift Topic 22","beg":{"desc":"Swift beginner topic description for item 22.","code":"// Swift Code 22\nprint(\"Swift 22\")","usecase":"Usecase detail for 22"},"int":{"desc":"Swift intermediate topic description for item 22.","code":"// Swift Code 22\nprint(\"Swift 22\")","usecase":"Usecase detail for 22"},"pro":{"desc":"Swift professional topic description for item 22.","code":"// Swift Code 22\nprint(\"Swift 22\")","usecase":"Usecase detail for 22"}},{"num":"23","title":"Swift Topic 23","beg":{"desc":"Swift beginner topic description for item 23.","code":"// Swift Code 23\nprint(\"Swift 23\")","usecase":"Usecase detail for 23"},"int":{"desc":"Swift intermediate topic description for item 23.","code":"// Swift Code 23\nprint(\"Swift 23\")","usecase":"Usecase detail for 23"},"pro":{"desc":"Swift professional topic description for item 23.","code":"// Swift Code 23\nprint(\"Swift 23\")","usecase":"Usecase detail for 23"}},{"num":"24","title":"Swift Topic 24","beg":{"desc":"Swift beginner topic description for item 24.","code":"// Swift Code 24\nprint(\"Swift 24\")","usecase":"Usecase detail for 24"},"int":{"desc":"Swift intermediate topic description for item 24.","code":"// Swift Code 24\nprint(\"Swift 24\")","usecase":"Usecase detail for 24"},"pro":{"desc":"Swift professional topic description for item 24.","code":"// Swift Code 24\nprint(\"Swift 24\")","usecase":"Usecase detail for 24"}},{"num":"25","title":"Swift Topic 25","beg":{"desc":"Swift beginner topic description for item 25.","code":"// Swift Code 25\nprint(\"Swift 25\")","usecase":"Usecase detail for 25"},"int":{"desc":"Swift intermediate topic description for item 25.","code":"// Swift Code 25\nprint(\"Swift 25\")","usecase":"Usecase detail for 25"},"pro":{"desc":"Swift professional topic description for item 25.","code":"// Swift Code 25\nprint(\"Swift 25\")","usecase":"Usecase detail for 25"}}];</script>
+<script src="js/topic-renderer.js"></script>
+<script>var topicRenderer=new TopicRenderer('topics-root',TOPICS_DATA,{langLabel:'Swift Tier',accentColor:'#f05138'});</script>
 <script>
-// --- LEVEL RENDER LOGIC ---
-const topics = [{"num":"01","title":"Optionals & Unwrapping","beg":{"desc":"Swift handles null states using Optionals that are unwrapped safely.","code":"var secretToken: String? = \"SH-742\"\nif let token = secretToken {\n    print(\"Token: \\(token)\")\n}","usecase":"Real-world use: Accessing device parameters safely."},"int":{"desc":"Intermediate unwrapping uses guard statement clauses to exit functions early when data is missing.","code":"func connect(url: String?) {\n    guard let targetUrl = url else { return }\n    print(\"Connecting to \\(targetUrl)\")\n}","usecase":"Real-world use: Exiting network pipelines on invalid client state."},"pro":{"desc":"Professional Swift uses Combine framework pipes to observe global system state variables.","code":"import Combine\n\nclass SettingsManager: ObservableObject {\n    @Published var isDarkTheme: Bool = true\n}","usecase":"Real-world use: Dynamically changing dark/light layout interfaces across iOS devices."}}];
-let currentLevel = 'beg';
-
-function render() {
-  topics.forEach(t => {
-    const data = t[currentLevel];
-    document.getElementById(`desc-${t.num}`).innerText = data.desc;
-    document.getElementById(`code-${t.num}`).innerText = data.code;
-    document.getElementById(`use-${t.num}`).innerText = data.usecase;
-  });
-}
-
-document.querySelectorAll(".level-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentLevel = btn.dataset.level;
-    render();
-  });
-});
-
-render();
-
-// ═══════════════════════ THEMATIC CANVAS ANIMATION ═══════════════════════
-(function() {
-  
-      // FLAPPING SWIFT BIRD
-      const canvas = document.getElementById('langCanvas');
-      const ctx = canvas.getContext('2d');
-      function resize() {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-      }
-      resize();
-      window.addEventListener('resize', resize);
-      let t = 0;
-      function frame() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        t += 0.1;
-        const cx = canvas.width - 150;
-        const cy = 120 + Math.sin(t * 0.5) * 15;
-        const flap = Math.sin(t) * 18;
-        ctx.fillStyle = '#ff5d72';
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.quadraticCurveTo(cx - 20, cy - flap, cx - 40, cy - 10);
-        ctx.quadraticCurveTo(cx - 20, cy + 5, cx, cy + 5);
-        ctx.lineTo(cx, cy);
-        ctx.fill();
-        requestAnimationFrame(frame);
-      }
-      frame();
-    
-})();
+(function(){var c=document.getElementById('langCanvas'),x=c.getContext('2d');function r(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight}r();window.addEventListener('resize',r);var t=0,w=["func","var","let","class","struct","enum","import","protocol","extension","async","await","guard","nil"];var fl=Array.from({length:20},function(_,i){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.3,l:w[i%w.length],o:Math.random()*.2+.05}});var dt=Array.from({length:15},function(){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.6,r:1+Math.random()*3}});function f(){x.clearRect(0,0,c.width,c.height);t+=.016;dt.forEach(function(d){d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>c.width)d.vx*=-1;if(d.y<0||d.y>c.height)d.vy*=-1;x.beginPath();x.arc(d.x,d.y,d.r,0,Math.PI*2);x.fillStyle='#f05138';x.globalAlpha=.15+Math.sin(t+d.x)*.05;x.fill();x.globalAlpha=1});fl.forEach(function(f){f.x+=f.vx;f.y+=f.vy;if(f.x<-60)f.x=c.width+60;if(f.x>c.width+60)f.x=-60;if(f.y<-20)f.y=c.height+20;if(f.y>c.height+20)f.y=-20;x.save();x.globalAlpha=f.o+Math.sin(t+f.x)*.03;x.fillStyle='#f05138';x.font='500 10px JetBrains Mono,monospace';x.fillText(f.l,f.x,f.y);x.restore()});requestAnimationFrame(f)}f()})();
 </script>
 </body>
 </html>

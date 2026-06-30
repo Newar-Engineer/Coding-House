@@ -285,6 +285,24 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   cursor:pointer;transition:all .2s;text-decoration:none;
 }
 .go-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,.4)}
+
+/* ── TIER SWITCHER ── */
+.tier-switcher{display:flex;gap:4px;padding:4px;background:var(--surface2);border:1px solid var(--border);border-radius:10px}
+.tier-sw-btn{
+  padding:5px 12px;border:none;border-radius:7px;font-size:11px;font-weight:700;
+  cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);background:transparent;color:var(--mute);
+}
+.tier-sw-btn:hover{color:var(--text)}
+.tier-sw-btn.active-normal{background:rgba(16,185,129,.2);color:#10b981;box-shadow:0 0 12px rgba(16,185,129,.2)}
+.tier-sw-btn.active-intermediate{background:rgba(245,185,66,.2);color:#f5b942;box-shadow:0 0 12px rgba(245,185,66,.2)}
+.tier-sw-btn.active-professional{background:rgba(248,113,113,.2);color:#f87171;box-shadow:0 0 12px rgba(248,113,113,.2)}
+.tier-badge-sidebar{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:2px;
+  display:inline-block;text-transform:uppercase;letter-spacing:.05em;
+}
+.tier-badge-sidebar.normal{background:rgba(16,185,129,.15);color:#10b981}
+.tier-badge-sidebar.intermediate{background:rgba(245,185,66,.15);color:#f5b942}
+.tier-badge-sidebar.professional{background:rgba(248,113,113,.15);color:#f87171}
 </style>
 </head>
 <body>
@@ -317,6 +335,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="user-info" style="cursor: pointer;" onclick="window.location.href='profile.html'">
       <div class="user-name">Shrestha</div>
       <div class="user-role">Pro Member</div>
+      <div class="tier-badge-sidebar" id="sidebarTierBadge">🟢 Normal</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='../login.html'" title="Log out">↩</button>
   </div>
@@ -331,6 +350,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       <p>Continue where you left off · Python · Chapter 7</p>
     </div>
     <div class="topbar-right">
+      <div class="tier-switcher" id="tierSwitcher">
+        <button class="tier-sw-btn" data-tier="normal" onclick="switchTier('normal')">🟢 Normal</button>
+        <button class="tier-sw-btn" data-tier="intermediate" onclick="switchTier('intermediate')">🟡 Intermediate</button>
+        <button class="tier-sw-btn" data-tier="professional" onclick="switchTier('professional')">🔴 Professional</button>
+      </div>
       <div class="streak-badge">🔥 14 day streak</div>
       <div class="notif-btn">🔔<span class="notif-dot"></span></div>
     </div>
@@ -866,6 +890,44 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     c.className='heat-cell'+(l?` h${l}`:'');
     g.appendChild(c);
   });
+})();
+
+/* ═══════════════════════ TIER MANAGEMENT ═══════════════════════ */
+function switchTier(tier) {
+  localStorage.setItem('codinghouse_tier', tier);
+  updateTierUI(tier);
+}
+
+function updateTierUI(tier) {
+  // Update topbar buttons
+  document.querySelectorAll('.tier-sw-btn').forEach(btn => {
+    btn.classList.remove('active-normal', 'active-intermediate', 'active-professional');
+    if (btn.dataset.tier === tier) {
+      btn.classList.add('active-' + tier);
+    }
+  });
+  
+  // Update sidebar badge
+  const badge = document.getElementById('sidebarTierBadge');
+  if (badge) {
+    const icons = { normal: '🟢', intermediate: '🟡', professional: '🔴' };
+    const labels = { normal: 'Normal', intermediate: 'Intermediate', professional: 'Professional' };
+    badge.className = 'tier-badge-sidebar ' + tier;
+    badge.textContent = icons[tier] + ' ' + labels[tier];
+  }
+  
+  // Update topbar greeting
+  const topbarP = document.querySelector('.topbar-left p');
+  if (topbarP) {
+    const tracks = { normal: 'Beginner Track', intermediate: 'Intermediate Track', professional: 'Pro Track' };
+    topbarP.textContent = tracks[tier] + ' · Python · Chapter 7';
+  }
+}
+
+// Initialize tier on page load
+(function() {
+  var tier = localStorage.getItem('codinghouse_tier') || 'normal';
+  updateTierUI(tier);
 })();
 </script>
 </body>

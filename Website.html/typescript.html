@@ -1,297 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TypeScript Portal — Coding House</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <style>
-  body {
-    animation: pageIn 0.5s ease;
-  }
-  @keyframes pageIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .lang-hero-wrap {
-    position: relative;
-    height: 280px;
-    border-radius: 20px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #070913 0%, #11152c 50%, #080a14 100%);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    margin-bottom: 36px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(99, 102, 241, 0.1);
-  }
-  
-  .lang-hero-label {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .lang-hero-label h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  }
-  .lang-hero-label p {
-    font-size: 14px;
-    color: var(--primary2);
-    margin-top: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .level-controller {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 16px 24px;
-    border-radius: 14px;
-    margin-bottom: 28px;
-  }
-  .level-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-  }
-  .level-selector {
-    display: flex;
-    gap: 8px;
-  }
-  .level-btn {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text-mute);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.3s ease;
-  }
-  .level-btn.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary2));
-    border-color: var(--primary);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-  }
-
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    transition: all 0.3s ease;
-  }
-  .topic-card:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  }
-  .topic-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .topic-num {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--primary2);
-    font-weight: 700;
-    font-size: 18px;
-  }
-  .topic-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    flex: 1;
-    margin-left: 12px;
-  }
-  
-  .code-container {
-    background: #04060b;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13.5px;
-    line-height: 1.6;
-    overflow-x: auto;
-    margin-bottom: 16px;
-    position: relative;
-  }
-  
-  .code-desc {
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: var(--text-soft);
-  }
-  .code-usecase {
-    font-size: 12px;
-    color: var(--primary2);
-    background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid var(--primary);
-    padding: 10px 14px;
-    border-radius: 4px;
-    margin-top: 12px;
-    font-weight: 500;
-  }
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.lang-hero-wrap{position:relative;height:280px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#020d1f 0%,#0a1d3d 50%,#040f1f 100%);border:1px solid rgba(49,120,198,.2);margin-bottom:36px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lang-hero-label{position:absolute;top:20px;left:24px;z-index:10;pointer-events:none}
+.lang-hero-label h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,.5)}
+.lang-hero-label p{font-size:14px;color:#3178c6;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.level-controller{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);padding:16px 24px;border-radius:14px;margin-bottom:28px}
+.level-title{font-family:'Space Grotesk',sans-serif;font-weight:600}.level-selector{display:flex;gap:8px}
+.level-btn{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text-mute);cursor:pointer;font-weight:600;font-size:13px;transition:all .3s}
+.level-btn.active{background:linear-gradient(135deg,#3178c6,#3178c6dd);border-color:#3178c6;color:#fff;box-shadow:0 4px 12px #3178c64d}
+.topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;transition:all .3s}.topic-card:hover{border-color:#3178c666;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.topic-header{display:flex;align-items:center;margin-bottom:16px}.topic-num{font-family:'JetBrains Mono',monospace;color:#3178c6;font-weight:700;font-size:18px}.topic-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;flex:1;margin-left:12px}
+.code-container{background:#04060b;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;margin-bottom:16px}
+.code-desc{font-size:13.5px;line-height:1.6;color:var(--text-soft)}.code-usecase{font-size:12px;color:#3178c6;background:#3178c614;border-left:3px solid #3178c6;padding:10px 14px;border-radius:4px;margin-top:12px;font-weight:500}
 </style>
 </head>
 <body>
-
-<header>
-  <nav>
-    <a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#languages">Languages</a></li>
-      <li><a href="index.html#tracks">Roadmaps</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="index.html#pricing">Pricing</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a>
-      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
-      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
-</header>
-
-<section>
-  <div class="wrap" style="padding-top:36px;">
-    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / TypeScript</div>
-
-    <!-- CANVAS HERO AREA -->
-    <div class="lang-hero-wrap">
-      <div class="lang-hero-label">
-        <p>🌐 Animated TypeScript Portal</p>
-        <h1>TypeScript Masterclass</h1>
-      </div>
-      <canvas id="langCanvas" style="position:absolute; top:0; left:0; width:100%; height:100%;"></canvas>
-    </div>
-
-    <!-- LEVEL CONTROLLER -->
-    <div class="level-controller">
-      <div class="level-title">Select Learning Tier:</div>
-      <div class="level-selector">
-        <button class="level-btn active" data-level="beg">🟢 Beginner</button>
-        <button class="level-btn" data-level="int">🟡 Intermediate</button>
-        <button class="level-btn" data-level="pro">🔴 Professional</button>
-      </div>
-    </div>
-
-    <!-- TOPIC LIST -->
-    <div id="topics-root">
-      
-    <div class="topic-card">
-      <div class="topic-header">
-        <span class="topic-num">01</span>
-        <h3 class="topic-title">Type Annotations & Aliases</h3>
-        <span style="font-size:12px; color:var(--mute); text-transform:uppercase; font-weight:700;">Ts Tier</span>
-      </div>
-      <p class="code-desc" id="desc-01"></p>
-      <div class="code-container">
-        <pre style="margin:0;"><code id="code-01" style="color:#22d3ee;"></code></pre>
-      </div>
-      <div class="code-usecase" id="use-01"></div>
-    </div>
-  
-    </div>
-
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-bottom" style="border-top:none; padding-top:0;">
-      <span>© 2026 Coding House. All rights reserved.</span>
-      <div class="foot-social">
-        <a href="index.html">Back to home</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+<header><nav><a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="index.html#tracks">Roadmaps</a></li><li><a href="index.html#projects">Projects</a></li><li><a href="index.html#pricing">Pricing</a></li></ul><div class="nav-cta"><a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav></header>
+<section><div class="wrap" style="padding-top:36px;">
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / TypeScript</div>
+<div class="lang-hero-wrap"><div class="lang-hero-label"><p>🔷 TypeScript Portal</p><h1>TypeScript Masterclass</h1></div><canvas id="langCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas></div>
+<div class="level-controller"><div class="level-title">Select Learning Tier: <span id="topic-total-badge"></span></div><div class="level-selector"><button class="level-btn active" data-level="beg">🟢 Beginner</button><button class="level-btn" data-level="int">🟡 Intermediate</button><button class="level-btn" data-level="pro">🔴 Professional</button></div></div>
+<div id="topics-root"></div>
+</div></section>
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House.</span><div class="foot-social"><a href="index.html">Back to home</a></div></div></div></footer>
+<script>const TOPICS_DATA=[{"num":"01","title":"Types & Type Annotations","beg":{"desc":"TypeScript adds types to JavaScript. Annotate variables, parameters, and returns.","code":"let name: string = \"Alice\";\nlet age: number = 25;\nlet active: boolean = true;\n\nfunction greet(name: string): string {\n  return `Hello, ${name}!`;\n}\nconsole.log(greet(\"Alice\"));","usecase":"Real-world use: Type-safe variable declarations."},"int":{"desc":"Use union types, literal types, and type narrowing.","code":"type Status = \"active\" | \"inactive\" | \"pending\";\n\nfunction display(input: string | number): string {\n  if (typeof input === \"string\") {\n    return input.toUpperCase(); // narrowed to string\n  }\n  return input.toFixed(2); // narrowed to number\n}\n\nlet status: Status = \"active\";","usecase":"Real-world use: Handling multiple input types safely."},"pro":{"desc":"Use template literal types and branded types for domain modeling.","code":"type HTTPMethod = \"GET\" | \"POST\" | \"PUT\" | \"DELETE\";\ntype Route = `/${string}`;\ntype Endpoint = `${HTTPMethod} ${Route}`;\n\ntype Brand<T, B> = T & { __brand: B };\ntype UserId = Brand<number, 'UserId'>;\ntype OrderId = Brand<number, 'OrderId'>;\n\nfunction getUser(id: UserId) { /* ... */ }\nconst userId = 42 as UserId;\ngetUser(userId); // OK\n// getUser(42 as OrderId); // Error!","usecase":"Real-world use: Branded types preventing ID confusion."}},{"num":"02","title":"Interfaces & Type Aliases","beg":{"desc":"Interfaces define object shapes. Type aliases create custom type names.","code":"interface User {\n  name: string;\n  age: number;\n  email?: string; // optional\n}\n\nconst user: User = { name: \"Alice\", age: 25 };\nconsole.log(user.name);","usecase":"Real-world use: Defining API response shapes."},"int":{"desc":"Extend interfaces and use intersection types for composition.","code":"interface Timestamps {\n  createdAt: Date;\n  updatedAt: Date;\n}\n\ninterface User extends Timestamps {\n  id: number;\n  name: string;\n}\n\ntype Admin = User & { permissions: string[] };\n\nconst admin: Admin = {\n  id: 1, name: \"Alice\",\n  permissions: [\"read\", \"write\"],\n  createdAt: new Date(), updatedAt: new Date()\n};","usecase":"Real-world use: Composing types through extension and intersection."},"pro":{"desc":"Use declaration merging and module augmentation for extending third-party types.","code":"// Extend Express Request type\ndeclare module 'express' {\n  interface Request {\n    user?: { id: number; role: string };\n  }\n}\n\n// Extend Window for custom globals\ndeclare global {\n  interface Window {\n    analytics: { track(event: string, data?: object): void };\n  }\n}","usecase":"Real-world use: Augmenting third-party library types."}},{"num":"03","title":"Functions & Overloads","beg":{"desc":"Type function parameters and return types for safety.","code":"const add = (a: number, b: number): number => a + b;\n\nfunction greet(name: string, greeting = \"Hello\"): string {\n  return `${greeting}, ${name}!`;\n}\n\nconsole.log(greet(\"Alice\"));\nconsole.log(add(3, 7));","usecase":"Real-world use: Type-safe function signatures."},"int":{"desc":"Use function overloads for multiple signatures with a single implementation.","code":"function format(input: string): string;\nfunction format(input: number): string;\nfunction format(input: string | number): string {\n  if (typeof input === \"string\") return input.trim();\n  return input.toFixed(2);\n}\n\nconsole.log(format(\"  hello  \")); // \"hello\"\nconsole.log(format(3.14159));     // \"3.14\"","usecase":"Real-world use: Overloaded formatting functions."},"pro":{"desc":"Use conditional return types and generic constraints for precise signatures.","code":"type ReturnType<T> = T extends string ? string[] : T extends number ? number : never;\n\nfunction process<T extends string | number>(input: T): ReturnType<T> {\n  if (typeof input === 'string') return input.split('') as ReturnType<T>;\n  return (input * 2) as ReturnType<T>;\n}\n\nconst chars = process(\"hello\"); // string[]\nconst doubled = process(42);    // number","usecase":"Real-world use: Return types that depend on input types."}},{"num":"04","title":"Generics","beg":{"desc":"Generics create reusable components that work with any type.","code":"function identity<T>(value: T): T {\n  return value;\n}\n\nconsole.log(identity<string>(\"hello\"));\nconsole.log(identity(42)); // type inferred","usecase":"Real-world use: Type-safe utility functions."},"int":{"desc":"Use generic constraints and default type parameters.","code":"interface HasId { id: number; }\n\nfunction findById<T extends HasId>(items: T[], id: number): T | undefined {\n  return items.find(item => item.id === id);\n}\n\ninterface User extends HasId { name: string; }\nconst users: User[] = [{ id: 1, name: \"Alice\" }];\nconst found = findById(users, 1); // User | undefined","usecase":"Real-world use: Generic data access patterns."},"pro":{"desc":"Use mapped types, conditional types, and infer keyword for type-level programming.","code":"type DeepReadonly<T> = {\n  readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K];\n};\n\ntype Awaited<T> = T extends Promise<infer U> ? Awaited<U> : T;\n\ntype PathKeys<T, Prefix extends string = ''> = {\n  [K in keyof T & string]: T[K] extends object\n    ? PathKeys<T[K], `${Prefix}${K}.`>\n    : `${Prefix}${K}`\n}[keyof T & string];\n\ninterface Config { db: { host: string; port: number }; }\ntype ConfigPaths = PathKeys<Config>; // 'db.host' | 'db.port'","usecase":"Real-world use: Type-safe configuration path access."}},{"num":"05","title":"Enums & Const Assertions","beg":{"desc":"Enums define named constants for readable code.","code":"enum Direction {\n  Up = \"UP\",\n  Down = \"DOWN\",\n  Left = \"LEFT\",\n  Right = \"RIGHT\"\n}\n\nfunction move(dir: Direction) {\n  console.log(`Moving ${dir}`);\n}\nmove(Direction.Up);","usecase":"Real-world use: Named constants for directions and statuses."},"int":{"desc":"Use const assertions for literal types without runtime enums.","code":"const STATUS = {\n  Active: 'active',\n  Inactive: 'inactive',\n  Pending: 'pending'\n} as const;\n\ntype Status = typeof STATUS[keyof typeof STATUS];\n// type Status = 'active' | 'inactive' | 'pending'\n\nfunction setStatus(s: Status) { console.log(s); }\nsetStatus('active'); // OK","usecase":"Real-world use: String literal unions without enum overhead."},"pro":{"desc":"Use discriminated unions for type-safe state machines.","code":"type State =\n  | { status: 'idle' }\n  | { status: 'loading'; progress: number }\n  | { status: 'success'; data: string[] }\n  | { status: 'error'; error: Error };\n\nfunction render(state: State): string {\n  switch (state.status) {\n    case 'idle': return 'Ready';\n    case 'loading': return `Loading ${state.progress}%`;\n    case 'success': return `${state.data.length} items`;\n    case 'error': return `Error: ${state.error.message}`;\n  }\n}","usecase":"Real-world use: Type-safe UI state management."}},{"num":"06","title":"Classes & Access Modifiers","beg":{"desc":"TypeScript classes support public, private, and protected members.","code":"class Animal {\n  constructor(public name: string, private sound: string) {}\n  speak(): string { return `${this.name} says ${this.sound}`; }\n}\n\nclass Dog extends Animal {\n  constructor(name: string) { super(name, \"Woof\"); }\n}\n\nconsole.log(new Dog(\"Rex\").speak());","usecase":"Real-world use: OOP with encapsulation."},"int":{"desc":"Use abstract classes and implements for polymorphic design.","code":"abstract class Shape {\n  abstract area(): number;\n  describe(): string { return `Area: ${this.area().toFixed(2)}`; }\n}\n\nclass Circle extends Shape {\n  constructor(private radius: number) { super(); }\n  area(): number { return Math.PI * this.radius ** 2; }\n}\n\nconst shapes: Shape[] = [new Circle(5)];\nshapes.forEach(s => console.log(s.describe()));","usecase":"Real-world use: Polymorphic shape calculations."},"pro":{"desc":"Use decorators and metadata reflection for framework-level abstractions.","code":"function Injectable() {\n  return function<T extends { new(...args: any[]): {} }>(target: T) {\n    Reflect.defineMetadata('injectable', true, target);\n    return target;\n  };\n}\n\nfunction Inject(token: string) {\n  return function(target: any, _: undefined, paramIndex: number) {\n    const existing = Reflect.getMetadata('inject', target) || [];\n    existing.push({ index: paramIndex, token });\n    Reflect.defineMetadata('inject', existing, target);\n  };\n}","usecase":"Real-world use: Dependency injection decorators like in Angular/NestJS."}},{"num":"07","title":"Modules & Namespaces","beg":{"desc":"Use import/export for modular TypeScript code.","code":"// math.ts\nexport const add = (a: number, b: number) => a + b;\nexport const PI = 3.14159;\n\n// app.ts\nimport { add, PI } from './math';\nconsole.log(add(2, 3), PI);","usecase":"Real-world use: Organizing code into modules."},"int":{"desc":"Use type-only imports and barrel exports for clean module architecture.","code":"// types.ts\nexport interface User { id: number; name: string; }\nexport type Role = 'admin' | 'user';\n\n// index.ts (barrel)\nexport type { User, Role } from './types';\nexport { UserService } from './services';\n\n// consumer.ts\nimport type { User } from './'; // type-only import","usecase":"Real-world use: Clean module exports with tree-shaking."},"pro":{"desc":"Use declaration files (.d.ts) and module resolution for library typing.","code":"// global.d.ts\ndeclare module '*.css' {\n  const styles: Record<string, string>;\n  export default styles;\n}\n\ndeclare module '*.svg' {\n  const content: string;\n  export default content;\n}\n\n// typed-env.d.ts\ndeclare namespace NodeJS {\n  interface ProcessEnv {\n    NODE_ENV: 'development' | 'production';\n    DATABASE_URL: string;\n    PORT?: string;\n  }\n}","usecase":"Real-world use: Type declarations for non-TS assets and env vars."}},{"num":"08","title":"Utility Types","beg":{"desc":"TypeScript provides built-in utility types for common transformations.","code":"interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\ntype PartialUser = Partial<User>;     // all optional\ntype RequiredUser = Required<User>;   // all required\ntype ReadonlyUser = Readonly<User>;   // all readonly\ntype UserName = Pick<User, 'name'>;   // just name","usecase":"Real-world use: Creating type variants without rewriting."},"int":{"desc":"Use Record, Omit, Extract, and Exclude for type manipulation.","code":"type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';\ntype SafeMethod = Extract<HttpMethod, 'GET'>; // 'GET'\ntype WriteMethods = Exclude<HttpMethod, 'GET'>; // 'POST'|'PUT'|'DELETE'\n\ntype Handlers = Record<HttpMethod, (req: Request) => Response>;\n\ntype CreateUserDto = Omit<User, 'id'>;\ntype UpdateUserDto = Partial<Omit<User, 'id'>>;","usecase":"Real-world use: Deriving DTO types from entity types."},"pro":{"desc":"Create custom utility types for advanced type transformations.","code":"type DeepPartial<T> = {\n  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];\n};\n\ntype Prettify<T> = { [K in keyof T]: T[K] } & {};\n\ntype UnionToIntersection<U> =\n  (U extends any ? (x: U) => void : never) extends\n  (x: infer I) => void ? I : never;\n\ntype StrictOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;","usecase":"Real-world use: Advanced type utilities for library development."}},{"num":"09","title":"Error Handling & Result Types","beg":{"desc":"Use try/catch with typed errors for safe error handling.","code":"function parseJSON<T>(text: string): T {\n  try {\n    return JSON.parse(text) as T;\n  } catch (error) {\n    if (error instanceof SyntaxError) {\n      console.error('Invalid JSON:', error.message);\n    }\n    throw error;\n  }\n}","usecase":"Real-world use: Safe JSON parsing with typed errors."},"int":{"desc":"Create a type-safe Result type for error handling without exceptions.","code":"type Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nfunction ok<T>(value: T): Result<T> { return { ok: true, value }; }\nfunction err<E>(error: E): Result<never, E> { return { ok: false, error }; }\n\nfunction divide(a: number, b: number): Result<number, string> {\n  if (b === 0) return err('Division by zero');\n  return ok(a / b);\n}\n\nconst result = divide(10, 0);\nif (result.ok) console.log(result.value);\nelse console.log(result.error);","usecase":"Real-world use: Functional error handling like Rust's Result."},"pro":{"desc":"Use branded errors and exhaustive error handling with never.","code":"type AppError =\n  | { code: 'NOT_FOUND'; resource: string }\n  | { code: 'UNAUTHORIZED'; reason: string }\n  | { code: 'VALIDATION'; fields: string[] };\n\nfunction handleError(error: AppError): string {\n  switch (error.code) {\n    case 'NOT_FOUND': return `${error.resource} not found`;\n    case 'UNAUTHORIZED': return `Access denied: ${error.reason}`;\n    case 'VALIDATION': return `Invalid: ${error.fields.join(', ')}`;\n    default: {\n      const _exhaustive: never = error;\n      return _exhaustive; // compile error if case missed\n    }\n  }\n}","usecase":"Real-world use: Exhaustive error handling with discriminated unions."}},{"num":"10","title":"Async/Await & Promises","beg":{"desc":"TypeScript types async functions and promises for safe asynchronous code.","code":"async function fetchUser(id: number): Promise<{ name: string }> {\n  const res = await fetch(`/api/users/${id}`);\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  return res.json();\n}\n\nconst user = await fetchUser(1);\nconsole.log(user.name);","usecase":"Real-world use: Typed API calls."},"int":{"desc":"Use Promise.allSettled and async iterables for robust async patterns.","code":"async function fetchAll(urls: string[]) {\n  const results = await Promise.allSettled(\n    urls.map(url => fetch(url).then(r => r.json()))\n  );\n  \n  const successes = results\n    .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')\n    .map(r => r.value);\n  \n  return successes;\n}","usecase":"Real-world use: Fetching multiple APIs with partial failure handling."},"pro":{"desc":"Use typed async generators and abort patterns.","code":"async function* paginate<T>(url: string): AsyncGenerator<T[]> {\n  let page = 1;\n  while (true) {\n    const res = await fetch(`${url}?page=${page}`);\n    const data: T[] = await res.json();\n    if (data.length === 0) break;\n    yield data;\n    page++;\n  }\n}\n\nfor await (const batch of paginate<User>('/api/users')) {\n  console.log(`Got ${batch.length} users`);\n}","usecase":"Real-world use: Typed async pagination with generators."}},{"num":"11","title":"Type Guards & Narrowing","beg":{"desc":"Type guards narrow types within conditional blocks.","code":"function isString(val: unknown): val is string {\n  return typeof val === 'string';\n}\n\nfunction process(input: string | number) {\n  if (isString(input)) {\n    console.log(input.toUpperCase()); // string\n  } else {\n    console.log(input.toFixed(2)); // number\n  }\n}","usecase":"Real-world use: Runtime type checking with compile-time narrowing."},"int":{"desc":"Use discriminated unions and in-operator narrowing.","code":"interface Dog { kind: 'dog'; bark(): void; }\ninterface Cat { kind: 'cat'; meow(): void; }\ntype Pet = Dog | Cat;\n\nfunction handle(pet: Pet) {\n  switch (pet.kind) {\n    case 'dog': pet.bark(); break;\n    case 'cat': pet.meow(); break;\n  }\n}","usecase":"Real-world use: Polymorphic dispatch with tagged unions."},"pro":{"desc":"Use assertion functions and satisfies operator for precise type control.","code":"function assertDefined<T>(val: T | undefined, msg?: string): asserts val is T {\n  if (val === undefined) throw new Error(msg ?? 'Value is undefined');\n}\n\n// satisfies operator (TS 4.9+)\ntype Colors = Record<string, [number, number, number]>;\n\nconst palette = {\n  red: [255, 0, 0],\n  green: [0, 255, 0],\n} satisfies Colors;\n\n// palette.red is still [number, number, number], not string\nconst r = palette.red[0]; // number","usecase":"Real-world use: Compile-time type validation without widening."}},{"num":"12","title":"Advanced Types & Patterns","beg":{"desc":"Use intersection and union types for flexible type composition.","code":"type WithTimestamp<T> = T & { createdAt: Date; updatedAt: Date };\n\ninterface User { id: number; name: string; }\ntype UserWithTimestamp = WithTimestamp<User>;\n\nconst user: UserWithTimestamp = {\n  id: 1, name: \"Alice\",\n  createdAt: new Date(), updatedAt: new Date()\n};","usecase":"Real-world use: Adding common fields to entity types."},"int":{"desc":"Use conditional types and mapped types for type-level logic.","code":"type NonNullableProps<T> = {\n  [K in keyof T]-?: NonNullable<T[K]>;\n};\n\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];\n};\n\ninterface User { name: string; age: number; }\ntype UserGetters = Getters<User>;\n// { getName: () => string; getAge: () => number }","usecase":"Real-world use: Auto-generating getter types from data types."},"pro":{"desc":"Use variadic tuple types and higher-kinded types for library-level abstractions.","code":"// Variadic tuple types\ntype Concat<A extends any[], B extends any[]> = [...A, ...B];\ntype Result = Concat<[1, 2], [3, 4]>; // [1, 2, 3, 4]\n\n// Builder pattern with variadic types\ntype Pipe<Fns extends Function[]> = Fns extends [infer F, ...infer Rest]\n  ? Rest extends Function[]\n    ? F extends (...args: any) => infer R\n      ? [F, ...Pipe<Rest>]\n      : never\n    : [F]\n  : [];\n\n// Type-safe event emitter\ntype Events = { click: [x: number, y: number]; keydown: [key: string] };\ntype Handler<E extends keyof Events> = (...args: Events[E]) => void;","usecase":"Real-world use: Type-safe event systems and function composition."}},{"num":"13","title":"React with TypeScript","beg":{"desc":"Type React components with props interfaces and generic components.","code":"interface ButtonProps {\n  label: string;\n  onClick: () => void;\n  variant?: 'primary' | 'secondary';\n}\n\nconst Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) => (\n  <button className={variant} onClick={onClick}>{label}</button>\n);","usecase":"Real-world use: Type-safe React components."},"int":{"desc":"Use generic components and typed hooks.","code":"function useLocalStorage<T>(key: string, initial: T) {\n  const [value, setValue] = useState<T>(() => {\n    const stored = localStorage.getItem(key);\n    return stored ? JSON.parse(stored) : initial;\n  });\n  \n  useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(value));\n  }, [key, value]);\n  \n  return [value, setValue] as const;\n}","usecase":"Real-world use: Type-safe custom hooks with generic state."},"pro":{"desc":"Use discriminated union props and polymorphic components.","code":"type ButtonProps =\n  | { as: 'button'; onClick: () => void }\n  | { as: 'a'; href: string; target?: string }\n  | { as: 'submit'; formId: string };\n\nfunction ActionButton(props: ButtonProps & { children: React.ReactNode }) {\n  switch (props.as) {\n    case 'button': return <button onClick={props.onClick}>{props.children}</button>;\n    case 'a': return <a href={props.href}>{props.children}</a>;\n    case 'submit': return <button type=\"submit\" form={props.formId}>{props.children}</button>;\n  }\n}","usecase":"Real-world use: Polymorphic components with exhaustive prop types."}},{"num":"14","title":"Decorators","beg":{"desc":"Decorators add metadata to classes and methods (stage 3 / TypeScript 5).","code":"function log(target: any, key: string, desc: PropertyDescriptor) {\n  const original = desc.value;\n  desc.value = function(...args: any[]) {\n    console.log(`Calling ${key} with`, args);\n    return original.apply(this, args);\n  };\n}\n\nclass Calculator {\n  @log\n  add(a: number, b: number) { return a + b; }\n}","usecase":"Real-world use: Method logging and debugging decorators."},"int":{"desc":"Use class decorators for dependency injection and validation.","code":"function Validate<T extends { new(...args: any[]): {} }>(target: T) {\n  return class extends target {\n    constructor(...args: any[]) {\n      super(...args);\n      for (const [key, value] of Object.entries(this)) {\n        if (value === null || value === undefined)\n          throw new Error(`${key} is required`);\n      }\n    }\n  };\n}","usecase":"Real-world use: Auto-validation of class properties."},"pro":{"desc":"Use TypeScript 5 decorators with metadata for framework design.","code":"// TC39 Stage 3 decorators (TypeScript 5)\nfunction sealed(value: Function, context: ClassDecoratorContext) {\n  Object.seal(value);\n  Object.seal(value.prototype);\n}\n\nfunction bound(value: Function, context: ClassMethodDecoratorContext) {\n  context.addInitializer(function(this: any) {\n    this[context.name] = this[context.name].bind(this);\n  });\n}","usecase":"Real-world use: Modern decorator patterns for frameworks."}},{"num":"15","title":"Zod & Runtime Validation","beg":{"desc":"Zod provides runtime type validation that syncs with TypeScript types.","code":"import { z } from 'zod';\n\nconst UserSchema = z.object({\n  name: z.string().min(1),\n  age: z.number().int().positive(),\n  email: z.string().email()\n});\n\ntype User = z.infer<typeof UserSchema>;\n\nconst result = UserSchema.safeParse({ name: \"Alice\", age: 25, email: \"a@b.com\" });\nif (result.success) console.log(result.data);","usecase":"Real-world use: API input validation with type inference."},"int":{"desc":"Use Zod for form validation and API response parsing.","code":"const ApiResponse = z.object({\n  data: z.array(z.object({\n    id: z.number(),\n    title: z.string(),\n    completed: z.boolean()\n  })),\n  total: z.number()\n});\n\ntype ApiResponse = z.infer<typeof ApiResponse>;\n\nasync function fetchTodos(): Promise<ApiResponse> {\n  const res = await fetch('/api/todos');\n  return ApiResponse.parse(await res.json());\n}","usecase":"Real-world use: Runtime API response validation."},"pro":{"desc":"Use Zod transforms and discriminated unions for complex parsing.","code":"const DateFromString = z.string()\n  .transform(s => new Date(s))\n  .refine(d => !isNaN(d.getTime()), 'Invalid date');\n\nconst Event = z.discriminatedUnion('type', [\n  z.object({ type: z.literal('click'), x: z.number(), y: z.number() }),\n  z.object({ type: z.literal('keydown'), key: z.string() }),\n  z.object({ type: z.literal('scroll'), delta: z.number() })\n]);\n\ntype Event = z.infer<typeof Event>;","usecase":"Real-world use: Complex schema validation with type inference."}},{"num":"16","title":"Configuration & tsconfig","beg":{"desc":"tsconfig.json configures the TypeScript compiler.","code":"{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"strict\": true,\n    \"outDir\": \"./dist\",\n    \"rootDir\": \"./src\"\n  },\n  \"include\": [\"src/**/*\"]\n}","usecase":"Real-world use: Basic TypeScript project configuration."},"int":{"desc":"Use path aliases and project references for monorepos.","code":"{\n  \"compilerOptions\": {\n    \"baseUrl\": \".\",\n    \"paths\": {\n      \"@app/*\": [\"src/*\"],\n      \"@shared/*\": [\"../../shared/*\"]\n    },\n    \"composite\": true,\n    \"declaration\": true\n  },\n  \"references\": [\n    { \"path\": \"../shared\" }\n  ]\n}","usecase":"Real-world use: Monorepo project references with path aliases."},"pro":{"desc":"Use strict mode flags and performance optimizations.","code":"{\n  \"compilerOptions\": {\n    \"strict\": true,\n    \"noUncheckedIndexedAccess\": true,\n    \"exactOptionalPropertyTypes\": true,\n    \"noPropertyAccessFromIndexSignature\": true,\n    \"incremental\": true,\n    \"tsBuildInfoFile\": \".tsbuildinfo\",\n    \"skipLibCheck\": true\n  }\n}","usecase":"Real-world use: Maximum type safety with strict compiler flags."}},{"num":"17","title":"Testing TypeScript","beg":{"desc":"Write type-safe tests with Jest and TypeScript.","code":"describe('Calculator', () => {\n  test('adds two numbers', () => {\n    expect(add(2, 3)).toBe(5);\n  });\n  \n  test('handles negative numbers', () => {\n    expect(add(-1, 1)).toBe(0);\n  });\n});","usecase":"Real-world use: Type-safe unit testing."},"int":{"desc":"Use typed mocks and test utilities.","code":"import { jest } from '@jest/globals';\n\ninterface UserService {\n  getUser(id: number): Promise<User>;\n}\n\nconst mockService: jest.Mocked<UserService> = {\n  getUser: jest.fn().mockResolvedValue({ id: 1, name: 'Alice' })\n};\n\ntest('fetches user', async () => {\n  const user = await mockService.getUser(1);\n  expect(user.name).toBe('Alice');\n  expect(mockService.getUser).toHaveBeenCalledWith(1);\n});","usecase":"Real-world use: Typed mock objects for service testing."},"pro":{"desc":"Use type-level testing with conditional types.","code":"// Type testing utilities\ntype Expect<T extends true> = T;\ntype Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends\n  (<T>() => T extends Y ? 1 : 2) ? true : false;\n\n// Test your types!\ntype Cases = [\n  Expect<Equal<Awaited<Promise<string>>, string>>,\n  Expect<Equal<ReturnType<typeof add>, number>>,\n  Expect<Equal<Pick<User, 'name'>, { name: string }>>\n];\n// Compile error if any type test fails","usecase":"Real-world use: Compile-time type testing for libraries."}},{"num":"18","title":"Design Patterns in TS","beg":{"desc":"Use the Singleton pattern for global shared instances.","code":"class Database {\n  private static instance: Database;\n  private constructor() {}\n  \n  static getInstance(): Database {\n    if (!Database.instance) {\n      Database.instance = new Database();\n    }\n    return Database.instance;\n  }\n  \n  query(sql: string) { console.log(`Running: ${sql}`); }\n}","usecase":"Real-world use: Shared database connection instance."},"int":{"desc":"Use the Factory pattern with discriminated unions.","code":"type Shape = \n  | { type: 'circle'; radius: number }\n  | { type: 'rect'; width: number; height: number };\n\nfunction createShape(type: 'circle', radius: number): Shape;\nfunction createShape(type: 'rect', width: number, height: number): Shape;\nfunction createShape(type: string, ...args: number[]): Shape {\n  switch (type) {\n    case 'circle': return { type: 'circle', radius: args[0] };\n    case 'rect': return { type: 'rect', width: args[0], height: args[1] };\n    default: throw new Error(`Unknown: ${type}`);\n  }\n}","usecase":"Real-world use: Type-safe factory functions."},"pro":{"desc":"Use the Builder pattern with TypeScript's type system for compile-time validation.","code":"class QueryBuilder<HasTable extends boolean = false> {\n  #table = ''; #conditions: string[] = []; #limit?: number;\n  \n  from(table: string): QueryBuilder<true> {\n    this.#table = table;\n    return this as any;\n  }\n  \n  where(condition: string): this { this.#conditions.push(condition); return this; }\n  take(n: number): this { this.#limit = n; return this; }\n  \n  build(this: QueryBuilder<true>): string {\n    let sql = `SELECT * FROM ${this.#table}`;\n    if (this.#conditions.length) sql += ` WHERE ${this.#conditions.join(' AND ')}`;\n    if (this.#limit) sql += ` LIMIT ${this.#limit}`;\n    return sql;\n  }\n}\n\n// new QueryBuilder().build(); // Error! Must call .from() first\nnew QueryBuilder().from('users').where('active').build(); // OK","usecase":"Real-world use: Type-safe builders that enforce required steps."}},{"num":"19","title":"Node.js with TypeScript","beg":{"desc":"Use TypeScript with Node.js for type-safe server-side code.","code":"import http from 'node:http';\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'text/plain' });\n  res.end('Hello from TypeScript!');\n});\n\nserver.listen(3000, () => console.log('Listening on :3000'));","usecase":"Real-world use: HTTP server with TypeScript."},"int":{"desc":"Use Express with typed request/response.","code":"import express, { Request, Response } from 'express';\n\ninterface CreateUserBody { name: string; email: string; }\n\nconst app = express();\napp.use(express.json());\n\napp.post('/users', (req: Request<{}, {}, CreateUserBody>, res: Response) => {\n  const { name, email } = req.body;\n  res.json({ id: 1, name, email });\n});\n\napp.listen(3000);","usecase":"Real-world use: Typed Express API routes."},"pro":{"desc":"Use tRPC for end-to-end type safety between client and server.","code":"import { initTRPC } from '@trpc/server';\nimport { z } from 'zod';\n\nconst t = initTRPC.create();\n\nconst router = t.router({\n  getUser: t.procedure\n    .input(z.object({ id: z.number() }))\n    .query(({ input }) => {\n      return { id: input.id, name: 'Alice' };\n    }),\n  createUser: t.procedure\n    .input(z.object({ name: z.string(), email: z.string().email() }))\n    .mutation(({ input }) => {\n      return { id: 1, ...input };\n    })\n});","usecase":"Real-world use: Full-stack type safety with tRPC."}},{"num":"20","title":"Performance & Optimization","beg":{"desc":"Use const enums and type-only imports to reduce bundle size.","code":"// Type-only import (removed at compile time)\nimport type { User } from './types';\n\n// Const enum (inlined at compile time)\nconst enum Direction { Up, Down, Left, Right }\nconst dir = Direction.Up; // compiled to: const dir = 0;","usecase":"Real-world use: Reducing JavaScript output size."},"int":{"desc":"Use strict compiler flags and project references for build performance.","code":"// Use incremental compilation\n// tsconfig.json: { \"incremental\": true }\n\n// Use type-only re-exports\nexport type { User } from './user';\n\n// Avoid unnecessary type computations\ntype Simplify<T> = { [K in keyof T]: T[K] } & {};","usecase":"Real-world use: Faster builds and smaller bundles."},"pro":{"desc":"Use const type parameters (TS 5.0) and satisfies for zero-runtime-cost type checking.","code":"// const type parameter (TS 5.0)\nfunction createConfig<const T extends readonly string[]>(routes: T) {\n  return routes; // preserves literal types\n}\n\nconst routes = createConfig(['/', '/about', '/blog']);\n// type: readonly ['/', '/about', '/blog'] instead of string[]\n\n// satisfies: validates without widening\nconst theme = {\n  colors: { primary: '#007bff', danger: '#dc3545' },\n  spacing: { sm: 4, md: 8, lg: 16 }\n} satisfies Record<string, Record<string, string | number>>;","usecase":"Real-world use: Precise literal inference for configuration objects."}},{"num":"21","title":"Mapped & Conditional Types","beg":{"desc":"Mapped types transform every property of a type systematically.","code":"type Optional<T> = { [K in keyof T]?: T[K] };\ntype ReadonlyAll<T> = { readonly [K in keyof T]: T[K] };\n\ninterface User { name: string; age: number; }\ntype OptionalUser = Optional<User>; // { name?: string; age?: number; }","usecase":"Real-world use: Creating type variants from existing types."},"int":{"desc":"Use key remapping and conditional mapped types.","code":"type Getters<T> = {\n  [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];\n};\n\ntype EventMap<T> = {\n  [K in keyof T as `on${Capitalize<K & string>}Change`]: (value: T[K]) => void;\n};\n\ninterface Form { name: string; email: string; }\ntype FormEvents = EventMap<Form>;\n// { onNameChange: (value: string) => void; onEmailChange: ... }","usecase":"Real-world use: Auto-generating event handler types."},"pro":{"desc":"Use recursive conditional types for deep type transformations.","code":"type DeepRequired<T> = {\n  [K in keyof T]-?: T[K] extends object\n    ? DeepRequired<T[K]>\n    : T[K];\n};\n\ntype Paths<T, Prefix extends string = ''> = T extends object\n  ? { [K in keyof T & string]:\n      | `${Prefix}${K}`\n      | Paths<T[K], `${Prefix}${K}.`>\n    }[keyof T & string]\n  : never;\n\ninterface Config { db: { host: string; port: number; ssl: { enabled: boolean } } }\ntype ConfigPath = Paths<Config>;\n// 'db' | 'db.host' | 'db.port' | 'db.ssl' | 'db.ssl.enabled'","usecase":"Real-world use: Type-safe deep property access paths."}},{"num":"22","title":"API Design Patterns","beg":{"desc":"Use interfaces for API contracts and response types.","code":"interface ApiResponse<T> {\n  data: T;\n  status: number;\n  message: string;\n}\n\ninterface PaginatedResponse<T> extends ApiResponse<T[]> {\n  total: number;\n  page: number;\n  pageSize: number;\n}","usecase":"Real-world use: Consistent API response types."},"int":{"desc":"Use generic HTTP client wrappers for type-safe API calls.","code":"class ApiClient {\n  constructor(private baseUrl: string) {}\n  \n  async get<T>(path: string): Promise<T> {\n    const res = await fetch(`${this.baseUrl}${path}`);\n    if (!res.ok) throw new Error(`HTTP ${res.status}`);\n    return res.json() as Promise<T>;\n  }\n  \n  async post<T, B>(path: string, body: B): Promise<T> {\n    const res = await fetch(`${this.baseUrl}${path}`, {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify(body)\n    });\n    return res.json() as Promise<T>;\n  }\n}\n\nconst api = new ApiClient('https://api.example.com');\nconst user = await api.get<User>('/users/1');","usecase":"Real-world use: Type-safe API client wrappers."},"pro":{"desc":"Use contract-first design with OpenAPI types.","code":"// Generated from OpenAPI spec\ninterface paths {\n  '/users': {\n    get: {\n      responses: { 200: { content: { 'application/json': User[] } } };\n    };\n    post: {\n      requestBody: { content: { 'application/json': CreateUserDto } };\n      responses: { 201: { content: { 'application/json': User } } };\n    };\n  };\n}\n\n// Type-safe client from spec\ntype GetUsers = paths['/users']['get']['responses'][200]['content']['application/json'];","usecase":"Real-world use: OpenAPI-first type-safe API clients."}},{"num":"23","title":"State Management Types","beg":{"desc":"Use TypeScript for type-safe state management with reducers.","code":"interface State { count: number; name: string; }\n\ntype Action =\n  | { type: 'increment' }\n  | { type: 'decrement' }\n  | { type: 'setName'; payload: string };\n\nfunction reducer(state: State, action: Action): State {\n  switch (action.type) {\n    case 'increment': return { ...state, count: state.count + 1 };\n    case 'decrement': return { ...state, count: state.count - 1 };\n    case 'setName': return { ...state, name: action.payload };\n  }\n}","usecase":"Real-world use: Type-safe Redux-style reducers."},"int":{"desc":"Use generic store types with selectors and middleware.","code":"type Selector<S, R> = (state: S) => R;\ntype Middleware<S> = (state: S, action: Action) => Action | null;\n\nclass Store<S> {\n  private state: S;\n  private listeners = new Set<() => void>();\n  \n  constructor(private reducer: (s: S, a: Action) => S, initial: S) {\n    this.state = initial;\n  }\n  \n  getState(): Readonly<S> { return this.state; }\n  select<R>(selector: Selector<S, R>): R { return selector(this.state); }\n  dispatch(action: Action) {\n    this.state = this.reducer(this.state, action);\n    this.listeners.forEach(fn => fn());\n  }\n}","usecase":"Real-world use: Generic typed state stores."},"pro":{"desc":"Use immer and TypeScript for immutable state updates.","code":"import { produce } from 'immer';\n\ninterface AppState {\n  users: Map<number, User>;\n  ui: { loading: boolean; error?: string };\n}\n\nconst nextState = produce(state, draft => {\n  draft.users.set(1, { id: 1, name: 'Alice' });\n  draft.ui.loading = false;\n});\n// Type-safe, immutable update with mutable syntax","usecase":"Real-world use: Type-safe immutable updates with Immer."}},{"num":"24","title":"Module Declaration Files","beg":{"desc":"Declaration files (.d.ts) provide types for JavaScript libraries.","code":"// lodash.d.ts\ndeclare module 'lodash' {\n  export function chunk<T>(arr: T[], size: number): T[][];\n  export function debounce<F extends (...args: any[]) => any>(\n    func: F, wait: number\n  ): F;\n}","usecase":"Real-world use: Typing untyped JavaScript libraries."},"int":{"desc":"Use ambient declarations for global types and constants.","code":"// globals.d.ts\ndeclare const __DEV__: boolean;\ndeclare const __VERSION__: string;\n\ndeclare function gtag(command: 'config' | 'event', target: string, params?: object): void;\n\ninterface ImportMetaEnv {\n  VITE_API_URL: string;\n  VITE_APP_TITLE: string;\n}\n\ninterface ImportMeta {\n  readonly env: ImportMetaEnv;\n}","usecase":"Real-world use: Typing build-time constants and environment."},"pro":{"desc":"Create advanced declaration files with overloaded signatures.","code":"// Typed event emitter\ndeclare class TypedEmitter<Events extends Record<string, any[]>> {\n  on<E extends keyof Events>(event: E, handler: (...args: Events[E]) => void): this;\n  emit<E extends keyof Events>(event: E, ...args: Events[E]): boolean;\n  off<E extends keyof Events>(event: E, handler: (...args: Events[E]) => void): this;\n}\n\n// Usage\ninterface AppEvents {\n  login: [userId: number];\n  error: [code: number, message: string];\n}\nconst emitter = new TypedEmitter<AppEvents>();\nemitter.on('login', (userId) => {}); // userId: number","usecase":"Real-world use: Type-safe event emitter declarations."}},{"num":"25","title":"TypeScript 5+ Features","beg":{"desc":"TypeScript 5 introduced decorators, const type params, and faster builds.","code":"// Const type parameters\nfunction routes<const T extends string[]>(paths: T): T {\n  return paths;\n}\n\nconst r = routes(['/home', '/about']); // readonly ['/home', '/about']\n\n// Enum improvements\nenum Color { Red, Green, Blue }\nconst c: Color = Color.Red;","usecase":"Real-world use: Literal-preserving generics."},"int":{"desc":"Use the satisfies operator and auto-accessors.","code":"// satisfies validates type without widening\nconst config = {\n  port: 3000,\n  host: 'localhost'\n} satisfies Record<string, string | number>;\n\n// config.port is still number, not string | number\nconfig.port.toFixed(); // OK!\n\n// Auto-accessors (TS 4.9+)\nclass User {\n  accessor name: string;\n  constructor(name: string) { this.name = name; }\n}","usecase":"Real-world use: Type validation without type widening."},"pro":{"desc":"Use module resolution bundler mode and verbatimModuleSyntax.","code":"{\n  \"compilerOptions\": {\n    \"moduleResolution\": \"bundler\",\n    \"verbatimModuleSyntax\": true,\n    \"allowImportingTsExtensions\": true,\n    \"noEmit\": true\n  }\n}\n\n// With verbatimModuleSyntax:\nimport type { User } from './types.ts'; // type-only kept as-is\nimport { createUser } from './users.ts'; // runtime import","usecase":"Real-world use: Modern bundler-friendly TypeScript configuration."}}];</script>
+<script src="js/topic-renderer.js"></script>
+<script>var topicRenderer=new TopicRenderer('topics-root',TOPICS_DATA,{langLabel:'TypeScript Tier',accentColor:'#3178c6'});</script>
 <script>
-// --- LEVEL RENDER LOGIC ---
-const topics = [{"num":"01","title":"Type Annotations & Aliases","beg":{"desc":"TypeScript allows declaring data boundaries. Variables get explicit types.","code":"let currentScore: number = 2840;\nconst username: string = \"Shrestha\";","usecase":"Real-world use: Enforcing variable type integrity."},"int":{"desc":"Intermediate code uses strict Type Aliases and interfaces for structural type configurations.","code":"interface DatabaseClient {\n    host: string;\n    port: number;\n    connect(): boolean;\n}","usecase":"Real-world use: Mapping API objects schemas."},"pro":{"desc":"Professional TypeScript uses advanced mapped and conditional types to dynamically generate variations.","code":"type ReadOnlyConfig<T> = {\n    readonly [P in keyof T]: T[P];\n};\n\ntype SecureClient = ReadOnlyConfig<{ host: string; apiToken: string }>;","usecase":"Real-world use: Building immutable global state containers."}}];
-let currentLevel = 'beg';
-
-function render() {
-  topics.forEach(t => {
-    const data = t[currentLevel];
-    document.getElementById(`desc-${t.num}`).innerText = data.desc;
-    document.getElementById(`code-${t.num}`).innerText = data.code;
-    document.getElementById(`use-${t.num}`).innerText = data.usecase;
-  });
-}
-
-document.querySelectorAll(".level-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentLevel = btn.dataset.level;
-    render();
-  });
-});
-
-render();
-
-// ═══════════════════════ THEMATIC CANVAS ANIMATION ═══════════════════════
-(function() {
-  
-      // COMPILER NETWORK GRAPH
-      const canvas = document.getElementById('langCanvas');
-      const ctx = canvas.getContext('2d');
-      function resize() {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-      }
-      resize();
-      window.addEventListener('resize', resize);
-      let t = 0;
-      function frame() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        t += 0.015;
-        const cx = canvas.width - 160;
-        const cy = 120;
-        ctx.strokeStyle = 'rgba(59, 130, 246, 0.2)';
-        ctx.lineWidth = 1;
-        const nodes = [];
-        for(let i=0; i<6; i++) {
-          nodes.push({
-            x: cx + Math.cos(t + i * 1.04)*45,
-            y: cy + Math.sin(t * 1.5 + i * 1.04)*30
-          });
-        }
-        for(let i=0; i<6; i++) {
-          for(let j=i+1; j<6; j++) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-          ctx.beginPath();
-          ctx.arc(nodes[i].x, nodes[i].y, 4, 0, Math.PI*2);
-          ctx.fillStyle = '#3b82f6';
-          ctx.fill();
-        }
-        requestAnimationFrame(frame);
-      }
-      frame();
-    
-})();
+(function(){var c=document.getElementById('langCanvas'),x=c.getContext('2d');function r(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight}r();window.addEventListener('resize',r);var t=0,w=["type","interface","enum","generic","readonly","extends","keyof","typeof","infer","mapped","utility","conditional"];var fl=Array.from({length:20},function(_,i){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.3,l:w[i%w.length],o:Math.random()*.2+.05}});var dt=Array.from({length:15},function(){return{x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.6,r:1+Math.random()*3}});function f(){x.clearRect(0,0,c.width,c.height);t+=.016;dt.forEach(function(d){d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>c.width)d.vx*=-1;if(d.y<0||d.y>c.height)d.vy*=-1;x.beginPath();x.arc(d.x,d.y,d.r,0,Math.PI*2);x.fillStyle='#3178c6';x.globalAlpha=.15+Math.sin(t+d.x)*.05;x.fill();x.globalAlpha=1});fl.forEach(function(f){f.x+=f.vx;f.y+=f.vy;if(f.x<-60)f.x=c.width+60;if(f.x>c.width+60)f.x=-60;if(f.y<-20)f.y=c.height+20;if(f.y>c.height+20)f.y=-20;x.save();x.globalAlpha=f.o+Math.sin(t+f.x)*.03;x.fillStyle='#3178c6';x.font='500 10px JetBrains Mono,monospace';x.fillText(f.l,f.x,f.y);x.restore()});requestAnimationFrame(f)}f()})();
 </script>
 </body>
 </html>
