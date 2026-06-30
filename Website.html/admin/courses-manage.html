@@ -724,6 +724,10 @@ if (!localStorage.getItem('codinghouse_languages')) {
 }
 
 var courses = JSON.parse(localStorage.getItem('codinghouse_languages'));
+courses.sort(function(a, b) {
+  return a.name.localeCompare(b.name);
+});
+
 var activeLang = null;
 var activeTopics = [];
 
@@ -801,6 +805,11 @@ function saveCourse(event) {
     }
     courses.push(newCourse);
   }
+
+  // Sort alphabetically
+  courses.sort(function(a, b) {
+    return a.name.localeCompare(b.name);
+  });
 
   localStorage.setItem('codinghouse_languages', JSON.stringify(courses));
   renderCoursesList();

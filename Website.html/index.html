@@ -716,15 +716,24 @@ if (!localStorage.getItem('codinghouse_languages')) {
 }
 const languages = JSON.parse(localStorage.getItem('codinghouse_languages'));
 
+// Sort languages alphabetically (serially) by name
+languages.sort(function(a, b) {
+  return a.name.localeCompare(b.name);
+});
+
+const defaultSlugList = ['python', 'java', 'c', 'cpp', 'csharp', 'javascript', 'typescript', 'go', 'rust', 'php', 'kotlin', 'swift', 'dart', 'ruby', 'r', 'matlab'];
 const grid = document.getElementById("lang-grid");
-grid.innerHTML = languages.map(l => `
-  <a href="${l.slug}.html" class="lang-card">
-    <div class="lang-badge" style="background:linear-gradient(135deg, ${l.c1}, ${l.c2})">${l.ab}</div>
-    <div class="lang-name">${l.name}</div>
-    <div class="lang-tag">${l.tag}</div>
-    <div class="lang-arrow">Open portal →</div>
-  </a>
-`).join("");
+grid.innerHTML = languages.map(l => {
+  const url = defaultSlugList.indexOf(l.slug) !== -1 ? `${l.slug}.html` : `course-detail.html?lang=${l.slug}`;
+  return `
+    <a href="${url}" class="lang-card">
+      <div class="lang-badge" style="background:linear-gradient(135deg, ${l.c1}, ${l.c2})">${l.ab}</div>
+      <div class="lang-name">${l.name}</div>
+      <div class="lang-tag">${l.tag}</div>
+      <div class="lang-arrow">Open portal →</div>
+    </a>
+  `;
+}).join("");
 
 const burger = document.querySelector(".burger");
 const navLinks = document.querySelector(".nav-links");

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming Portal — Coding House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.lang-hero-wrap{position:relative;height:280px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,#020810 0%,#0a1628 50%,#040b15 100%);border:1px solid rgba(168,85,247,0.2);margin-bottom:36px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lang-hero-label{position:absolute;top:20px;left:24px;z-index:10;pointer-events:none}
+.lang-hero-label h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,.5)}
+.lang-hero-label p{font-size:14px;color:#a855f7;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.level-controller{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);padding:16px 24px;border-radius:14px;margin-bottom:28px}
+.level-title{font-family:'Space Grotesk',sans-serif;font-weight:600}.level-selector{display:flex;gap:8px}
+.level-btn{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text-mute);cursor:pointer;font-weight:600;font-size:13px;transition:all .3s}
+.level-btn.active{background:linear-gradient(135deg,#a855f7,#6366f1);border-color:#a855f7;color:#fff;box-shadow:0 4px 12px rgba(168,85,247,0.3)}
+.topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;transition:all .3s}.topic-card:hover{border-color:rgba(168,85,247,0.4);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.topic-header{display:flex;align-items:center;margin-bottom:16px}.topic-num{font-family:'JetBrains Mono',monospace;color:#a855f7;font-weight:700;font-size:18px}.topic-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;flex:1;margin-left:12px}
+.code-container{background:#04060b;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:1.6;overflow-x:auto;margin-bottom:16px;position:relative}
+.code-desc{font-size:13.5px;line-height:1.6;color:var(--text-soft)}.code-usecase{font-size:12px;color:#a855f7;background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:10px 14px;border-radius:4px;margin-top:12px;font-weight:500}
+</style>
+</head>
+<body>
+<header><nav><a href="index.html" class="logo"><span class="mark">&lt;/&gt;</span>Coding House</a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="index.html#tracks">Roadmaps</a></li><li><a href="index.html#projects">Projects</a></li><li><a href="index.html#pricing">Pricing</a></li></ul><div class="nav-cta"><a href="user/userdashboard.html" class="btn btn-ghost btn-sm">Dashboard</a><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div></nav></header>
+<section><div class="wrap" style="padding-top:36px;">
+<div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / Course</div>
+<div class="lang-hero-wrap"><div class="lang-hero-label"><p>⚙️ Course Portal</p><h1>Course Masterclass</h1></div><canvas id="langCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;"></canvas></div>
+<div class="level-controller"><div class="level-title">Select Learning Tier: <span id="topic-total-badge"></span></div><div class="level-selector"><button class="level-btn active" data-level="beg">🟢 Beginner</button><button class="level-btn" data-level="int">🟡 Intermediate</button><button class="level-btn" data-level="pro">🔴 Professional</button></div></div>
+<div id="topics-root"></div>
+</div></section>
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House.</span><div class="foot-social"><a href="index.html">Back to home</a></div></div></div></footer>
+
+<script src="js/topic-renderer.js"></script>
+<script>
+// Dynamic page parameters initialization
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get('lang') || 'python';
+  
+  var languages = JSON.parse(localStorage.getItem('codinghouse_languages') || '[]');
+  var currentLang = languages.find(function(l) { return l.slug === slug; }) || {
+    name: slug.toUpperCase(),
+    tag: "Custom Programming Language",
+    ab: slug.substring(0,2).toUpperCase(),
+    c1: "#a855f7",
+    c2: "#6366f1",
+    slug: slug
+  };
+  
+  // Update colors & UI text
+  document.title = currentLang.name + ' Portal — Coding House';
+  document.querySelector('.breadcrumb').innerHTML = '<a href="index.html">Home</a> / <a href="index.html#languages">Languages</a> / ' + currentLang.name;
+  document.querySelector('.lang-hero-label p').textContent = '⚙️ ' + currentLang.name + ' Programming Portal';
+  document.querySelector('.lang-hero-label h1').textContent = currentLang.name + ' Masterclass';
+  
+  // Custom styles for accent colors
+  var style = document.createElement('style');
+  style.textContent = `
+    .lang-hero-wrap { border-color: ${currentLang.c1} !important; }
+    .level-btn.active { background: linear-gradient(135deg, ${currentLang.c1}, ${currentLang.c2}) !important; border-color: ${currentLang.c1} !important; }
+    .topic-card:hover { border-color: ${currentLang.c1} !important; }
+    .topic-num { color: ${currentLang.c1} !important; }
+    .code-usecase { color: ${currentLang.c1} !important; border-left-color: ${currentLang.c1} !important; background: ${currentLang.c1}12 !important; }
+  `;
+  document.head.appendChild(style);
+
+  // Initialize renderer
+  new TopicRenderer('topics-root', null, {
+    langLabel: currentLang.name + ' Tier',
+    accentColor: currentLang.c1,
+    lang: currentLang.slug
+  });
+})();
+</script>
+<script>
+// Canvas Visualizer
+(function(){
+  const canvas=document.getElementById('langCanvas');const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.parentElement.offsetWidth;canvas.height=canvas.parentElement.offsetHeight}
+  resize();window.addEventListener('resize',resize);
+  let time=0;
+  const ptrs=Array.from({length:30},()=>({x:Math.random()*1200,y:Math.random()*280,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.4,label:['*ptr','&var','val','stack','heap','sizeof','0x7ff','init','class','struct'][Math.floor(Math.random()*10)],op:Math.random()*.2+.05}));
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);time+=0.016;
+    ctx.strokeStyle='rgba(168,85,247,0.03)';ctx.lineWidth=1;
+    for(let x=0;x<canvas.width;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
+    for(let y=0;y<canvas.height;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
+    ptrs.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<-60)p.x=canvas.width+60;if(p.x>canvas.width+60)p.x=-60;
+      if(p.y<-20)p.y=canvas.height+20;if(p.y>canvas.height+20)p.y=-20;
+      ctx.save();ctx.globalAlpha=p.op+Math.sin(time+p.x)*.03;
+      ctx.fillStyle='#a855f7';ctx.font='500 10px JetBrains Mono,monospace';
+      ctx.fillText(p.label,p.x,p.y);ctx.restore();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
