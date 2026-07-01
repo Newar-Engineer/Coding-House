@@ -207,17 +207,7 @@ body{
         <p>Sign in to continue your coding journey</p>
       </div>
 
-      <!-- ROLE TABS -->
-      <div class="role-tabs">
-        <button class="role-tab active" id="userTab" onclick="selectRole('user')">
-          <span class="tab-icon">🎓</span>
-          <span>Student</span>
-        </button>
-        <button class="role-tab admin-tab" id="adminTab" onclick="selectRole('admin')">
-          <span class="tab-icon">🛡️</span>
-          <span>Admin</span>
-        </button>
-      </div>
+
 
       <!-- TIER SELECTOR -->
       <div class="tier-label">Select your learning level:</div>
@@ -249,10 +239,12 @@ body{
           <label class="remember"><input type="checkbox"> Remember me</label>
           <a href="#" class="forgot">Forgot password?</a>
         </div>
-        <button type="submit" class="submit-btn user-btn" id="submitBtn">Sign in as Student</button>
+        <button type="submit" class="submit-btn user-btn" id="submitBtn">Sign In</button>
       </form>
 
-      <div class="demo-hint">Demo → any email/password works · Role tab determines destination</div>
+      <div class="error-box" id="errorBox" style="display:none;margin-top:16px;padding:12px 16px;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);border-radius:10px;font-size:13px;color:#f43f5e;font-weight:500;"></div>
+
+      <div class="demo-hint">Demo → use admin email for Admin Panel, or any other email for Student Dashboard</div>
 
       <div class="divider"><span>or</span></div>
 
@@ -294,26 +286,13 @@ body{
 
 </div>
 
+<!-- Supabase + Admin Auth modules -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/admin-config.js"></script>
+<script src="js/admin-auth.js"></script>
+
 <script>
-let currentRole = 'user';
 let currentTier = 'normal';
-
-function selectRole(role){
-  currentRole = role;
-  const userTab = document.getElementById('userTab');
-  const adminTab = document.getElementById('adminTab');
-  const btn = document.getElementById('submitBtn');
-
-  if(role==='user'){
-    userTab.classList.add('active'); adminTab.classList.remove('active');
-    btn.textContent='Sign in as Student';
-    btn.className='submit-btn user-btn';
-  } else {
-    adminTab.classList.add('active'); userTab.classList.remove('active');
-    btn.textContent='Sign in as Admin';
-    btn.className='submit-btn admin-btn';
-  }
-}
 
 function selectTier(tier, el){
   currentTier = tier;
@@ -321,71 +300,114 @@ function selectTier(tier, el){
   el.classList.add('active');
 }
 
-function handleLogin(e){
+async function handleLogin(e){
   e.preventDefault();
   
-  var email = document.getElementById('email').value;
-  var matchedUser = null;
+  var email = document.getElementById('email').value.trim();
+  var password = document.getElementById('password').value;
+  var btn = document.getElementById('submitBtn');
+  var errorBox = document.getElementById('errorBox');
   
-  if (currentRole === 'user') {
-    // Load local storage users database
-    var defaultUsers = [
-      { name: "Shrestha R.", email: "shrestha@email.com", plan: "Pro", status: "Active", xp: 2840, av: "SR" },
-      { name: "Aryan K.", email: "aryan@email.com", plan: "Free", status: "New", xp: 4210, av: "AK" },
-      { name: "Priya S.", email: "priya@email.com", plan: "Lifetime", status: "Active", xp: 3880, av: "PS" }
-    ];
-    if (!localStorage.getItem('codinghouse_users')) {
-      localStorage.setItem('codinghouse_users', JSON.stringify(defaultUsers));
-    }
-    
-    var userList = JSON.parse(localStorage.getItem('codinghouse_users'));
-    matchedUser = userList.find(function(u) { return u.email.toLowerCase() === email.toLowerCase(); });
-    
-    if (!matchedUser) {
-      // Auto-create new student account for demo
-      var namePart = email.split('@')[0];
-      var formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-      matchedUser = {
-        name: formattedName + " K.",
+  errorBox.style.display = 'none';
+  btn.textContent = 'Signing in...';
+  btn.disabled = true;
+
+  // List of known admin emails
+  var adminEmails = ['admin@codinghouse.com', 'beastmr9766@gmail.com'];
+  var isAdminEmail = adminEmails.includes(email.toLowerCase());
+
+  try {
+    // Try authenticating as admin first via Supabase + Express API
+    var authResult = await AdminAuth.login(email, password);
+
+    if (authResult.success) {
+      // Admin login successful
+      var adminUser = authResult.user || {
+        name: "Admin Profile",
         email: email,
-        plan: currentTier === 'normal' ? 'Free' : (currentTier === 'intermediate' ? 'Pro' : 'Lifetime'),
-        status: 'New',
-        xp: 120,
-        av: namePart.substring(0, 2).toUpperCase()
+        role: "Super Admin",
+        av: "AD"
       };
-      userList.push(matchedUser);
-      localStorage.setItem('codinghouse_users', JSON.stringify(userList));
+      localStorage.setItem('codinghouse_currentUser', JSON.stringify({
+        name: adminUser.name || "Admin Profile",
+        email: adminUser.email || email,
+        role: adminUser.role || "Super Admin",
+        av: (adminUser.name || "AD").split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase()
+      }));
+      localStorage.setItem('codinghouse_tier', 'professional');
+      localStorage.setItem('codinghouse_role', 'admin');
+      
+      btn.textContent = '✓ Redirecting...';
+      btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      
+      setTimeout(function() {
+        window.location.href = './admin/admindashboard.html';
+      }, 800);
+      return;
     }
+
+    // If login failed, check why
+    var errMessage = authResult.error || '';
     
-    localStorage.setItem('codinghouse_currentUser', JSON.stringify(matchedUser));
-    // map plan string to tier key
-    var mappedTier = matchedUser.plan === 'Pro' ? 'intermediate' : (matchedUser.plan === 'Lifetime' ? 'professional' : 'normal');
-    localStorage.setItem('codinghouse_tier', mappedTier);
-  } else {
-    // Admin user session
-    var adminUser = {
-      name: "Admin Profile",
-      email: email,
-      role: "Super Admin",
-      av: "AD"
-    };
-    localStorage.setItem('codinghouse_currentUser', JSON.stringify(adminUser));
-    localStorage.setItem('codinghouse_tier', 'professional');
+    // If it's a known admin email and the password was wrong, do not fall back to student
+    if (isAdminEmail) {
+      errorBox.textContent = '⚠ ' + errMessage;
+      errorBox.style.display = 'block';
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+      return;
+    }
+
+    // If it is a network error (e.g. server down), warn the user
+    if (errMessage.indexOf('fetch') !== -1 || errMessage.indexOf('Network') !== -1 || errMessage.indexOf('TypeError') !== -1) {
+      errorBox.textContent = '⚠ Backend server connection failed. Please check if the server is running.';
+      errorBox.style.display = 'block';
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+      return;
+    }
+  } catch (err) {
+    console.error("Auth error:", err);
+  }
+
+  // Fall back to student login flow (any email/password works for demo)
+  var defaultUsers = [
+    { name: "Shrestha R.", email: "shrestha@email.com", plan: "Pro", status: "Active", xp: 2840, av: "SR" },
+    { name: "Aryan K.", email: "aryan@email.com", plan: "Free", status: "New", xp: 4210, av: "AK" },
+    { name: "Priya S.", email: "priya@email.com", plan: "Lifetime", status: "Active", xp: 3880, av: "PS" }
+  ];
+  if (!localStorage.getItem('codinghouse_users')) {
+    localStorage.setItem('codinghouse_users', JSON.stringify(defaultUsers));
   }
   
-  localStorage.setItem('codinghouse_role', currentRole);
+  var userList = JSON.parse(localStorage.getItem('codinghouse_users'));
+  var matchedUser = userList.find(function(u) { return u.email.toLowerCase() === email.toLowerCase(); });
   
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Signing in...';
-  btn.style.opacity = '0.7';
-  setTimeout(()=>{
-    if(currentRole==='admin'){
-      window.location.href='./admin/admindashboard.html';
-    } else {
-      window.location.href='./user/userdashboard.html';
-    }
+  if (!matchedUser) {
+    // Auto-create new student account for demo
+    var namePart = email.split('@')[0];
+    var formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    matchedUser = {
+      name: formattedName + " K.",
+      email: email,
+      plan: currentTier === 'normal' ? 'Free' : (currentTier === 'intermediate' ? 'Pro' : 'Lifetime'),
+      status: 'New',
+      xp: 120,
+      av: namePart.substring(0, 2).toUpperCase()
+    };
+    userList.push(matchedUser);
+    localStorage.setItem('codinghouse_users', JSON.stringify(userList));
+  }
+  
+  localStorage.setItem('codinghouse_currentUser', JSON.stringify(matchedUser));
+  var mappedTier = matchedUser.plan === 'Pro' ? 'intermediate' : (matchedUser.plan === 'Lifetime' ? 'professional' : 'normal');
+  localStorage.setItem('codinghouse_tier', mappedTier);
+  localStorage.setItem('codinghouse_role', 'user');
+
+  btn.textContent = '✓ Redirecting...';
+  setTimeout(function() {
+    window.location.href = './user/userdashboard.html';
   }, 800);
-}
 
 /* ── FLOATING PARTICLES ON RIGHT SIDE ── */
 (function(){
