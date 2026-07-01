@@ -349,18 +349,13 @@ async function handleLogin(e){
     // If login failed, check why
     var errMessage = authResult.error || '';
     
-    // If it's a known admin email and the password was wrong, do not fall back to student
+    // If it's a known admin email, block and show connection or auth error
     if (isAdminEmail) {
-      errorBox.textContent = '⚠ ' + errMessage;
-      errorBox.style.display = 'block';
-      btn.textContent = 'Sign In';
-      btn.disabled = false;
-      return;
-    }
-
-    // If it is a network error (e.g. server down), warn the user
-    if (errMessage.indexOf('fetch') !== -1 || errMessage.indexOf('Network') !== -1 || errMessage.indexOf('TypeError') !== -1) {
-      errorBox.textContent = '⚠ Backend server connection failed. Please check if the server is running.';
+      if (errMessage.indexOf('fetch') !== -1 || errMessage.indexOf('Network') !== -1 || errMessage.indexOf('TypeError') !== -1) {
+        errorBox.textContent = '⚠ Backend server connection failed. Please check if the server is running.';
+      } else {
+        errorBox.textContent = '⚠ ' + errMessage;
+      }
       errorBox.style.display = 'block';
       btn.textContent = 'Sign In';
       btn.disabled = false;
