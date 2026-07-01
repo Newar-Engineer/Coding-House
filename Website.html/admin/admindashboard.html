@@ -232,15 +232,94 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 .mini-bar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
 .mini-fill{height:100%;border-radius:3px}
 .mini-pct{width:30px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute)}
+
+/* ── ANIMATED LOGO STYLES ── */
+.codinghouse-logo {
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.4));
+  animation: logo-float 4s ease-in-out infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.5deg); }
+}
+
+.codinghouse-logo .logo-shell {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: draw-shell 2.5s ease-out forwards, shell-glow 4s ease-in-out infinite 2.5s;
+}
+
+@keyframes draw-shell {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes shell-glow {
+  0%, 100% { opacity: 0.8; stroke-width: 6; }
+  50% { opacity: 1; stroke-width: 7; filter: drop-shadow(0 0 3px rgba(168, 85, 247, 0.7)); }
+}
+
+.codinghouse-logo .logo-roof {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-roof 1.8s ease-out forwards 0.4s;
+}
+
+@keyframes draw-roof {
+  to { stroke-dashoffset: 0; }
+}
+
+.codinghouse-logo .logo-bracket-left {
+  animation: pulse-left 2s infinite ease-in-out;
+}
+.codinghouse-logo .logo-bracket-right {
+  animation: pulse-right 2s infinite ease-in-out;
+}
+
+@keyframes pulse-left {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(-1.5px); opacity: 1; }
+}
+@keyframes pulse-right {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(1.5px); opacity: 1; }
+}
+
+.codinghouse-logo .logo-cursor {
+  animation: cursor-blink 1s step-end infinite;
+  transform-origin: center;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
+}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo" style="cursor: pointer;" onclick="window.location.href='../index.html'">
-    <span class="mark">&lt;/&gt;</span>
-    <span>Coding House</span>
+  <div class="sidebar-logo" style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='../index.html'">
+    <svg class="codinghouse-logo" viewBox="0 0 100 100" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6366f1" />
+          <stop offset="50%" stop-color="#a855f7" />
+          <stop offset="100%" stop-color="#f43f5e" />
+        </linearGradient>
+      </defs>
+      <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="none" stroke="url(#logoGrad)" stroke-width="6" class="logo-shell" />
+      <path d="M50,25 L75,44 L75,72 L25,72 L25,44 Z" fill="none" stroke="url(#logoGrad)" stroke-width="4" stroke-dasharray="2 2" class="logo-house-grid" />
+      <path d="M32,48 L50,32 L68,48" fill="none" stroke="url(#logoGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" class="logo-roof" />
+      <path d="M38,60 L44,54 L38,48" fill="none" stroke="url(#logoGrad)" stroke-width="5" stroke-linecap="round" class="logo-bracket-left" />
+      <path d="M62,60 L56,54 L62,48" fill="none" stroke="url(#logoGrad)" stroke-width="5" stroke-linecap="round" class="logo-bracket-right" />
+      <line x1="50" y1="46" x2="50" y2="62" stroke="url(#logoGrad)" stroke-width="5" stroke-linecap="round" class="logo-cursor" />
+    </svg>
+    <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:#e2e8f0;margin-right:6px">Coding House</span>
     <span class="admin-badge">ADMIN</span>
   </div>
   <nav class="sidebar-nav">

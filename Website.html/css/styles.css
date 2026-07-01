@@ -1393,4 +1393,68 @@ code[class*="language-"] {
 }
 .token.regex, .token.important, .token.variable {
   color: #f5b942 !important;
+}
+
+/* ── ANIMATED LOGO STYLES ── */
+.codinghouse-logo {
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.4));
+  animation: logo-float 4s ease-in-out infinite;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.5deg); }
+}
+
+.codinghouse-logo .logo-shell {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: draw-shell 2.5s ease-out forwards, shell-glow 4s ease-in-out infinite 2.5s;
+}
+
+@keyframes draw-shell {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes shell-glow {
+  0%, 100% { opacity: 0.8; stroke-width: 6; }
+  50% { opacity: 1; stroke-width: 7; filter: drop-shadow(0 0 3px rgba(168, 85, 247, 0.7)); }
+}
+
+.codinghouse-logo .logo-roof {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-roof 1.8s ease-out forwards 0.4s;
+}
+
+@keyframes draw-roof {
+  to { stroke-dashoffset: 0; }
+}
+
+.codinghouse-logo .logo-bracket-left {
+  animation: pulse-left 2s infinite ease-in-out;
+}
+.codinghouse-logo .logo-bracket-right {
+  animation: pulse-right 2s infinite ease-in-out;
+}
+
+@keyframes pulse-left {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(-1.5px); opacity: 1; }
+}
+@keyframes pulse-right {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(1.5px); opacity: 1; }
+}
+
+.codinghouse-logo .logo-cursor {
+  animation: cursor-blink 1s step-end infinite;
+  transform-origin: center;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 1; }
 }
