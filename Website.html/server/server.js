@@ -19,6 +19,21 @@ const PORT = process.env.PORT || 3001;
 
 // ── MIDDLEWARE ──
 app.use(helmet());
+
+// Allow Chrome Private Network Access (PNA) from public HTTPS sites to local HTTP backend
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  
+  // Intercept and handle OPTIONS preflight requests directly to ensure PNA headers are sent
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 const allowedOrigins = [
   'http://localhost:5500',
   'http://127.0.0.1:5500',
@@ -70,6 +85,42 @@ app.get('/api/auth/verify-admin', requireAuth, requireAdmin, (req, res) => {
       role: req.adminUser.role
     }
   });
+});
+
+// ── PUBLIC ROUTES ──
+app.get('/api/public/images', async (req, res) => {
+  try {
+    const { query } = require('./db/connection');
+    const category = (req.query.category || '').trim();
+    const search   = (req.query.search || '').trim();
+
+    let where = [];
+    let params = [];
+
+    if (category && ['course_banner', 'track_icon', 'instructor'].includes(category)) {
+      where.push('category = ?');
+      params.push(category);
+    }
+    if (search) {
+      where.push('(filename LIKE ? OR alt_text LIKE ? OR linked_slug LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+    }
+
+    const whereClause = where.length > 0 ? 'WHERE ' + where.join(' AND ') : '';
+
+    const [rows] = await query(
+      `SELECT id, filename, url, category, linked_slug, alt_text
+       FROM images
+       ${whereClause}
+       ORDER BY created_at DESC`,
+      params
+    );
+
+    res.json({ images: rows });
+  } catch (err) {
+    console.error('[Public Images] List error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch public images' });
+  }
 });
 
 // ── PROTECTED ROUTES ──

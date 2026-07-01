@@ -1048,6 +1048,35 @@ function updateTierUI(tier) {
       nav.appendChild(link);
     }
   }
+
+  // Dynamically load images uploaded from the admin panel for courses in progress
+  (async function() {
+    try {
+      var resp = await fetch('http://localhost:3001/api/public/images');
+      if (!resp.ok) return;
+      var data = await resp.json();
+      var images = data.images || [];
+
+      images.forEach(function(img) {
+        if (!img.linked_slug) return;
+        var slug = img.linked_slug.toLowerCase();
+
+        var courseItems = document.querySelectorAll('.course-item');
+        courseItems.forEach(function(item) {
+          var nameEl = item.querySelector('.course-name');
+          if (nameEl && nameEl.textContent.toLowerCase().indexOf(slug) !== -1) {
+            var icoEl = item.querySelector('.course-ico');
+            if (icoEl) {
+              icoEl.style.background = 'url(\'' + img.url + '\') center/cover no-repeat';
+              icoEl.textContent = ''; // clear text placeholder initials
+            }
+          }
+        });
+      });
+    } catch (e) {
+      console.warn("[Coding House] Could not load dynamic course images:", e);
+    }
+  })();
 })();
 </script>
 </body>
