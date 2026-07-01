@@ -127,12 +127,38 @@ var AdminAuth = (function() {
       }
       var data = await resp.json();
       sessionStorage.setItem('codinghouse_admin', JSON.stringify(data.user));
+      injectStudentViewLink();
       return true;
     } catch (e) {
       // If API is unreachable, allow access if session exists (graceful degradation)
       console.warn('[AdminAuth] API unreachable, using cached session');
-      return !!sessionStorage.getItem('codinghouse_admin');
+      var hasSession = !!sessionStorage.getItem('codinghouse_admin');
+      if (hasSession) {
+        injectStudentViewLink();
+      }
+      return hasSession;
     }
+  }
+
+  function injectStudentViewLink() {
+    setTimeout(function() {
+      var nav = document.querySelector('.sidebar-nav');
+      if (nav && !document.getElementById('admin-student-view-link')) {
+        var section = document.createElement('div');
+        section.className = 'nav-section';
+        section.style.marginTop = '12px';
+        section.textContent = 'View';
+
+        var link = document.createElement('a');
+        link.id = 'admin-student-view-link';
+        link.className = 'nav-item';
+        link.href = '../user/userdashboard.html';
+        link.innerHTML = '<span class="ni">🎓</span> Student View';
+
+        nav.appendChild(section);
+        nav.appendChild(link);
+      }
+    }, 100);
   }
 
   /**

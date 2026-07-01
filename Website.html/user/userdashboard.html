@@ -948,6 +948,26 @@ function updateTierUI(tier) {
     var statsVal = document.querySelector('.stat-card .stat-val');
     if (statsVal && userObj.xp !== undefined) statsVal.textContent = Number(userObj.xp).toLocaleString();
   }
+
+  // Inject Admin Panel link if the logged in user is an Admin
+  if (localStorage.getItem('codinghouse_role') === 'admin') {
+    var nav = document.querySelector('.sidebar-nav');
+    if (nav && !document.getElementById('student-admin-panel-link')) {
+      var section = document.createElement('div');
+      section.className = 'nav-section';
+      section.style.marginTop = '12px';
+      section.textContent = 'Admin';
+
+      var link = document.createElement('a');
+      link.id = 'student-admin-panel-link';
+      link.className = 'nav-item';
+      link.href = '../admin/admindashboard.html';
+      link.innerHTML = '<span class="ni">🛡️</span> Admin Panel';
+
+      nav.appendChild(section);
+      nav.appendChild(link);
+    }
+  }
 })();
 </script>
 </body>
