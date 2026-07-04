@@ -14,6 +14,25 @@
     { key: 'pro', label: 'Professional',  icon: '\uD83D\uDD34', color: '#ef4444' }
   ];
 
+  var AGENT_LABELS = {
+    c: 'C',
+    cpp: 'C++',
+    csharp: 'C#',
+    dart: 'Dart',
+    go: 'Go',
+    java: 'Java',
+    javascript: 'JavaScript',
+    kotlin: 'Kotlin',
+    matlab: 'MATLAB',
+    php: 'PHP',
+    python: 'Python',
+    r: 'R',
+    ruby: 'Ruby',
+    rust: 'Rust',
+    swift: 'Swift',
+    typescript: 'TypeScript'
+  };
+
   class TopicRenderer {
     constructor(containerId, topicsData, options) {
       options = options || {};
@@ -313,6 +332,9 @@
         var isBookmarked = this._bookmarks.indexOf(t.num) !== -1;
         var isComplete = this._completed.indexOf(t.num + '_' + this.currentLevel) !== -1;
         var topicId = 'topic-' + t.num + '-' + this.currentLevel;
+        var agentLabel = AGENT_LABELS[this.lang] || this.langLabel.replace(/\s+Tier$/i, '') || this.lang;
+        var agentHref = 'user/ai-assistant.html?language=' + encodeURIComponent(this.lang) +
+          '&topic=' + encodeURIComponent(t.title);
 
         html += '<div class="topic-card tr-enter' + collapsed + '" data-topic="' + t.num + '" style="animation-delay:' + delay + 's" id="' + topicId + '">';
 
@@ -355,6 +377,11 @@
         }
 
         html += '<div class="code-usecase">' + d.usecase + '</div>';
+
+        html += '<div class="tr-agent-row">' +
+          '<a class="tr-agent-btn" href="' + agentHref + '">Ask ' + this._esc(agentLabel) + ' Agent</a>' +
+          '<span>Answers stay locked to ' + this._esc(agentLabel) + '</span>' +
+        '</div>';
 
         /* Completion checkbox */
         html += '<label class="tr-complete' + (isComplete ? ' done' : '') + '">' +
