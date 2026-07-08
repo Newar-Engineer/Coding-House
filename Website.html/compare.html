@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Comparison — Coding House</title>
+<meta name="description" content="Compare programming languages side-by-side. See how Python, JavaScript, Java, C++, and more handle the same concepts.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.cmp-controls{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;align-items:center}
+.cmp-select{padding:10px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .3s;min-width:160px}
+.cmp-select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+.cmp-vs{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--primary);padding:0 8px}
+.cmp-concept-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:36px}
+.cmp-concept-tab{padding:8px 18px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-mute);font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+.cmp-concept-tab:hover{border-color:var(--primary);color:var(--text)}
+.cmp-concept-tab.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,0.3)}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:48px}
+.cmp-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .3s}
+.cmp-panel:hover{border-color:rgba(124,58,237,0.4)}
+.cmp-panel-header{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);background:rgba(124,58,237,0.04)}
+.cmp-lang-badge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.cmp-panel-header h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700}
+.cmp-code{padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;overflow-x:auto;background:#06080f;color:var(--text-soft);min-height:200px;white-space:pre}
+.cmp-note{padding:16px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--text-mute);line-height:1.5}
+.cmp-note strong{color:var(--primary)}
+.cmp-tip{background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(34,211,238,0.04));border:1px solid var(--border);border-radius:14px;padding:24px 28px;text-align:center;margin:0 auto;max-width:700px}
+.cmp-tip h3{font-family:'Space Grotesk',sans-serif;font-size:20px;margin-bottom:8px}
+.cmp-tip p{color:var(--text-soft);font-size:14px}
+@media(max-width:768px){.cmp-grid{grid-template-columns:1fr}.cmp-controls{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+<ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="playground.html">Playground</a></li><li><a href="cheatsheets.html">Cheatsheets</a></li><li><a href="blog.html">Blog</a></li></ul>
+<div class="nav-cta"><button class="theme-toggle" id="theme-toggle-btn">☀️</button><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</nav></header>
+
+<section class="page-hero">
+<div class="wrap">
+<div class="eyebrow">side by side</div>
+<h1>Compare Languages 🔀</h1>
+<p class="sub">See how different languages handle the same concept. Pick two languages and a topic below.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="cmp-controls">
+<select class="cmp-select" id="lang1" onchange="renderComparison()"><option value="python">Python</option><option value="javascript">JavaScript</option><option value="java">Java</option><option value="cpp">C++</option><option value="c">C</option><option value="go">Go</option><option value="rust">Rust</option><option value="csharp">C#</option><option value="typescript">TypeScript</option><option value="php">PHP</option><option value="ruby">Ruby</option><option value="kotlin">Kotlin</option><option value="swift">Swift</option><option value="dart">Dart</option></select>
+<span class="cmp-vs">VS</span>
+<select class="cmp-select" id="lang2" onchange="renderComparison()"><option value="javascript" selected>JavaScript</option><option value="python">Python</option><option value="java">Java</option><option value="cpp">C++</option><option value="c">C</option><option value="go">Go</option><option value="rust">Rust</option><option value="csharp">C#</option><option value="typescript">TypeScript</option><option value="php">PHP</option><option value="ruby">Ruby</option><option value="kotlin">Kotlin</option><option value="swift">Swift</option><option value="dart">Dart</option></select>
+</div>
+
+<div class="cmp-concept-tabs" id="concept-tabs"></div>
+<div class="cmp-grid" id="cmp-grid"></div>
+
+<div class="cmp-tip">
+<h3>💡 Want to try the code?</h3>
+<p>Open our <a href="playground.html" style="color:var(--primary);font-weight:600">Code Playground</a> and run any of these examples in your browser.</p>
+</div>
+</div>
+</section>
+
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House. All rights reserved.</span><div class="foot-social"><a href="index.html">Home</a><a href="playground.html">Playground</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div></div></div></footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var LANGS={
+python:{name:'Python',ab:'Py',c1:'#3b82f6',c2:'#22d3ee'},
+javascript:{name:'JavaScript',ab:'Js',c1:'#f5b942',c2:'#3b82f6'},
+java:{name:'Java',ab:'Jv',c1:'#8b5cf6',c2:'#3b82f6'},
+cpp:{name:'C++',ab:'C+',c1:'#3b82f6',c2:'#8b5cf6'},
+c:{name:'C',ab:'C',c1:'#22d3ee',c2:'#3b82f6'},
+go:{name:'Go',ab:'Go',c1:'#22d3ee',c2:'#34e0a1'},
+rust:{name:'Rust',ab:'Rs',c1:'#f5b942',c2:'#ff5d72'},
+csharp:{name:'C#',ab:'C#',c1:'#8b5cf6',c2:'#22d3ee'},
+typescript:{name:'TypeScript',ab:'Ts',c1:'#3b82f6',c2:'#22d3ee'},
+php:{name:'PHP',ab:'Php',c1:'#8b5cf6',c2:'#f5b942'},
+ruby:{name:'Ruby',ab:'Rb',c1:'#ff5d72',c2:'#8b5cf6'},
+kotlin:{name:'Kotlin',ab:'Kt',c1:'#8b5cf6',c2:'#ff5d72'},
+swift:{name:'Swift',ab:'Sw',c1:'#ff5d72',c2:'#f5b942'},
+dart:{name:'Dart',ab:'Dt',c1:'#22d3ee',c2:'#3b82f6'}
+};
+
+var CONCEPTS={
+'hello-world':{label:'Hello World',data:{
+python:{code:'print("Hello, World!")',note:'No semicolons, no boilerplate. Python is minimal by design.'},
+javascript:{code:'console.log("Hello, World!");',note:'Runs in browsers and Node.js. The universal scripting language.'},
+java:{code:'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',note:'Verbose but explicit. Everything lives inside a class.'},
+cpp:{code:'#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}',note:'C++ requires includes and a main function. Compiles to native code.'},
+c:{code:'#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',note:'The simplest systems language. No classes, no overhead.'},
+go:{code:'package main\n\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',note:'Go requires a package declaration and explicit imports.'},
+rust:{code:'fn main() {\n    println!("Hello, World!");\n}',note:'println! is a macro (note the !). Rust compiles to native code.'},
+csharp:{code:'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}',note:'Similar to Java but with more modern C# syntax options.'},
+typescript:{code:'console.log("Hello, World!");',note:'Same as JavaScript — TypeScript adds types but output is the same.'},
+php:{code:'<?php\necho "Hello, World!\\n";\n?>',note:'PHP was designed for web. Echo outputs directly to the page.'},
+ruby:{code:'puts "Hello, World!"',note:'Ruby prioritizes developer happiness. Incredibly concise.'},
+kotlin:{code:'fun main() {\n    println("Hello, World!")\n}',note:'Kotlin removes Java boilerplate. No class wrapper needed.'},
+swift:{code:'print("Hello, World!")',note:'Swift is as clean as Python for simple scripts.'},
+dart:{code:'void main() {\n  print("Hello, World!");\n}',note:'Dart requires a main function. Used primarily with Flutter.'}
+}},
+'for-loop':{label:'For Loop',data:{
+python:{code:'for i in range(5):\n    print(i)',note:'range() creates an iterator. No brackets, uses indentation.'},
+javascript:{code:'for (let i = 0; i < 5; i++) {\n    console.log(i);\n}',note:'Classic C-style for loop. Also supports for...of and forEach.'},
+java:{code:'for (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}',note:'C-style syntax. Java also has enhanced for-each loops.'},
+cpp:{code:'for (int i = 0; i < 5; i++) {\n    std::cout << i << std::endl;\n}',note:'Same C-style syntax. C++11 added range-based for loops.'},
+c:{code:'for (int i = 0; i < 5; i++) {\n    printf("%d\\n", i);\n}',note:'The original C-style for loop. All others derive from this.'},
+go:{code:'for i := 0; i < 5; i++ {\n    fmt.Println(i)\n}',note:'Go only has "for" — no while or do-while keywords.'},
+rust:{code:'for i in 0..5 {\n    println!("{}", i);\n}',note:'Rust uses range syntax (0..5). Iterators are zero-cost.'},
+csharp:{code:'for (int i = 0; i < 5; i++) {\n    Console.WriteLine(i);\n}',note:'C-style syntax. C# also supports foreach with LINQ.'},
+typescript:{code:'for (let i = 0; i < 5; i++) {\n    console.log(i);\n}',note:'Same as JavaScript. TypeScript adds type safety to the variable.'},
+php:{code:'for ($i = 0; $i < 5; $i++) {\n    echo $i . "\\n";\n}',note:'PHP uses $ for variables. Otherwise standard C-style loop.'},
+ruby:{code:'5.times do |i|\n    puts i\nend',note:'Ruby makes loops read like English. Also supports (0..4).each.'},
+kotlin:{code:'for (i in 0 until 5) {\n    println(i)\n}',note:'Kotlin uses "until" for exclusive ranges, ".." for inclusive.'},
+swift:{code:'for i in 0..<5 {\n    print(i)\n}',note:'Swift uses ..< for half-open ranges and ... for closed ranges.'},
+dart:{code:'for (var i = 0; i < 5; i++) {\n  print(i);\n}',note:'C-style syntax. Dart also supports for-in loops.'}
+}},
+'function':{label:'Functions',data:{
+python:{code:'def add(a, b):\n    return a + b\n\nresult = add(3, 5)\nprint(result)  # 8',note:'No type declarations needed. Supports default args and *args.'},
+javascript:{code:'function add(a, b) {\n    return a + b;\n}\n\n// Arrow function\nconst multiply = (a, b) => a * b;',note:'Two syntax options. Arrow functions have lexical "this".'},
+java:{code:'public static int add(int a, int b) {\n    return a + b;\n}',note:'Must declare return type and parameter types. Static for class methods.'},
+cpp:{code:'int add(int a, int b) {\n    return a + b;\n}\n\n// With auto return type (C++14)\nauto multiply(int a, int b) {\n    return a * b;\n}',note:'Type declarations required. C++14 added auto return type.'},
+c:{code:'int add(int a, int b) {\n    return a + b;\n}',note:'Functions must be declared before use (or use prototypes).'},
+go:{code:'func add(a, b int) int {\n    return a + b\n}\n\n// Multiple returns\nfunc divide(a, b float64) (float64, error) {\n    if b == 0 {\n        return 0, errors.New("division by zero")\n    }\n    return a / b, nil\n}',note:'Go supports multiple return values. Error handling is explicit.'},
+rust:{code:'fn add(a: i32, b: i32) -> i32 {\n    a + b  // no semicolon = implicit return\n}',note:'Last expression without semicolon is the return value.'},
+csharp:{code:'static int Add(int a, int b) {\n    return a + b;\n}\n\n// Expression body (C# 6+)\nstatic int Multiply(int a, int b) => a * b;',note:'C# supports expression-bodied members for concise syntax.'},
+typescript:{code:'function add(a: number, b: number): number {\n    return a + b;\n}\n\nconst multiply = (a: number, b: number): number => a * b;',note:'TypeScript adds type annotations to JavaScript functions.'},
+php:{code:'function add(int $a, int $b): int {\n    return $a + $b;\n}',note:'PHP 7+ supports type declarations. Parameters use $.'},
+ruby:{code:'def add(a, b)\n    a + b  # implicit return\nend',note:'Last evaluated expression is returned. "return" is optional.'},
+kotlin:{code:'fun add(a: Int, b: Int): Int {\n    return a + b\n}\n\n// Single expression\nfun multiply(a: Int, b: Int) = a * b',note:'Single-expression functions can omit braces and return type.'},
+swift:{code:'func add(_ a: Int, _ b: Int) -> Int {\n    return a + b\n}',note:'Underscore _ omits argument labels at call site.'},
+dart:{code:'int add(int a, int b) {\n  return a + b;\n}\n\n// Arrow syntax\nint multiply(int a, int b) => a * b;',note:'Dart supports arrow syntax for single-expression functions.'}
+}},
+'class':{label:'Classes / OOP',data:{
+python:{code:'class Dog:\n    def __init__(self, name, breed):\n        self.name = name\n        self.breed = breed\n    \n    def bark(self):\n        return f"{self.name} says Woof!"',note:'self is explicit. __init__ is the constructor.'},
+javascript:{code:'class Dog {\n    constructor(name, breed) {\n        this.name = name;\n        this.breed = breed;\n    }\n    \n    bark() {\n        return `${this.name} says Woof!`;\n    }\n}',note:'ES6 classes. Under the hood, still prototype-based.'},
+java:{code:'public class Dog {\n    private String name;\n    private String breed;\n    \n    public Dog(String name, String breed) {\n        this.name = name;\n        this.breed = breed;\n    }\n    \n    public String bark() {\n        return name + " says Woof!";\n    }\n}',note:'Java is fully OOP. Access modifiers are explicit.'},
+cpp:{code:'class Dog {\npublic:\n    string name;\n    string breed;\n    \n    Dog(string n, string b) : name(n), breed(b) {}\n    \n    string bark() {\n        return name + " says Woof!";\n    }\n};',note:'Uses initializer lists. public/private sections.'},
+c:{code:'// C has no classes — use structs\ntypedef struct {\n    char name[50];\n    char breed[50];\n} Dog;\n\nvoid bark(Dog* d) {\n    printf("%s says Woof!\\n", d->name);\n}',note:'C uses structs + function pointers for OOP-like patterns.'},
+go:{code:'type Dog struct {\n    Name  string\n    Breed string\n}\n\nfunc (d Dog) Bark() string {\n    return d.Name + " says Woof!"\n}',note:'Go uses structs with methods. No inheritance — use composition.'},
+rust:{code:'struct Dog {\n    name: String,\n    breed: String,\n}\n\nimpl Dog {\n    fn new(name: &str, breed: &str) -> Self {\n        Dog { name: name.to_string(), breed: breed.to_string() }\n    }\n    fn bark(&self) -> String {\n        format!("{} says Woof!", self.name)\n    }\n}',note:'Rust uses impl blocks. No inheritance — use traits.'},
+csharp:{code:'class Dog {\n    public string Name { get; set; }\n    public string Breed { get; set; }\n    \n    public Dog(string name, string breed) {\n        Name = name;\n        Breed = breed;\n    }\n    \n    public string Bark() => $"{Name} says Woof!";',note:'C# has auto-properties and expression-bodied members.'},
+typescript:{code:'class Dog {\n    constructor(\n        public name: string,\n        public breed: string\n    ) {}\n    \n    bark(): string {\n        return `${this.name} says Woof!`;\n    }\n}',note:'TypeScript parameter properties auto-create and assign fields.'},
+php:{code:'class Dog {\n    public function __construct(\n        public string $name,\n        public string $breed\n    ) {}\n    \n    public function bark(): string {\n        return "{$this->name} says Woof!";\n    }\n}',note:'PHP 8 constructor promotion. Properties use $this->.'},
+ruby:{code:'class Dog\n    attr_accessor :name, :breed\n    \n    def initialize(name, breed)\n        @name = name\n        @breed = breed\n    end\n    \n    def bark\n        "#{@name} says Woof!"\n    end\nend',note:'@ for instance variables. attr_accessor generates getters/setters.'},
+kotlin:{code:'class Dog(\n    val name: String,\n    val breed: String\n) {\n    fun bark() = "$name says Woof!"\n}',note:'Kotlin primary constructors are incredibly concise.'},
+swift:{code:'class Dog {\n    let name: String\n    let breed: String\n    \n    init(name: String, breed: String) {\n        self.name = name\n        self.breed = breed\n    }\n    \n    func bark() -> String {\n        "\\(name) says Woof!"\n    }\n}',note:'Swift uses init for constructors. let for constants.'},
+dart:{code:'class Dog {\n  final String name;\n  final String breed;\n  \n  Dog(this.name, this.breed);\n  \n  String bark() => "$name says Woof!";\n}',note:'Dart this.param auto-assigns in constructor. Very concise.'}
+}},
+'error-handling':{label:'Error Handling',data:{
+python:{code:'try:\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    print(f"Error: {e}")\nfinally:\n    print("Cleanup done")',note:'Python uses try/except. Specific exception types recommended.'},
+javascript:{code:'try {\n    const result = JSON.parse(invalidJson);\n} catch (err) {\n    console.error("Parse failed:", err.message);\n} finally {\n    console.log("Cleanup done");\n}',note:'JavaScript catches all errors in one catch block.'},
+java:{code:'try {\n    int result = 10 / 0;\n} catch (ArithmeticException e) {\n    System.out.println("Error: " + e.getMessage());\n} finally {\n    System.out.println("Cleanup done");\n}',note:'Java has checked exceptions — must declare or handle.'},
+cpp:{code:'try {\n    throw std::runtime_error("Something went wrong");\n} catch (const std::exception& e) {\n    std::cerr << "Error: " << e.what() << std::endl;\n}',note:'C++ exceptions are optional. Many codebases avoid them.'},
+c:{code:'// C has no exceptions — use return codes\nint divide(int a, int b, int* result) {\n    if (b == 0) return -1;  // error\n    *result = a / b;\n    return 0;  // success\n}',note:'C uses return codes and errno for error handling.'},
+go:{code:'result, err := divide(10, 0)\nif err != nil {\n    fmt.Println("Error:", err)\n    return\n}\nfmt.Println(result)',note:'Go uses explicit error returns. No try/catch.'},
+rust:{code:'fn divide(a: f64, b: f64) -> Result<f64, String> {\n    if b == 0.0 {\n        Err("Division by zero".to_string())\n    } else {\n        Ok(a / b)\n    }\n}\n\nmatch divide(10.0, 0.0) {\n    Ok(v) => println!("{}", v),\n    Err(e) => println!("Error: {}", e),\n}',note:'Rust uses Result<T, E> enum. No exceptions. The ? operator propagates errors.'},
+csharp:{code:'try {\n    var result = 10 / 0;\n} catch (DivideByZeroException ex) {\n    Console.WriteLine($"Error: {ex.Message}");\n} finally {\n    Console.WriteLine("Cleanup done");\n}',note:'C# exceptions similar to Java but without checked exceptions.'},
+typescript:{code:'try {\n    const data = JSON.parse(input);\n} catch (err) {\n    if (err instanceof SyntaxError) {\n        console.error("Invalid JSON");\n    }\n}',note:'Same as JavaScript. TypeScript helps with error type narrowing.'},
+php:{code:'try {\n    $result = 10 / 0;\n} catch (DivisionByZeroError $e) {\n    echo "Error: " . $e->getMessage();\n} finally {\n    echo "Cleanup done";\n}',note:'PHP 7+ has try/catch with typed exceptions.'},
+ruby:{code:'begin\n    result = 10 / 0\nrescue ZeroDivisionError => e\n    puts "Error: #{e.message}"\nensure\n    puts "Cleanup done"\nend',note:'Ruby uses begin/rescue/ensure instead of try/catch/finally.'},
+kotlin:{code:'try {\n    val result = 10 / 0\n} catch (e: ArithmeticException) {\n    println("Error: ${e.message}")\n} finally {\n    println("Cleanup done")\n}',note:'Kotlin has no checked exceptions. try is an expression.'},
+swift:{code:'enum MathError: Error {\n    case divisionByZero\n}\n\nfunc divide(_ a: Int, by b: Int) throws -> Int {\n    guard b != 0 else { throw MathError.divisionByZero }\n    return a / b\n}\n\ndo {\n    let result = try divide(10, by: 0)\n} catch {\n    print("Error: \\(error)")\n}',note:'Swift uses do/try/catch with typed errors.'},
+dart:{code:'try {\n  var result = 10 ~/ 0;\n} on IntegerDivisionByZeroException {\n  print("Cannot divide by zero");\n} catch (e) {\n  print("Error: $e");\n} finally {\n  print("Cleanup done");\n}',note:'Dart uses on for specific types and catch for generic.'}
+}}
+};
+
+var currentConcept='hello-world';
+
+function renderTabs(){
+var html='';
+for(var key in CONCEPTS){
+html+='<button class="cmp-concept-tab'+(key===currentConcept?' active':'')+'" onclick="selectConcept(\''+key+'\',this)">'+CONCEPTS[key].label+'</button>';
+}
+document.getElementById('concept-tabs').innerHTML=html;
+}
+
+function selectConcept(key,btn){
+currentConcept=key;
+document.querySelectorAll('.cmp-concept-tab').forEach(function(t){t.classList.remove('active')});
+btn.classList.add('active');
+renderComparison();
+}
+
+function renderComparison(){
+var l1=document.getElementById('lang1').value;
+var l2=document.getElementById('lang2').value;
+var concept=CONCEPTS[currentConcept];
+var d1=concept.data[l1]||{code:'// Not available yet',note:'Coming soon!'};
+var d2=concept.data[l2]||{code:'// Not available yet',note:'Coming soon!'};
+var info1=LANGS[l1],info2=LANGS[l2];
+
+document.getElementById('cmp-grid').innerHTML=
+'<div class="cmp-panel"><div class="cmp-panel-header"><div class="cmp-lang-badge" style="background:linear-gradient(135deg,'+info1.c1+','+info1.c2+')">'+info1.ab+'</div><h3>'+info1.name+'</h3></div><div class="cmp-code">'+escapeHtml(d1.code)+'</div><div class="cmp-note"><strong>💡 Note:</strong> '+d1.note+'</div></div>'+
+'<div class="cmp-panel"><div class="cmp-panel-header"><div class="cmp-lang-badge" style="background:linear-gradient(135deg,'+info2.c1+','+info2.c2+')">'+info2.ab+'</div><h3>'+info2.name+'</h3></div><div class="cmp-code">'+escapeHtml(d2.code)+'</div><div class="cmp-note"><strong>💡 Note:</strong> '+d2.note+'</div></div>';
+}
+
+function escapeHtml(t){var d=document.createElement('div');d.appendChild(document.createTextNode(t));return d.innerHTML;}
+
+renderTabs();
+renderComparison();
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>

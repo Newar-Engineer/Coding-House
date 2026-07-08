@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Forum — Coding House</title>
+<meta name="description" content="Ask questions, share projects, and connect with fellow developers in the Coding House community forum.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.forum-stats{display:flex;gap:24px;justify-content:center;margin-bottom:40px;flex-wrap:wrap}
+.forum-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 28px;text-align:center}
+.forum-stat .fs-num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.forum-stat .fs-label{font-size:12px;color:var(--text-mute);font-weight:600;margin-top:2px}
+.forum-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.forum-toolbar .sort-select{padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif}
+.ask-btn{padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;font-size:14px;cursor:pointer;border:none;transition:all .3s;font-family:'Inter',sans-serif;box-shadow:0 4px 16px rgba(124,58,237,0.3)}
+.ask-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.4)}
+
+.forum-list{display:flex;flex-direction:column;gap:12px}
+.forum-post{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;display:flex;gap:16px;transition:all .3s;cursor:pointer}
+.forum-post:hover{border-color:rgba(124,58,237,0.4);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
+.fp-votes{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px}
+.fp-vote-btn{width:32px;height:24px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text-mute);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s}
+.fp-vote-btn:hover{border-color:var(--primary);color:var(--primary)}
+.fp-vote-btn.voted{background:rgba(124,58,237,0.15);border-color:var(--primary);color:var(--primary)}
+.fp-count{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700}
+.fp-body{flex:1}
+.fp-body h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.fp-body p{font-size:13px;color:var(--text-soft);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fp-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.fp-tag{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(124,58,237,0.1);color:var(--primary)}
+.fp-tag.help{background:rgba(16,185,129,0.1);color:var(--success)}
+.fp-tag.show{background:rgba(245,185,66,0.1);color:var(--warning)}
+.fp-tag.career{background:rgba(236,72,153,0.1);color:#ec4899}
+.fp-meta{display:flex;gap:16px;font-size:12px;color:var(--text-mute)}
+.fp-answers{display:flex;align-items:center;gap:6px;min-width:80px;font-size:13px;font-weight:600;color:var(--text-mute)}
+.fp-answers.has-answer{color:var(--success)}
+
+/* ── Ask Question Modal ── */
+.ask-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);padding:40px 20px;overflow-y:auto}
+.ask-modal.open{display:flex;align-items:flex-start;justify-content:center;animation:fadeIn .3s ease}
+.ask-form{background:var(--bg);border:1px solid var(--border);border-radius:20px;width:100%;max-width:640px;margin-top:60px}
+.ask-form-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ask-form-header h2{font-family:'Space Grotesk',sans-serif;font-size:22px}
+.ask-form-body{padding:24px 28px}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--text-soft);margin-bottom:6px}
+.form-input{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;transition:border-color .2s}
+.form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+textarea.form-input{min-height:120px;resize:vertical;line-height:1.6}
+.form-tags-input{display:flex;gap:8px;flex-wrap:wrap}
+.form-tag-option{padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-mute);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.form-tag-option.selected{background:var(--primary);border-color:var(--primary);color:#fff}
+.ask-form-footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px}
+.btn-cancel{padding:10px 20px;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--text-mute);font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px}
+.btn-submit{padding:10px 24px;border-radius:10px;background:var(--primary);border:none;color:#fff;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;box-shadow:0 4px 16px rgba(124,58,237,0.3)}
+
+@media(max-width:768px){.forum-post{flex-direction:column}.fp-votes{flex-direction:row;gap:8px}.forum-stats{gap:12px}.forum-stat{padding:12px 20px}}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+<ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="playground.html">Playground</a></li><li><a href="cheatsheets.html">Cheatsheets</a></li><li><a href="blog.html">Blog</a></li></ul>
+<div class="nav-cta"><button class="theme-toggle" id="theme-toggle-btn">☀️</button><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</nav></header>
+
+<section class="page-hero">
+<div class="wrap">
+<div class="eyebrow">community</div>
+<h1>Discussion Forum 💬</h1>
+<p class="sub">Ask questions, share solutions, and learn together. Our community is here to help you grow.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="forum-stats">
+<div class="forum-stat"><div class="fs-num" id="stat-questions">0</div><div class="fs-label">Questions</div></div>
+<div class="forum-stat"><div class="fs-num" id="stat-answers">0</div><div class="fs-label">Answers</div></div>
+<div class="forum-stat"><div class="fs-num" id="stat-members">2,847</div><div class="fs-label">Members</div></div>
+<div class="forum-stat"><div class="fs-num" id="stat-solved">0</div><div class="fs-label">Solved</div></div>
+</div>
+
+<div class="filter-tabs" id="forum-filters">
+<button class="filter-tab active" onclick="filterForum('all',this)">All</button>
+<button class="filter-tab" onclick="filterForum('help',this)">❓ Help</button>
+<button class="filter-tab" onclick="filterForum('show',this)">🎨 Show & Tell</button>
+<button class="filter-tab" onclick="filterForum('general',this)">💭 General</button>
+<button class="filter-tab" onclick="filterForum('career',this)">💼 Career</button>
+</div>
+
+<div class="forum-toolbar">
+<select class="sort-select" id="sort-select" onchange="renderPosts()">
+<option value="recent">Most Recent</option>
+<option value="votes">Most Upvoted</option>
+<option value="unanswered">Unanswered</option>
+</select>
+<button class="ask-btn" onclick="openAskModal()">+ Ask a Question</button>
+</div>
+
+<div class="forum-list" id="forum-list"></div>
+</div>
+</section>
+
+<div class="ask-modal" id="ask-modal">
+<div class="ask-form">
+<div class="ask-form-header"><h2>Ask a Question</h2><button class="cs-close" onclick="closeAskModal()">✕</button></div>
+<div class="ask-form-body">
+<div class="form-group"><label>Title</label><input class="form-input" id="ask-title" placeholder="What's your question?"></div>
+<div class="form-group"><label>Details</label><textarea class="form-input" id="ask-body" placeholder="Add more context, code snippets, or error messages..."></textarea></div>
+<div class="form-group"><label>Category</label>
+<div class="form-tags-input">
+<button class="form-tag-option selected" data-tag="help" onclick="selectTag(this)">❓ Help</button>
+<button class="form-tag-option" data-tag="show" onclick="selectTag(this)">🎨 Show & Tell</button>
+<button class="form-tag-option" data-tag="general" onclick="selectTag(this)">💭 General</button>
+<button class="form-tag-option" data-tag="career" onclick="selectTag(this)">💼 Career</button>
+</div></div>
+</div>
+<div class="ask-form-footer">
+<button class="btn-cancel" onclick="closeAskModal()">Cancel</button>
+<button class="btn-submit" onclick="submitQuestion()">Post Question</button>
+</div>
+</div>
+</div>
+
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House. All rights reserved.</span><div class="foot-social"><a href="index.html">Home</a><a href="https://discord.gg/knbWG8KjT">Discord</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div></div></div></footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var STORAGE='ch_forum_posts';
+var currentFilter='all';
+
+var DEFAULT_POSTS=[
+{id:1,title:'How do I reverse a linked list in Python?',body:'I understand the concept but keep getting confused with the pointer manipulation. Can someone walk through it step by step?',tag:'help',author:'Alex K.',time:'2 hours ago',votes:24,answers:5,solved:true},
+{id:2,title:'Built my first full-stack app! Check it out 🚀',body:'After 3 months on the Web Development track, I finally deployed my e-commerce project. Used React + Node.js + MongoDB. Would love feedback!',tag:'show',author:'Priya M.',time:'5 hours ago',votes:47,answers:12,solved:false},
+{id:3,title:'Rust vs C++ for game development in 2026?',body:'I want to get into game development but can\'t decide between Rust and C++. What do you experienced devs recommend for someone starting out?',tag:'general',author:'Marcus T.',time:'8 hours ago',votes:31,answers:8,solved:false},
+{id:4,title:'How to prepare for FAANG interviews as a self-taught dev?',body:'I\'ve been learning through Coding House for 6 months. No CS degree. What\'s the realistic path to getting into a big tech company?',tag:'career',author:'Sarah L.',time:'1 day ago',votes:56,answers:15,solved:true},
+{id:5,title:'Why does my async function return undefined?',body:'I\'m calling an async function but getting undefined instead of the data. Using fetch with await but something\'s wrong with my error handling.',tag:'help',author:'Dev P.',time:'1 day ago',votes:18,answers:7,solved:true},
+{id:6,title:'Best resources to learn system design?',body:'I\'m comfortable with DSA but system design is completely new to me. Any books, courses, or YouTube channels you recommend?',tag:'career',author:'Kim J.',time:'2 days ago',votes:39,answers:11,solved:false},
+{id:7,title:'Just completed the AI/ML track! My experience',body:'It took me 5 months to complete all phases. The face recognition project was the hardest but most rewarding. Here\'s what I learned...',tag:'show',author:'Omar R.',time:'3 days ago',votes:62,answers:14,solved:false},
+{id:8,title:'Understanding closures in JavaScript',body:'Can someone explain closures with a practical example? The MDN docs are a bit abstract for me.',tag:'help',author:'Nina W.',time:'3 days ago',votes:22,answers:6,solved:true},
+{id:9,title:'Is PHP still worth learning in 2026?',body:'I see a lot of hate for PHP online but many companies still use it. Is it worth investing time in or should I focus on Node.js?',tag:'general',author:'Tom B.',time:'4 days ago',votes:28,answers:19,solved:false},
+{id:10,title:'From barista to software engineer — my journey',body:'Two years ago I was making lattes. Today I accepted an offer as a junior developer. Here\'s exactly what I did and the roadmap I followed.',tag:'career',author:'Jade C.',time:'5 days ago',votes:89,answers:23,solved:false}
+];
+
+function loadPosts(){
+try{var saved=JSON.parse(localStorage.getItem(STORAGE));return saved&&saved.length?saved:DEFAULT_POSTS;}catch(e){return DEFAULT_POSTS;}
+}
+function savePosts(posts){localStorage.setItem(STORAGE,JSON.stringify(posts));}
+
+function renderPosts(){
+var posts=loadPosts();
+var sort=document.getElementById('sort-select').value;
+var filtered=currentFilter==='all'?posts:posts.filter(function(p){return p.tag===currentFilter;});
+
+if(sort==='votes')filtered.sort(function(a,b){return b.votes-a.votes;});
+else if(sort==='unanswered')filtered=filtered.filter(function(p){return p.answers===0;});
+
+document.getElementById('stat-questions').textContent=posts.length;
+document.getElementById('stat-answers').textContent=posts.reduce(function(s,p){return s+p.answers;},0);
+document.getElementById('stat-solved').textContent=posts.filter(function(p){return p.solved;}).length;
+
+if(!filtered.length){
+document.getElementById('forum-list').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mute)">No posts found in this category.</div>';
+return;
+}
+
+document.getElementById('forum-list').innerHTML=filtered.map(function(post){
+var tagClass=post.tag;
+var tagLabels={help:'❓ Help',show:'🎨 Show & Tell',general:'💭 General',career:'💼 Career'};
+return '<div class="forum-post">'+
+'<div class="fp-votes">'+
+'<button class="fp-vote-btn" onclick="vote('+post.id+',event)">▲</button>'+
+'<span class="fp-count">'+post.votes+'</span>'+
+'<button class="fp-vote-btn" onclick="vote('+post.id+',event,-1)">▼</button>'+
+'</div>'+
+'<div class="fp-body">'+
+'<div class="fp-tags"><span class="fp-tag '+tagClass+'">'+(tagLabels[post.tag]||post.tag)+'</span>'+(post.solved?'<span class="fp-tag" style="background:rgba(16,185,129,0.1);color:#10b981">✅ Solved</span>':'')+'</div>'+
+'<h3>'+escapeHtml(post.title)+'</h3>'+
+'<p>'+escapeHtml(post.body)+'</p>'+
+'<div class="fp-meta"><span>👤 '+post.author+'</span><span>🕐 '+post.time+'</span></div>'+
+'</div>'+
+'<div class="fp-answers '+(post.answers>0?'has-answer':'')+'">'+
+'<span>💬 '+post.answers+'</span>'+
+'</div>'+
+'</div>';
+}).join('');
+}
+
+function vote(id,e,dir){
+e.stopPropagation();
+var posts=loadPosts();
+var post=posts.find(function(p){return p.id===id;});
+if(post){post.votes+=(dir||-1)*-1;savePosts(posts);renderPosts();}
+}
+
+function filterForum(cat,btn){
+currentFilter=cat;
+document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active')});
+btn.classList.add('active');
+renderPosts();
+}
+
+function openAskModal(){document.getElementById('ask-modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeAskModal(){document.getElementById('ask-modal').classList.remove('open');document.body.style.overflow='';}
+
+function selectTag(btn){
+document.querySelectorAll('.form-tag-option').forEach(function(b){b.classList.remove('selected')});
+btn.classList.add('selected');
+}
+
+function submitQuestion(){
+var title=document.getElementById('ask-title').value.trim();
+var body=document.getElementById('ask-body').value.trim();
+var tag=document.querySelector('.form-tag-option.selected');
+if(!title){alert('Please enter a title');return;}
+var posts=loadPosts();
+posts.unshift({id:Date.now(),title:title,body:body||'(No details provided)',tag:tag?tag.dataset.tag:'general',author:'You',time:'Just now',votes:0,answers:0,solved:false});
+savePosts(posts);
+closeAskModal();
+document.getElementById('ask-title').value='';
+document.getElementById('ask-body').value='';
+renderPosts();
+}
+
+function escapeHtml(t){var d=document.createElement('div');d.appendChild(document.createTextNode(t));return d.innerHTML;}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAskModal();});
+document.getElementById('ask-modal').addEventListener('click',function(e){if(e.target===this)closeAskModal();});
+
+renderPosts();
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>

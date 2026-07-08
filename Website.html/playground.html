@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Playground — Coding House</title>
+<meta name="description" content="Write and run code in 16+ programming languages directly in your browser. Free online code editor powered by Monaco Editor.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body { overflow: hidden; }
+.pg-layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+.pg-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.pg-toolbar .logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.pg-toolbar .logo img { width: 24px; height: 24px; }
+.pg-select {
+  padding: 8px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.pg-select:focus { outline: none; border-color: var(--primary); }
+.pg-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  font-family: 'Inter', sans-serif;
+}
+.pg-btn-run {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+}
+.pg-btn-run:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
+.pg-btn-run:active { transform: translateY(0); }
+.pg-btn-run.running {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 16px rgba(245,158,11,0.3);
+  pointer-events: none;
+}
+.pg-btn-sec {
+  background: var(--bg);
+  border-color: var(--border);
+  color: var(--text-mute);
+}
+.pg-btn-sec:hover { border-color: var(--primary); color: var(--text); }
+.pg-spacer { flex: 1; }
+.pg-status {
+  font-size: 12px;
+  color: var(--text-mute);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Editor + Output split ── */
+.pg-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+.pg-editor-wrap {
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+}
+#editor-container { width: 100%; height: 100%; }
+.pg-output-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+.pg-output-header {
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pg-output-header .tab { color: var(--text-mute); }
+.pg-output-header .tab.active { color: var(--cyan); }
+#output {
+  flex: 1;
+  padding: 16px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  color: var(--text-soft);
+}
+#output .out-success { color: #10b981; }
+#output .out-error { color: #f87171; }
+#output .out-info { color: var(--cyan); }
+.output-placeholder {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-mute);
+}
+.output-placeholder .big-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+.output-placeholder p { font-size: 14px; }
+
+/* ── Share modal ── */
+.share-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--surface);
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  box-shadow: 0 12px 40px rgba(124,58,237,0.3);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.share-toast.visible { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 900px) {
+  .pg-workspace { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .pg-editor-wrap { border-right: none; border-bottom: 1px solid var(--border); }
+}
+@media (max-width: 600px) {
+  .pg-toolbar { padding: 8px 12px; gap: 8px; }
+  .pg-btn span.label { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="pg-layout">
+  <!-- Toolbar -->
+  <div class="pg-toolbar">
+    <a href="index.html" class="logo">
+      <img src="assets/codinghouse-logo.svg" alt="">
+      Coding House
+    </a>
+
+    <select class="pg-select" id="lang-select">
+      <option value="python">Python</option>
+      <option value="javascript">JavaScript</option>
+      <option value="typescript">TypeScript</option>
+      <option value="java">Java</option>
+      <option value="c">C</option>
+      <option value="cpp">C++</option>
+      <option value="csharp">C#</option>
+      <option value="go">Go</option>
+      <option value="rust">Rust</option>
+      <option value="php">PHP</option>
+      <option value="ruby">Ruby</option>
+      <option value="swift">Swift</option>
+      <option value="kotlin">Kotlin</option>
+      <option value="dart">Dart</option>
+      <option value="r">R</option>
+      <option value="matlab">MATLAB (Octave)</option>
+    </select>
+
+    <select class="pg-select" id="theme-select">
+      <option value="vs-dark">Dark Theme</option>
+      <option value="vs">Light Theme</option>
+      <option value="hc-black">High Contrast</option>
+    </select>
+
+    <button class="pg-btn pg-btn-run" id="run-btn" onclick="runCode()">
+      ▶ <span class="label">Run Code</span>
+    </button>
+    <button class="pg-btn pg-btn-sec" onclick="resetCode()">↺ <span class="label">Reset</span></button>
+    <button class="pg-btn pg-btn-sec" onclick="copyCode()">📋 <span class="label">Copy</span></button>
+    <button class="pg-btn pg-btn-sec" onclick="shareCode()">🔗 <span class="label">Share</span></button>
+
+    <div class="pg-spacer"></div>
+    <span class="pg-status" id="status">Ready</span>
+    <button class="pg-btn pg-btn-sec" id="theme-toggle-btn" onclick="if(window.CodingHouseTheme)window.CodingHouseTheme.toggle()">☀️</button>
+  </div>
+
+  <!-- Workspace -->
+  <div class="pg-workspace">
+    <div class="pg-editor-wrap">
+      <div id="editor-container"></div>
+    </div>
+    <div class="pg-output-wrap">
+      <div class="pg-output-header">
+        <span class="tab active">⚡ Output</span>
+        <button class="pg-btn pg-btn-sec" style="padding:4px 10px;font-size:11px" onclick="clearOutput()">Clear</button>
+      </div>
+      <div id="output">
+        <div class="output-placeholder">
+          <span class="big-icon">🚀</span>
+          <p>Click <strong>▶ Run Code</strong> to see output here</p>
+          <p style="margin-top:8px;font-size:12px;color:var(--text-mute)">Supports Python, JavaScript, Java, C, C++, Go, Rust and more</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="share-toast" id="share-toast">✅ Link copied to clipboard!</div>
+
+<script src="js/theme-toggle.js"></script>
+
+<!-- Monaco Editor via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script>
+var editor;
+var LANG_MAP = {
+  python:     { id: 71, monaco: 'python',     ext: 'py' },
+  javascript: { id: 63, monaco: 'javascript',  ext: 'js' },
+  typescript: { id: 74, monaco: 'typescript',  ext: 'ts' },
+  java:       { id: 62, monaco: 'java',        ext: 'java' },
+  c:          { id: 50, monaco: 'c',           ext: 'c' },
+  cpp:        { id: 54, monaco: 'cpp',         ext: 'cpp' },
+  csharp:     { id: 51, monaco: 'csharp',      ext: 'cs' },
+  go:         { id: 60, monaco: 'go',          ext: 'go' },
+  rust:       { id: 73, monaco: 'rust',        ext: 'rs' },
+  php:        { id: 68, monaco: 'php',         ext: 'php' },
+  ruby:       { id: 72, monaco: 'ruby',        ext: 'rb' },
+  swift:      { id: 83, monaco: 'swift',       ext: 'swift' },
+  kotlin:     { id: 78, monaco: 'kotlin',      ext: 'kt' },
+  dart:       { id: 90, monaco: 'dart',        ext: 'dart' },
+  r:          { id: 80, monaco: 'r',           ext: 'r' },
+  matlab:     { id: 66, monaco: 'plaintext',   ext: 'm' }
+};
+
+var TEMPLATES = {
+  python: '# Welcome to Coding House Playground!\n# Try running this Python code:\n\ndef greet(name):\n    return f"Hello, {name}! Welcome to Coding House 🏠"\n\nfor i in range(5):\n    print(greet(f"Coder #{i+1}"))\n\nprint("\\n🚀 Happy Coding!")',
+  javascript: '// Welcome to Coding House Playground!\n// Try running this JavaScript code:\n\nfunction fibonacci(n) {\n  const fib = [0, 1];\n  for (let i = 2; i < n; i++) {\n    fib.push(fib[i-1] + fib[i-2]);\n  }\n  return fib;\n}\n\nconsole.log("Fibonacci sequence:");\nconsole.log(fibonacci(10));\nconsole.log("\\n🚀 Happy Coding!");',
+  typescript: '// Welcome to Coding House Playground!\n\ninterface User {\n  name: string;\n  level: "beginner" | "intermediate" | "advanced";\n}\n\nfunction welcome(user: User): string {\n  return `Hello ${user.name}! Level: ${user.level}`;\n}\n\nconst user: User = { name: "Coder", level: "beginner" };\nconsole.log(welcome(user));',
+  java: '// Welcome to Coding House Playground!\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello from Coding House! 🏠");\n        \n        for (int i = 1; i <= 5; i++) {\n            System.out.println("Step " + i + ": Learning Java!");\n        }\n        \n        System.out.println("\\n🚀 Happy Coding!");\n    }\n}',
+  c: '// Welcome to Coding House Playground!\n#include <stdio.h>\n\nint main() {\n    printf("Hello from Coding House!\\n\\n");\n    \n    for (int i = 1; i <= 5; i++) {\n        printf("Step %d: Learning C!\\n", i);\n    }\n    \n    printf("\\nHappy Coding!\\n");\n    return 0;\n}',
+  cpp: '// Welcome to Coding House Playground!\n#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<string> languages = {"C++", "Python", "Java", "Rust", "Go"};\n    \n    cout << "Languages at Coding House:" << endl;\n    sort(languages.begin(), languages.end());\n    \n    for (const auto& lang : languages) {\n        cout << "  → " << lang << endl;\n    }\n    \n    cout << "\\n🚀 Happy Coding!" << endl;\n    return 0;\n}',
+  csharp: '// Welcome to Coding House Playground!\nusing System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        var numbers = Enumerable.Range(1, 10);\n        var evens = numbers.Where(n => n % 2 == 0);\n        \n        Console.WriteLine("Even numbers from 1-10:");\n        foreach (var n in evens) {\n            Console.Write($"{n} ");\n        }\n        Console.WriteLine("\\n\\n🚀 Happy Coding!");\n    }\n}',
+  go: '// Welcome to Coding House Playground!\npackage main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("Hello from Coding House! 🏠")\n\t\n\tfor i := 1; i <= 5; i++ {\n\t\tfmt.Printf("Step %d: Learning Go!\\n", i)\n\t}\n\t\n\tfmt.Println("\\n🚀 Happy Coding!")\n}',
+  rust: '// Welcome to Coding House Playground!\nfn main() {\n    println!("Hello from Coding House! 🏠");\n    \n    let languages = vec!["Rust", "Python", "Java", "Go", "C++"];\n    \n    for (i, lang) in languages.iter().enumerate() {\n        println!("{}. {}", i + 1, lang);\n    }\n    \n    println!("\\n🚀 Happy Coding!");\n}',
+  php: '<?php\n// Welcome to Coding House Playground!\n\necho "Hello from Coding House! 🏠\\n\\n";\n\n$languages = ["PHP", "Python", "JavaScript", "Ruby"];\n\nforeach ($languages as $index => $lang) {\n    echo ($index + 1) . ". " . $lang . "\\n";\n}\n\necho "\\n🚀 Happy Coding!\\n";\n?>',
+  ruby: '# Welcome to Coding House Playground!\n\nputs "Hello from Coding House! 🏠\\n"\n\nlanguages = ["Ruby", "Python", "Java", "Go", "Rust"]\n\nlanguages.each_with_index do |lang, i|\n  puts "#{i + 1}. #{lang}"\nend\n\nputs "\\n🚀 Happy Coding!"',
+  swift: '// Welcome to Coding House Playground!\n\nprint("Hello from Coding House! 🏠")\n\nlet languages = ["Swift", "Kotlin", "Dart", "Python"]\n\nfor (index, lang) in languages.enumerated() {\n    print("\\(index + 1). \\(lang)")\n}\n\nprint("\\n🚀 Happy Coding!")',
+  kotlin: '// Welcome to Coding House Playground!\n\nfun main() {\n    println("Hello from Coding House! 🏠")\n    \n    val languages = listOf("Kotlin", "Java", "Swift", "Dart")\n    \n    languages.forEachIndexed { index, lang ->\n        println("${index + 1}. $lang")\n    }\n    \n    println("\\n🚀 Happy Coding!")\n}',
+  dart: '// Welcome to Coding House Playground!\n\nvoid main() {\n  print("Hello from Coding House! 🏠\\n");\n  \n  var languages = ["Dart", "Flutter", "Python", "Go"];\n  \n  for (var i = 0; i < languages.length; i++) {\n    print("${i + 1}. ${languages[i]}");\n  }\n  \n  print("\\n🚀 Happy Coding!");\n}',
+  r: '# Welcome to Coding House Playground!\n\ncat("Hello from Coding House! 🏠\\n\\n")\n\nnumbers <- 1:10\nsquares <- numbers^2\n\ndf <- data.frame(Number = numbers, Square = squares)\nprint(df)\n\ncat("\\n🚀 Happy Coding!\\n")',
+  matlab: '% Welcome to Coding House Playground!\n% (Runs as Octave)\n\ndisp("Hello from Coding House!")\n\nx = 0:0.1:2*pi;\ny = sin(x);\n\ndisp("Sin values at key points:")\nfor i = [0, pi/2, pi, 3*pi/2, 2*pi]\n  fprintf("sin(%.2f) = %.4f\\n", i, sin(i))\nend\n\ndisp("Happy Coding!")'
+};
+
+// Initialize Monaco
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }});
+
+require(['vs/editor/editor.main'], function () {
+  var lang = document.getElementById('lang-select').value;
+  editor = monaco.editor.create(document.getElementById('editor-container'), {
+    value: TEMPLATES[lang] || TEMPLATES.python,
+    language: LANG_MAP[lang].monaco,
+    theme: 'vs-dark',
+    fontSize: 14.5,
+    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+    minimap: { enabled: false },
+    padding: { top: 16, bottom: 16 },
+    scrollBeyondLastLine: false,
+    automaticLayout: true,
+    tabSize: 2,
+    wordWrap: 'on',
+    lineNumbers: 'on',
+    roundedSelection: true,
+    cursorBlinking: 'smooth',
+    cursorSmoothCaretAnimation: 'on',
+    smoothScrolling: true,
+    renderLineHighlight: 'all',
+    bracketPairColorization: { enabled: true }
+  });
+
+  // Ctrl+Enter to run
+  editor.addAction({
+    id: 'run-code',
+    label: 'Run Code',
+    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+    run: function () { runCode(); }
+  });
+});
+
+// Language change
+document.getElementById('lang-select').addEventListener('change', function () {
+  var lang = this.value;
+  var info = LANG_MAP[lang];
+  if (editor) {
+    editor.setValue(TEMPLATES[lang] || '// Start coding here...');
+    monaco.editor.setModelLanguage(editor.getModel(), info.monaco);
+  }
+  clearOutput();
+  document.getElementById('status').textContent = info.monaco + ' · Ready';
+});
+
+// Theme change
+document.getElementById('theme-select').addEventListener('change', function () {
+  if (editor) monaco.editor.setTheme(this.value);
+});
+
+// Piston API for code execution
+var PISTON_URL = 'https://emkc.org/api/v2/piston/execute';
+var PISTON_LANG_MAP = {
+  python: { language: 'python', version: '3.10.0' },
+  javascript: { language: 'javascript', version: '18.15.0' },
+  typescript: { language: 'typescript', version: '5.0.3' },
+  java: { language: 'java', version: '15.0.2' },
+  c: { language: 'c', version: '10.2.0' },
+  cpp: { language: 'c++', version: '10.2.0' },
+  csharp: { language: 'csharp.net', version: '6.12.0' },
+  go: { language: 'go', version: '1.16.2' },
+  rust: { language: 'rust', version: '1.68.2' },
+  php: { language: 'php', version: '8.2.3' },
+  ruby: { language: 'ruby', version: '3.0.1' },
+  swift: { language: 'swift', version: '5.3.3' },
+  kotlin: { language: 'kotlin', version: '1.8.20' },
+  dart: { language: 'dart', version: '2.19.6' },
+  r: { language: 'r', version: '4.1.1' },
+  matlab: { language: 'octave', version: '6.4.0' }
+};
+
+function runCode() {
+  if (!editor) return;
+  var code = editor.getValue();
+  var lang = document.getElementById('lang-select').value;
+  var pistonLang = PISTON_LANG_MAP[lang];
+  var btn = document.getElementById('run-btn');
+  var output = document.getElementById('output');
+  var status = document.getElementById('status');
+
+  btn.innerHTML = '⏳ <span class="label">Running...</span>';
+  btn.classList.add('running');
+  status.textContent = 'Executing...';
+  output.innerHTML = '<span class="out-info">⏳ Running your ' + lang + ' code...</span>\n';
+
+  fetch(PISTON_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      language: pistonLang.language,
+      version: pistonLang.version,
+      files: [{ name: 'main.' + (LANG_MAP[lang].ext), content: code }]
+    })
+  })
+  .then(function (res) { return res.json(); })
+  .then(function (data) {
+    btn.innerHTML = '▶ <span class="label">Run Code</span>';
+    btn.classList.remove('running');
+
+    if (data.run) {
+      var stdout = data.run.stdout || '';
+      var stderr = data.run.stderr || '';
+      var exitCode = data.run.code;
+
+      output.innerHTML = '';
+      if (stdout) output.innerHTML += '<span class="out-success">' + escapeHtml(stdout) + '</span>';
+      if (stderr) output.innerHTML += '<span class="out-error">' + escapeHtml(stderr) + '</span>';
+      if (!stdout && !stderr) output.innerHTML = '<span class="out-info">Program finished with no output.</span>';
+
+      status.textContent = exitCode === 0 ? '✓ Success · ' + lang : '✗ Exit code: ' + exitCode;
+    } else if (data.message) {
+      output.innerHTML = '<span class="out-error">Error: ' + escapeHtml(data.message) + '</span>';
+      status.textContent = '✗ Error';
+    }
+  })
+  .catch(function (err) {
+    btn.innerHTML = '▶ <span class="label">Run Code</span>';
+    btn.classList.remove('running');
+    output.innerHTML = '<span class="out-error">⚠ Network error. Please check your connection and try again.\n\n' + escapeHtml(err.message) + '</span>';
+    status.textContent = '✗ Network Error';
+  });
+}
+
+function resetCode() {
+  var lang = document.getElementById('lang-select').value;
+  if (editor) editor.setValue(TEMPLATES[lang] || '// Start coding here...');
+  clearOutput();
+}
+
+function clearOutput() {
+  var output = document.getElementById('output');
+  output.innerHTML = '<div class="output-placeholder"><span class="big-icon">🚀</span><p>Click <strong>▶ Run Code</strong> to see output here</p><p style="margin-top:8px;font-size:12px;color:var(--text-mute)">Press Ctrl+Enter to run quickly</p></div>';
+  document.getElementById('status').textContent = 'Ready';
+}
+
+function copyCode() {
+  if (!editor) return;
+  navigator.clipboard.writeText(editor.getValue()).then(function () {
+    showToast('📋 Code copied to clipboard!');
+  });
+}
+
+function shareCode() {
+  if (!editor) return;
+  var lang = document.getElementById('lang-select').value;
+  var code = btoa(unescape(encodeURIComponent(editor.getValue())));
+  var url = window.location.origin + window.location.pathname + '?lang=' + lang + '&code=' + code;
+  navigator.clipboard.writeText(url).then(function () {
+    showToast('🔗 Share link copied to clipboard!');
+  });
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('share-toast');
+  toast.textContent = msg;
+  toast.classList.add('visible');
+  setTimeout(function () { toast.classList.remove('visible'); }, 2500);
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+// Load shared code from URL
+window.addEventListener('load', function () {
+  var params = new URLSearchParams(window.location.search);
+  var lang = params.get('lang');
+  var code = params.get('code');
+  if (lang && LANG_MAP[lang]) {
+    document.getElementById('lang-select').value = lang;
+    document.getElementById('lang-select').dispatchEvent(new Event('change'));
+  }
+  if (code && editor) {
+    try {
+      var decoded = decodeURIComponent(escape(atob(code)));
+      editor.setValue(decoded);
+    } catch (e) { /* ignore */ }
+  }
+});
+</script>
+</body>
+</html>

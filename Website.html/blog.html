@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Coding House</title>
+<meta name="description" content="Programming tutorials, career advice, and tech articles from Coding House. Learn best practices, interview tips, and more.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.blog-featured {
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(34,211,238,0.05));
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 48px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.blog-featured:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(124,58,237,0.15); }
+.bf-image {
+  background: linear-gradient(135deg, #1a1040, #0c1a3a);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  position: relative;
+  overflow: hidden;
+}
+.bf-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(99,102,241,0.15), transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+.bf-content { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+.bf-tag {
+  display: inline-flex;
+  padding: 5px 14px;
+  background: rgba(124,58,237,0.15);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+  width: fit-content;
+}
+.bf-content h2 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+.bf-content p { color: var(--text-soft); font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+.bf-meta { display: flex; gap: 16px; font-size: 13px; color: var(--text-mute); }
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+.blog-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+}
+.blog-card:hover { border-color: var(--primary); transform: translateY(-8px); box-shadow: 0 16px 40px rgba(124,58,237,0.15); }
+.bc-thumb {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  position: relative;
+}
+.bc-body { padding: 24px; }
+.bc-tag {
+  display: inline-flex;
+  padding: 3px 10px;
+  background: rgba(124,58,237,0.12);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.bc-body h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.bc-body p { color: var(--text-soft); font-size: 13.5px; line-height: 1.6; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.bc-footer { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mute); }
+
+/* ── Article View ── */
+.article-modal { display:none; position:fixed; inset:0; z-index:9999; background:var(--bg); overflow-y:auto; }
+.article-modal.open { display:block; animation:fadeIn .3s ease; }
+.article-wrap { max-width:780px; margin:0 auto; padding:40px 24px 80px; }
+.article-back {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 16px; background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; color:var(--text-mute); font-size:13px; font-weight:600;
+  cursor:pointer; transition:all .2s; margin-bottom:32px;
+}
+.article-back:hover { border-color:var(--primary); color:var(--text); }
+.article-wrap h1 { font-family:'Space Grotesk',sans-serif; font-size:36px; font-weight:700; margin-bottom:16px; line-height:1.2; }
+.article-wrap .article-meta { display:flex; gap:16px; font-size:14px; color:var(--text-mute); margin-bottom:32px; }
+.article-body { font-size:16px; line-height:1.8; color:var(--text-soft); }
+.article-body h2 { font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; color:var(--text); margin:32px 0 16px; }
+.article-body p { margin-bottom:16px; }
+.article-body code {
+  background:rgba(124,58,237,0.1); padding:2px 8px; border-radius:4px;
+  font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--primary);
+}
+.article-body pre {
+  background:#0a0e1a; border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px; padding:20px; margin:16px 0; overflow-x:auto;
+  font-family:'JetBrains Mono',monospace; font-size:13.5px; line-height:1.7; color:var(--text-soft);
+}
+.article-body ul { padding-left:24px; margin-bottom:16px; }
+.article-body li { margin-bottom:8px; }
+.article-body blockquote {
+  border-left:3px solid var(--primary); padding:16px 20px; margin:16px 0;
+  background:rgba(124,58,237,0.06); border-radius:0 8px 8px 0;
+  font-style:italic; color:var(--text-soft);
+}
+
+@media (max-width:768px) {
+  .blog-featured { grid-template-columns:1fr; }
+  .bf-image { min-height:200px; }
+  .blog-grid { grid-template-columns:1fr; }
+  .article-wrap h1 { font-size:28px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#languages">Languages</a></li>
+      <li><a href="playground.html">Playground</a></li>
+      <li><a href="cheatsheets.html">Cheatsheets</a></li>
+      <li><a href="roadmap.html">Roadmaps</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="theme-toggle-btn">☀️</button>
+      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
+      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">tech articles</div>
+    <h1>Blog ✍️</h1>
+    <p class="sub">Tutorials, career advice, and insights to help you grow as a developer.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="filter-tabs" id="blog-filters">
+      <button class="filter-tab active" data-cat="all" onclick="filterBlog('all',this)">All</button>
+      <button class="filter-tab" data-cat="tutorial" onclick="filterBlog('tutorial',this)">Tutorials</button>
+      <button class="filter-tab" data-cat="career" onclick="filterBlog('career',this)">Career</button>
+      <button class="filter-tab" data-cat="tips" onclick="filterBlog('tips',this)">Tips & Tricks</button>
+      <button class="filter-tab" data-cat="news" onclick="filterBlog('news',this)">News</button>
+      <button class="filter-tab" data-cat="comparison" onclick="filterBlog('comparison',this)">Comparisons</button>
+    </div>
+
+    <div class="blog-featured" id="featured-post" onclick="openArticle(0)"></div>
+    <div class="blog-grid" id="blog-grid"></div>
+  </div>
+</section>
+
+<div class="article-modal" id="article-modal">
+  <div class="article-wrap">
+    <button class="article-back" onclick="closeArticle()">← Back to Blog</button>
+    <div id="article-content"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2026 Coding House. All rights reserved.</span>
+      <div class="foot-social"><a href="index.html">Home</a><a href="playground.html">Playground</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var POSTS = [
+  {
+    title: "10 Python Projects Every Beginner Should Build in 2026",
+    category: "tutorial", icon: "🐍", date: "Jul 5, 2026", readTime: "8 min",
+    bg: "linear-gradient(135deg, #1a1040, #0c2a3a)",
+    excerpt: "From a todo app to a full AI chatbot — these 10 projects will take you from hello world to portfolio-ready.",
+    content: '<h2>Why Projects Matter More Than Tutorials</h2><p>The biggest mistake beginner programmers make is watching tutorials without building anything. You can watch 100 hours of Python content and still not be able to write a program from scratch. Projects force you to think, debug, and problem-solve — the actual skills employers care about.</p><blockquote>The only way to learn programming is to program. — Dennis Ritchie</blockquote><h2>The 10 Projects</h2><h2>1. Personal Budget Tracker</h2><p>Build a CLI app that tracks income and expenses, stores data in JSON files, and generates monthly summaries. You\'ll learn <code>file I/O</code>, <code>dictionaries</code>, and <code>datetime</code> handling.</p><pre>import json\nfrom datetime import datetime\n\ndef add_expense(data, amount, category):\n    data["expenses"].append({\n        "amount": amount,\n        "category": category,\n        "date": datetime.now().isoformat()\n    })\n    return data</pre><h2>2. Web Scraper</h2><p>Use <code>BeautifulSoup</code> and <code>requests</code> to scrape product prices from an e-commerce site. Learn about HTTP requests, HTML parsing, and data extraction.</p><h2>3. Weather App with API</h2><p>Build an app that fetches real-time weather data from OpenWeatherMap API. Learn about REST APIs, JSON parsing, and error handling.</p><h2>4. Quiz Game</h2><p>Create an interactive quiz with scoring, timers, and categories. Store questions in a JSON file and build a simple UI with <code>tkinter</code>.</p><h2>5. Password Generator & Manager</h2><p>Generate secure passwords and store them encrypted. Learn about <code>cryptography</code>, <code>hashlib</code>, and security best practices.</p><h2>6. Markdown to HTML Converter</h2><p>Parse markdown syntax and convert it to HTML. Great for understanding string parsing and regular expressions.</p><h2>7. File Organizer</h2><p>Automatically sort files in a directory by extension. Learn about <code>os</code>, <code>shutil</code>, and file system operations.</p><h2>8. Chat Application</h2><p>Build a simple chat app using <code>socket</code> programming. Understand networking, client-server architecture, and threading.</p><h2>9. REST API with Flask</h2><p>Create a RESTful API with CRUD operations, authentication, and database integration using Flask and SQLite.</p><h2>10. AI Chatbot</h2><p>Build a chatbot using the OpenAI API. Learn about prompt engineering, conversation memory, and API integration.</p><h2>What\'s Next?</h2><p>Each of these projects can be found in our <a href="index.html#projects">Projects section</a> with step-by-step guidance, starter code, and solution walkthroughs. Start with #1 and work your way up!</p>'
+  },
+  {
+    title: "How to Prepare for Technical Interviews in 2026",
+    category: "career", icon: "💼", date: "Jul 3, 2026", readTime: "12 min",
+    bg: "linear-gradient(135deg, #0c1a3a, #1a0c3a)",
+    excerpt: "A complete roadmap covering DSA, system design, behavioral rounds, and the tools that actually help.",
+    content: '<h2>The Interview Landscape in 2026</h2><p>Technical interviews have evolved. While LeetCode-style problems are still common, companies now place more emphasis on system design, practical coding, and communication skills.</p><h2>Phase 1: Data Structures & Algorithms (Weeks 1-4)</h2><p>Focus on these core topics in order:</p><ul><li><strong>Arrays & Strings</strong> — Two pointers, sliding window, prefix sums</li><li><strong>Hash Maps</strong> — Frequency counting, grouping, caching</li><li><strong>Linked Lists</strong> — Reversal, cycle detection, merge</li><li><strong>Trees & Graphs</strong> — BFS, DFS, shortest path</li><li><strong>Dynamic Programming</strong> — Memoization, tabulation, common patterns</li></ul><h2>Phase 2: System Design (Weeks 5-6)</h2><p>Practice designing real systems:</p><ul><li>URL shortener (like bit.ly)</li><li>Chat application (like WhatsApp)</li><li>Social media feed (like Twitter)</li><li>File storage system (like Dropbox)</li></ul><h2>Phase 3: Mock Interviews (Weeks 7-8)</h2><p>Practice with real people or AI tools. Focus on thinking out loud and explaining your approach before coding.</p><blockquote>It\'s not about getting the perfect solution. It\'s about showing how you think.</blockquote>'
+  },
+  {
+    title: "Rust vs Go: Which Should You Learn in 2026?",
+    category: "comparison", icon: "⚔️", date: "Jul 1, 2026", readTime: "10 min",
+    bg: "linear-gradient(135deg, #2a1a0a, #0a1a2a)",
+    excerpt: "Both are modern systems languages, but they solve different problems. Here's how to choose.",
+    content: '<h2>The Short Answer</h2><p><strong>Choose Go</strong> if you want to build web services, APIs, and cloud infrastructure quickly. <strong>Choose Rust</strong> if you need maximum performance, memory safety, or are building systems-level software.</p><h2>Performance</h2><p>Rust wins on raw performance — it has no garbage collector and provides zero-cost abstractions. Go is fast enough for 95% of applications and compiles much faster.</p><pre>// Go: Simple HTTP server\nhttp.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, "Hello, World!")\n})\nhttp.ListenAndServe(":8080", nil)</pre><pre>// Rust: Same with Actix\n#[get("/")]\nasync fn hello() -> impl Responder {\n    "Hello, World!"\n}\nHttpServer::new(|| App::new().service(hello))\n    .bind("0.0.0.0:8080")?.run().await</pre><h2>Learning Curve</h2><p>Go can be productive in days. Rust\'s ownership system takes weeks to internalize but pays dividends in safety.</p><h2>Job Market</h2><p>Both are growing rapidly, but Go has more job listings today (3x more on LinkedIn). Rust jobs tend to pay higher on average.</p>'
+  },
+  {
+    title: "5 VS Code Extensions Every Developer Needs",
+    category: "tips", icon: "🔧", date: "Jun 28, 2026", readTime: "5 min",
+    bg: "linear-gradient(135deg, #0a2a1a, #1a0a2a)",
+    excerpt: "Stop coding without these. They'll save you hours every week.",
+    content: '<h2>1. GitHub Copilot</h2><p>AI pair programming that suggests entire functions. Essential for boilerplate code and learning new APIs.</p><h2>2. Error Lens</h2><p>Shows errors and warnings inline — no more squinting at the problems panel. Makes debugging 10x faster.</p><h2>3. Thunder Client</h2><p>REST API client built into VS Code. Test your APIs without leaving the editor. Goodbye, Postman.</p><h2>4. GitLens</h2><p>See who changed what and when, directly in your code. Blame annotations, file history, and commit search.</p><h2>5. Prettier</h2><p>Auto-format your code on save. Never argue about code style again. Works with JS, TS, HTML, CSS, JSON, and more.</p>'
+  },
+  {
+    title: "Understanding Async/Await in JavaScript",
+    category: "tutorial", icon: "⚡", date: "Jun 25, 2026", readTime: "7 min",
+    bg: "linear-gradient(135deg, #2a2a0a, #0a0a2a)",
+    excerpt: "Promises, callbacks, async/await — finally explained in a way that makes sense.",
+    content: '<h2>The Problem: Callback Hell</h2><p>Before Promises, JavaScript used callbacks for async operations. This led to deeply nested code that was hard to read and maintain.</p><pre>getUser(userId, function(user) {\n  getOrders(user.id, function(orders) {\n    getProducts(orders[0].id, function(products) {\n      // 3 levels deep already...\n    });\n  });\n});</pre><h2>The Solution: async/await</h2><pre>async function getOrderDetails(userId) {\n  const user = await getUser(userId);\n  const orders = await getOrders(user.id);\n  const products = await getProducts(orders[0].id);\n  return products;\n}</pre><p>Much cleaner! <code>async/await</code> is syntactic sugar over Promises. The <code>await</code> keyword pauses execution until the Promise resolves.</p><h2>Error Handling</h2><pre>async function fetchData() {\n  try {\n    const res = await fetch("/api/data");\n    if (!res.ok) throw new Error("HTTP " + res.status);\n    return await res.json();\n  } catch (err) {\n    console.error("Failed:", err.message);\n  }\n}</pre>'
+  },
+  {
+    title: "The Complete Git Cheatsheet for Beginners",
+    category: "tips", icon: "📝", date: "Jun 22, 2026", readTime: "6 min",
+    bg: "linear-gradient(135deg, #1a0a0a, #0a1a0a)",
+    excerpt: "Every git command you'll actually use, explained with real examples.",
+    content: '<h2>Setup</h2><pre>git config --global user.name "Your Name"\ngit config --global user.email "your@email.com"\ngit init\ngit clone https://github.com/user/repo.git</pre><h2>Daily Workflow</h2><pre>git status\ngit add .\ngit commit -m "feat: add login page"\ngit push origin main</pre><h2>Branching</h2><pre>git branch feature-login\ngit checkout feature-login\n# or: git checkout -b feature-login\ngit merge feature-login\ngit branch -d feature-login</pre><h2>Undo Mistakes</h2><pre>git reset --soft HEAD~1    # undo last commit, keep changes\ngit reset --hard HEAD~1    # undo last commit, discard changes\ngit stash                  # temporarily save changes\ngit stash pop              # restore stashed changes</pre>'
+  },
+  {
+    title: "Why Every Developer Should Learn SQL",
+    category: "career", icon: "🗃️", date: "Jun 20, 2026", readTime: "6 min",
+    bg: "linear-gradient(135deg, #0a0a2a, #2a0a1a)",
+    excerpt: "It's 2026 and SQL is still the #1 most requested technical skill on job postings.",
+    content: '<h2>SQL Is Everywhere</h2><p>Every app has data. Every data store speaks SQL (or something like it). From PostgreSQL to BigQuery to SQLite on your phone — SQL is universal.</p><h2>Essential Queries</h2><pre>-- Find top customers\nSELECT name, SUM(amount) as total\nFROM orders\nJOIN customers ON orders.customer_id = customers.id\nGROUP BY name\nORDER BY total DESC\nLIMIT 10;</pre>'
+  },
+  {
+    title: "Web Development in 2026: What's Changed",
+    category: "news", icon: "🌐", date: "Jun 18, 2026", readTime: "8 min",
+    bg: "linear-gradient(135deg, #0a2a0a, #0a0a3a)",
+    excerpt: "React Server Components, Bun, HTMX — the web development landscape has shifted dramatically.",
+    content: '<h2>The Big Shifts</h2><ul><li><strong>Server Components</strong> are now the default in React/Next.js</li><li><strong>Bun</strong> is replacing Node.js for many teams</li><li><strong>HTMX</strong> is making server-rendered HTML cool again</li><li><strong>AI-first development</strong> with Copilot and Cursor</li></ul><h2>What Should You Learn?</h2><p>Focus on fundamentals that don\'t change: HTML, CSS, JavaScript, HTTP, SQL. Then pick ONE framework and go deep.</p>'
+  }
+];
+
+var currentFilter = 'all';
+
+function renderBlog() {
+  var filtered = currentFilter === 'all' ? POSTS : POSTS.filter(function(p) { return p.category === currentFilter; });
+  if (filtered.length === 0) {
+    document.getElementById('featured-post').style.display = 'none';
+    document.getElementById('blog-grid').innerHTML = '<p style="text-align:center;color:var(--text-mute);grid-column:1/-1;padding:40px;">No articles in this category yet.</p>';
+    return;
+  }
+
+  var feat = filtered[0];
+  document.getElementById('featured-post').style.display = '';
+  document.getElementById('featured-post').setAttribute('onclick', 'openArticle(' + POSTS.indexOf(feat) + ')');
+  document.getElementById('featured-post').innerHTML =
+    '<div class="bf-image" style="background:' + feat.bg + '">' + feat.icon + '</div>' +
+    '<div class="bf-content">' +
+    '<span class="bf-tag">' + feat.category.toUpperCase() + '</span>' +
+    '<h2>' + feat.title + '</h2>' +
+    '<p>' + feat.excerpt + '</p>' +
+    '<div class="bf-meta"><span>📅 ' + feat.date + '</span><span>⏱️ ' + feat.readTime + ' read</span></div>' +
+    '</div>';
+
+  var rest = filtered.slice(1);
+  document.getElementById('blog-grid').innerHTML = rest.map(function(post) {
+    var idx = POSTS.indexOf(post);
+    return '<div class="blog-card" onclick="openArticle(' + idx + ')">' +
+      '<div class="bc-thumb" style="background:' + post.bg + '">' + post.icon + '</div>' +
+      '<div class="bc-body">' +
+      '<span class="bc-tag">' + post.category.toUpperCase() + '</span>' +
+      '<h3>' + post.title + '</h3>' +
+      '<p>' + post.excerpt + '</p>' +
+      '<div class="bc-footer"><span>📅 ' + post.date + '</span><span>⏱️ ' + post.readTime + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function filterBlog(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  renderBlog();
+}
+
+function openArticle(idx) {
+  var post = POSTS[idx];
+  document.getElementById('article-content').innerHTML =
+    '<h1>' + post.title + '</h1>' +
+    '<div class="article-meta"><span>📅 ' + post.date + '</span><span>⏱️ ' + post.readTime + ' read</span><span>' + post.category.toUpperCase() + '</span></div>' +
+    '<div class="article-body">' + post.content + '</div>';
+  document.getElementById('article-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+
+function closeArticle() {
+  document.getElementById('article-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeArticle(); });
+renderBlog();
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>

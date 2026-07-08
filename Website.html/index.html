@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coding House — Learn Programming From Beginner to Professional</title>
+<meta name="description" content="Learn 16 programming languages from beginner to professional level. Interactive code playground, real-world projects, coding challenges, and career roadmaps.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
@@ -187,14 +189,36 @@
           <a href="#challenges">Coding Challenges</a>
         </div>
       </li>
-      <li><a href="#languages">Languages</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#tracks">Roadmaps</a></li>
-      <li><a href="#features">Interview Prep</a></li>
-      <li><a href="#stories">Community</a></li>
+      <li class="has-drop">
+        <a href="#">Tools</a>
+        <div class="dropdown">
+          <a href="playground.html">⚡ Code Playground</a>
+          <a href="compare.html">🔀 Compare Languages</a>
+          <a href="cheatsheets.html">📋 Cheatsheets</a>
+        </div>
+      </li>
+      <li><a href="roadmap.html">Roadmaps</a></li>
+      <li class="has-drop">
+        <a href="#">Community</a>
+        <div class="dropdown">
+          <a href="forum.html">💬 Discussion Forum</a>
+          <a href="blog.html">✍️ Blog</a>
+          <a href="verify.html">🎓 Verify Certificate</a>
+        </div>
+      </li>
       <li><a href="#pricing">Pricing</a></li>
     </ul>
     <div class="nav-cta">
+  <button class="theme-toggle" id="theme-toggle-btn">☀️</button>
+  <div class="notif-bell" onclick="this.querySelector('.notif-dropdown').classList.toggle('open')">
+    🔔<span class="badge">3</span>
+    <div class="notif-dropdown">
+      <div class="notif-header">Notifications</div>
+      <div class="notif-item"><span class="ni-icon">🔥</span><div class="ni-text"><strong>Your streak is 7 days!</strong>Keep going to earn the weekly badge.<div class="ni-time">2 hours ago</div></div></div>
+      <div class="notif-item"><span class="ni-icon">🎯</span><div class="ni-text"><strong>New challenge available</strong>Weekly coding contest starts tomorrow.<div class="ni-time">5 hours ago</div></div></div>
+      <div class="notif-item"><span class="ni-icon">📚</span><div class="ni-text"><strong>Rust track updated</strong>5 new topics added to the Advanced tier.<div class="ni-time">1 day ago</div></div></div>
+    </div>
+  </div>
   <a href="login.html" class="btn btn-ghost btn-sm">Log In</a>
   <a href="#languages" class="btn btn-primary btn-sm">Start Learning</a>
   <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -212,7 +236,13 @@
       <p class="desc">16 languages · 5 development tracks · 100+ guided projects</p>
       <div class="hero-cta">
         <a href="#languages" class="btn btn-primary">Start Learning Free</a>
-        <a href="#languages" class="btn btn-ghost">Browse Languages</a>
+        <a href="playground.html" class="btn btn-ghost">⚡ Open Playground</a>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-num" data-target="16">0</div><div class="stat-label">Languages</div></div>
+        <div class="stat-item"><div class="stat-num" data-target="1085">0</div><div class="stat-label">Challenges</div></div>
+        <div class="stat-item"><div class="stat-num" data-target="100">0</div><div class="stat-label">Projects</div></div>
+        <div class="stat-item"><div class="stat-num" data-target="12500">0</div><div class="stat-label">Students</div></div>
       </div>
     </div>
 
@@ -525,7 +555,7 @@
       </div>
       <div class="proj-card" style="border-style:dashed; justify-content:center; align-items:center; text-align:center;">
         <p style="color:var(--text-mute);">+ 95 more projects across every track</p>
-        <a href="#" class="track-link">See all projects →</a>
+        <a href="projects-showcase.html" class="track-link">See all projects →</a>
       </div>
     </div>
   </div>
@@ -650,7 +680,7 @@
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="#" class="logo">
+        <a href="index.html" class="logo">
           <svg class="codinghouse-logo" viewBox="0 0 100 100" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -673,21 +703,21 @@
       <div class="foot-col">
         <h5>Learn</h5>
         <a href="#languages">Languages</a>
-        <a href="#tracks">Roadmaps</a>
-        <a href="#projects">Projects</a>
-        <a href="#challenges">Challenges</a>
+        <a href="roadmap.html">Roadmaps</a>
+        <a href="projects-showcase.html">Projects</a>
+        <a href="cheatsheets.html">Cheatsheets</a>
       </div>
       <div class="foot-col">
-        <h5>Company</h5>
-        <a href="#">About</a>
-        <a href="#">Blog</a>
-        <a href="#">Careers</a>
-        <a href="#">Contact</a>
+        <h5>Tools</h5>
+        <a href="playground.html">Code Playground</a>
+        <a href="compare.html">Compare Languages</a>
+        <a href="blog.html">Blog</a>
+        <a href="verify.html">Verify Certificate</a>
       </div>
       <div class="foot-col">
         <h5>Community</h5>
+        <a href="forum.html">Discussion Forum</a>
         <a href="https://discord.gg/knbWG8KjT">Discord</a>
-        <a href="#">Forum</a>
         <a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a>
       </div>
       <div class="foot-col">
@@ -702,7 +732,7 @@
     <div class="foot-bottom">
       <span>© 2026 Coding House. All rights reserved.</span>
       <div class="foot-social">
-        <a href="#">Twitter</a><a href="#">GitHub</a><a href="https://www.youtube.com/@Krylvex">YouTube</a><a href="#">Discord</a>
+        <a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a><a href="https://www.youtube.com/@Krylvex">YouTube</a><a href="https://discord.gg/knbWG8KjT">Discord</a>
       </div>
     </div>
   </div>
@@ -811,6 +841,46 @@ burger.addEventListener("click", () => {
   navLinks.style.borderBottom = "1px solid var(--border)";
   navLinks.style.gap = "18px";
 });
+
+// ── Animated Stats Counter ──
+function animateCounters() {
+  var counters = document.querySelectorAll('.stat-num[data-target]');
+  counters.forEach(function(el) {
+    var target = parseInt(el.dataset.target);
+    var duration = 2000;
+    var start = 0;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString() + (target >= 100 ? '+' : '');
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// Trigger counter animation when hero is in view
+var statsObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      animateCounters();
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+var statsRow = document.querySelector('.stats-row');
+if (statsRow) statsObserver.observe(statsRow);
+
+// Close notification dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.notif-bell')) {
+    document.querySelectorAll('.notif-dropdown').forEach(function(d) { d.classList.remove('open'); });
+  }
+});
 </script>
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
 </body>
 </html>

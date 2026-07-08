@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Builder — Coding House</title>
+<meta name="description" content="Build real-world projects step-by-step. Guided walkthroughs with starter code, expected outputs, and deployable results.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.pj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:28px;margin-bottom:48px}
+.pj-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .4s cubic-bezier(0.34,1.56,0.64,1);cursor:pointer}
+.pj-card:hover{border-color:var(--primary);transform:translateY(-10px);box-shadow:0 24px 60px rgba(124,58,237,0.2)}
+.pj-thumb{height:200px;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative;overflow:hidden}
+.pj-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,var(--surface));pointer-events:none}
+.pj-body{padding:24px 28px}
+.pj-diff{display:inline-flex;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;margin-bottom:10px}
+.pj-diff.starter{background:rgba(16,185,129,0.12);color:#10b981}
+.pj-diff.intermediate{background:rgba(245,185,66,0.12);color:#f5b942}
+.pj-diff.capstone{background:rgba(239,68,68,0.12);color:#ef4444}
+.pj-body h3{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px}
+.pj-body>p{color:var(--text-soft);font-size:14px;line-height:1.6;margin-bottom:16px}
+.pj-tech{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.pj-tech span{padding:4px 10px;background:rgba(99,102,241,0.1);border-radius:6px;font-size:11px;font-weight:600;color:var(--text-mute)}
+.pj-meta{display:flex;gap:16px;font-size:12px;color:var(--text-mute);padding-top:16px;border-top:1px solid var(--border)}
+
+/* ── Project Detail Modal ── */
+.pj-modal{display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto}
+.pj-modal.open{display:block;animation:fadeIn .3s ease}
+.pj-detail{max-width:900px;margin:0 auto;padding:32px 24px 80px}
+.pj-back{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-mute);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:28px;font-family:'Inter',sans-serif}
+.pj-back:hover{border-color:var(--primary);color:var(--text)}
+.pj-detail-header{margin-bottom:32px}
+.pj-detail-header h1{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;margin-bottom:12px;line-height:1.2}
+.pj-detail-header>p{color:var(--text-soft);font-size:16px;line-height:1.7;margin-bottom:16px}
+.pj-detail-meta{display:flex;gap:16px;font-size:13px;color:var(--text-mute);flex-wrap:wrap}
+.pj-detail-meta span{display:flex;align-items:center;gap:4px}
+
+/* ── Steps ── */
+.pj-steps{counter-reset:step}
+.pj-step{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:20px;overflow:hidden;transition:border-color .3s}
+.pj-step:hover{border-color:rgba(124,58,237,0.3)}
+.pj-step-header{padding:20px 24px;display:flex;align-items:center;gap:16px;cursor:pointer;user-select:none}
+.pj-step-num{counter-increment:step;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;flex-shrink:0;transition:all .3s}
+.pj-step-num.todo{background:var(--bg);border:2px solid var(--border);color:var(--text-mute)}
+.pj-step-num.done{background:linear-gradient(135deg,#10b981,#059669);border:none;color:#fff}
+.pj-step-num.active{background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;animation:pulse-glow 2s ease-in-out infinite}
+.pj-step-info{flex:1}
+.pj-step-info h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:2px}
+.pj-step-info span{font-size:12px;color:var(--text-mute)}
+.pj-step-toggle{font-size:18px;color:var(--text-mute);transition:transform .3s}
+.pj-step.expanded .pj-step-toggle{transform:rotate(180deg)}
+.pj-step-body{display:none;padding:0 24px 24px;border-top:1px solid var(--border)}
+.pj-step.expanded .pj-step-body{display:block;animation:slideDown .3s ease}
+.pj-step-body p{font-size:14px;color:var(--text-soft);line-height:1.7;margin:16px 0}
+.pj-step-body h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin:20px 0 8px;color:var(--text)}
+.pj-code{background:#06080f;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;overflow-x:auto;color:var(--text-soft);margin:12px 0;position:relative;white-space:pre}
+.pj-code .copy-btn{position:absolute;top:8px;right:8px;padding:4px 10px;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:6px;color:var(--primary);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.pj-code .copy-btn:hover{background:rgba(124,58,237,0.3)}
+.pj-step-check{display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;cursor:pointer;transition:all .2s}
+.pj-step-check:hover{background:rgba(16,185,129,0.1)}
+.pj-step-check input{width:18px;height:18px;accent-color:#10b981}
+.pj-step-check label{font-size:13px;font-weight:600;color:var(--success);cursor:pointer}
+
+.pj-nav{display:flex;justify-content:space-between;margin-top:32px;gap:12px}
+.pj-nav button{padding:12px 28px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+.pj-nav .prev-btn{background:var(--surface);border:1px solid var(--border);color:var(--text-mute)}
+.pj-nav .prev-btn:hover{border-color:var(--primary);color:var(--text)}
+.pj-nav .next-btn{background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;box-shadow:0 4px 16px rgba(124,58,237,0.3)}
+.pj-nav .next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.4)}
+
+@media(max-width:768px){.pj-grid{grid-template-columns:1fr}.pj-detail-header h1{font-size:28px}.pj-step-header{gap:12px}}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+<ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="playground.html">Playground</a></li><li><a href="cheatsheets.html">Cheatsheets</a></li><li><a href="blog.html">Blog</a></li></ul>
+<div class="nav-cta"><button class="theme-toggle" id="theme-toggle-btn">☀️</button><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</nav></header>
+
+<section class="page-hero">
+<div class="wrap">
+<div class="eyebrow">build real things</div>
+<h1>Project Builder 🏗️</h1>
+<p class="sub">Step-by-step guided projects that actually belong in your portfolio. Not a to-do app.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="filter-tabs" id="pj-filters">
+<button class="filter-tab active" onclick="filterProjects('all',this)">All Projects</button>
+<button class="filter-tab" onclick="filterProjects('starter',this)">🟢 Starter</button>
+<button class="filter-tab" onclick="filterProjects('intermediate',this)">🟡 Intermediate</button>
+<button class="filter-tab" onclick="filterProjects('capstone',this)">🔴 Capstone</button>
+</div>
+<div class="pj-grid" id="pj-grid"></div>
+</div>
+</section>
+
+<div class="pj-modal" id="pj-modal">
+<div class="pj-detail" id="pj-detail"></div>
+</div>
+
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House. All rights reserved.</span><div class="foot-social"><a href="index.html">Home</a><a href="playground.html">Playground</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div></div></div></footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var PROJECTS=[
+{
+  id:'weather-app',title:'Weather Dashboard',difficulty:'starter',icon:'🌤️',
+  bg:'linear-gradient(135deg,#0c2a3a,#1a3a0c)',
+  desc:'Build a beautiful weather app that fetches real-time data from an API and displays forecasts with icons and animations.',
+  tech:['HTML','CSS','JavaScript','API'],time:'2-3 hours',steps:6,
+  fullSteps:[
+    {title:'Project Setup',est:'10 min',body:'<p>Create the project folder structure and basic HTML boilerplate.</p><h4>File Structure</h4>',code:'weather-app/\n├── index.html\n├── style.css\n└── app.js',body2:'<p>Create <code>index.html</code> with the basic HTML5 structure, link the CSS and JS files.</p>'},
+    {title:'Build the UI Layout',est:'30 min',body:'<p>Create the search bar, current weather display, and 5-day forecast grid using semantic HTML.</p><h4>HTML Structure</h4>',code:'<div class="weather-app">\n  <div class="search-bar">\n    <input type="text" id="city" placeholder="Enter city name...">\n    <button onclick="getWeather()">Search</button>\n  </div>\n  <div class="current-weather" id="current">\n    <!-- Filled by JS -->\n  </div>\n  <div class="forecast-grid" id="forecast">\n    <!-- 5-day forecast cards -->\n  </div>\n</div>',body2:'<p>Style everything with CSS Grid and Flexbox. Use a dark gradient background and glassmorphism cards.</p>'},
+    {title:'Style with CSS',est:'30 min',body:'<p>Make the app look professional with gradients, glass effects, and responsive design.</p><h4>Key CSS</h4>',code:'.weather-app {\n  max-width: 600px;\n  margin: 40px auto;\n  padding: 32px;\n}\n\n.current-weather {\n  background: rgba(255,255,255,0.1);\n  backdrop-filter: blur(10px);\n  border-radius: 20px;\n  padding: 32px;\n  text-align: center;\n}\n\n.forecast-grid {\n  display: grid;\n  grid-template-columns: repeat(5, 1fr);\n  gap: 12px;\n  margin-top: 24px;\n}',body2:'<p>Add hover effects and smooth transitions to forecast cards.</p>'},
+    {title:'Fetch Weather API',est:'25 min',body:'<p>Connect to OpenWeatherMap API to get real weather data. You\'ll need a free API key.</p><h4>API Call</h4>',code:'const API_KEY = "YOUR_API_KEY"; // Get free at openweathermap.org\n\nasync function getWeather() {\n  const city = document.getElementById("city").value;\n  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;\n  \n  try {\n    const res = await fetch(url);\n    if (!res.ok) throw new Error("City not found");\n    const data = await res.json();\n    displayWeather(data);\n  } catch (err) {\n    alert(err.message);\n  }\n}',body2:'<p>Sign up at <a href="https://openweathermap.org/api" target="_blank" style="color:var(--primary)">openweathermap.org</a> for a free API key (1000 calls/day).</p>'},
+    {title:'Display Weather Data',est:'30 min',body:'<p>Parse the API response and render current conditions + 5-day forecast.</p><h4>Rendering Function</h4>',code:'function displayWeather(data) {\n  const current = data.list[0];\n  document.getElementById("current").innerHTML = `\n    <h2>${data.city.name}</h2>\n    <div class="temp">${Math.round(current.main.temp)}°C</div>\n    <p>${current.weather[0].description}</p>\n    <div class="details">\n      <span>💧 ${current.main.humidity}%</span>\n      <span>💨 ${current.wind.speed} m/s</span>\n    </div>\n  `;\n  \n  // 5-day forecast (every 24h)\n  const daily = data.list.filter((_, i) => i % 8 === 0);\n  document.getElementById("forecast").innerHTML = daily.map(day => `\n    <div class="forecast-card">\n      <div>${new Date(day.dt * 1000).toLocaleDateString("en", {weekday: "short"})}</div>\n      <div>${Math.round(day.main.temp)}°</div>\n    </div>\n  `).join("");\n}',body2:''},
+    {title:'Add Polish & Deploy',est:'20 min',body:'<p>Add loading states, error handling, geolocation support, and deploy to GitHub Pages or Vercel.</p><h4>Geolocation</h4>',code:'// Auto-detect user location on load\nnavigator.geolocation.getCurrentPosition(async (pos) => {\n  const { latitude, longitude } = pos.coords;\n  const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;\n  const res = await fetch(url);\n  const data = await res.json();\n  displayWeather(data);\n});',body2:'<p>Deploy: <code>git init && git add . && git commit -m "weather app" && git push</code></p><p>Enable GitHub Pages in Settings → Pages → Deploy from main branch.</p>'}
+  ]
+},
+{
+  id:'portfolio',title:'Developer Portfolio',difficulty:'starter',icon:'💼',
+  bg:'linear-gradient(135deg,#1a0c3a,#0c1a3a)',
+  desc:'Create a stunning personal portfolio website with smooth animations, project showcase, and contact form.',
+  tech:['HTML','CSS','JavaScript'],time:'3-4 hours',steps:5,
+  fullSteps:[
+    {title:'Plan & Structure',est:'15 min',body:'<p>Outline the sections: Hero, About, Skills, Projects, Contact. Create the HTML structure.</p><h4>Sections</h4>',code:'<section id="hero"><!-- Name, title, CTA --></section>\n<section id="about"><!-- Bio, photo --></section>\n<section id="skills"><!-- Skill bars/cards --></section>\n<section id="projects"><!-- Project grid --></section>\n<section id="contact"><!-- Contact form --></section>',body2:''},
+    {title:'Hero & Navigation',est:'30 min',body:'<p>Build a full-screen hero with animated text, gradient background, and sticky navigation.</p><h4>Hero CSS</h4>',code:'.hero {\n  min-height: 100vh;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background: linear-gradient(135deg, #0a0a2e, #1a0a3a);\n  text-align: center;\n}\n\n.hero h1 {\n  font-size: clamp(36px, 6vw, 72px);\n  background: linear-gradient(135deg, #6366f1, #22d3ee);\n  -webkit-background-clip: text;\n  color: transparent;\n}',body2:''},
+    {title:'Skills & Projects Grid',est:'40 min',body:'<p>Create an animated skills section and responsive project card grid with hover effects.</p><h4>Project Card</h4>',code:'.project-card {\n  background: rgba(255,255,255,0.05);\n  border: 1px solid rgba(255,255,255,0.1);\n  border-radius: 16px;\n  overflow: hidden;\n  transition: transform 0.3s, box-shadow 0.3s;\n}\n\n.project-card:hover {\n  transform: translateY(-8px);\n  box-shadow: 0 20px 40px rgba(99,102,241,0.2);\n}',body2:''},
+    {title:'Contact Form & Animations',est:'30 min',body:'<p>Add a working contact form (Formspree) and scroll-triggered reveal animations.</p><h4>Scroll Animations</h4>',code:'const observer = new IntersectionObserver((entries) => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      entry.target.classList.add("visible");\n    }\n  });\n}, { threshold: 0.1 });\n\ndocument.querySelectorAll(".reveal").forEach(el => {\n  observer.observe(el);\n});',body2:''},
+    {title:'Responsive & Deploy',est:'20 min',body:'<p>Make it fully responsive and deploy to Vercel or GitHub Pages.</p><h4>Media Queries</h4>',code:'@media (max-width: 768px) {\n  .projects-grid { grid-template-columns: 1fr; }\n  .hero h1 { font-size: 32px; }\n  nav { padding: 12px; }\n}',body2:''}
+  ]
+},
+{
+  id:'chat-app',title:'Real-Time Chat App',difficulty:'intermediate',icon:'💬',
+  bg:'linear-gradient(135deg,#0c3a1a,#1a0c2a)',
+  desc:'Build a real-time chat application with rooms, user avatars, typing indicators, and message history.',
+  tech:['Node.js','Socket.io','Express','HTML/CSS'],time:'6-8 hours',steps:6,
+  fullSteps:[
+    {title:'Project Setup',est:'15 min',body:'<p>Initialize Node.js project and install dependencies.</p><h4>Setup Commands</h4>',code:'mkdir chat-app && cd chat-app\nnpm init -y\nnpm install express socket.io\nmkdir public\ntouch server.js public/index.html public/style.css public/app.js',body2:''},
+    {title:'Express Server + Socket.io',est:'30 min',body:'<p>Create the Express server and integrate Socket.io for real-time communication.</p><h4>server.js</h4>',code:'const express = require("express");\nconst http = require("http");\nconst { Server } = require("socket.io");\n\nconst app = express();\nconst server = http.createServer(app);\nconst io = new Server(server);\n\napp.use(express.static("public"));\n\nio.on("connection", (socket) => {\n  console.log("User connected:", socket.id);\n  \n  socket.on("chat message", (msg) => {\n    io.emit("chat message", msg);\n  });\n  \n  socket.on("disconnect", () => {\n    console.log("User disconnected:", socket.id);\n  });\n});\n\nserver.listen(3000, () => console.log("Chat running on :3000"));',body2:''},
+    {title:'Chat UI',est:'40 min',body:'<p>Build the chat interface with message bubbles, input bar, and user list.</p><h4>Message HTML</h4>',code:'<div class="chat-container">\n  <aside class="sidebar">\n    <h3>Chat Rooms</h3>\n    <div class="room active">General</div>\n    <div class="room">JavaScript</div>\n    <div class="room">Python</div>\n  </aside>\n  <main class="chat-main">\n    <div class="messages" id="messages"></div>\n    <form class="input-bar" id="form">\n      <input id="input" placeholder="Type a message..." autocomplete="off">\n      <button type="submit">Send</button>\n    </form>\n  </main>\n</div>',body2:''},
+    {title:'Client-Side Socket.io',est:'30 min',body:'<p>Connect the frontend to Socket.io and handle sending/receiving messages.</p><h4>app.js</h4>',code:'const socket = io();\nconst form = document.getElementById("form");\nconst input = document.getElementById("input");\nconst messages = document.getElementById("messages");\n\nform.addEventListener("submit", (e) => {\n  e.preventDefault();\n  if (input.value) {\n    socket.emit("chat message", {\n      text: input.value,\n      user: username,\n      time: new Date().toLocaleTimeString()\n    });\n    input.value = "";\n  }\n});\n\nsocket.on("chat message", (msg) => {\n  const el = document.createElement("div");\n  el.className = "message";\n  el.innerHTML = `<strong>${msg.user}</strong> <span>${msg.time}</span><p>${msg.text}</p>`;\n  messages.appendChild(el);\n  messages.scrollTop = messages.scrollHeight;\n});',body2:''},
+    {title:'Rooms & Typing Indicator',est:'40 min',body:'<p>Add chat room support and "user is typing..." indicators.</p><h4>Typing Indicator</h4>',code:'// Client\nlet typingTimeout;\ninput.addEventListener("input", () => {\n  socket.emit("typing", username);\n  clearTimeout(typingTimeout);\n  typingTimeout = setTimeout(() => {\n    socket.emit("stop typing");\n  }, 1000);\n});\n\n// Server\nsocket.on("typing", (user) => {\n  socket.broadcast.emit("typing", user);\n});\nsocket.on("stop typing", () => {\n  socket.broadcast.emit("stop typing");\n});',body2:''},
+    {title:'Polish & Deploy',est:'30 min',body:'<p>Add message timestamps, user avatars, sound notifications, and deploy to Railway or Render.</p><h4>Deploy to Railway</h4>',code:'# Install Railway CLI\nnpm install -g @railway/cli\n\n# Login and deploy\nrailway login\nrailway init\nrailway up',body2:'<p>Your chat app will be live at a Railway URL within minutes!</p>'}
+  ]
+},
+{
+  id:'ecommerce',title:'E-Commerce Store',difficulty:'capstone',icon:'🛒',
+  bg:'linear-gradient(135deg,#2a1a0a,#0a1a2a)',
+  desc:'Full-stack e-commerce with product catalog, cart, checkout, user auth, and payment integration.',
+  tech:['React','Node.js','MongoDB','Stripe'],time:'15-20 hours',steps:7,
+  fullSteps:[
+    {title:'Architecture & Setup',est:'30 min',body:'<p>Plan the full-stack architecture and set up the React frontend + Express backend.</p><h4>Project Structure</h4>',code:'ecommerce/\n├── client/          # React frontend\n│   ├── src/\n│   │   ├── components/\n│   │   ├── pages/\n│   │   ├── context/\n│   │   └── App.jsx\n│   └── package.json\n├── server/          # Express backend\n│   ├── models/\n│   ├── routes/\n│   ├── middleware/\n│   └── server.js\n└── package.json',body2:''},
+    {title:'Product Database & API',est:'2 hours',body:'<p>Set up MongoDB schemas and CRUD API endpoints for products.</p><h4>Product Model</h4>',code:'const mongoose = require("mongoose");\n\nconst productSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  price: { type: Number, required: true },\n  description: String,\n  image: String,\n  category: String,\n  stock: { type: Number, default: 0 },\n  rating: { type: Number, default: 0 }\n}, { timestamps: true });\n\nmodule.exports = mongoose.model("Product", productSchema);',body2:''},
+    {title:'Product Catalog UI',est:'3 hours',body:'<p>Build the product listing page with filters, search, and responsive grid.</p><h4>ProductCard Component</h4>',code:'function ProductCard({ product, addToCart }) {\n  return (\n    <div className="product-card">\n      <img src={product.image} alt={product.name} />\n      <h3>{product.name}</h3>\n      <p className="price">${product.price.toFixed(2)}</p>\n      <div className="rating">{"⭐".repeat(Math.round(product.rating))}</div>\n      <button onClick={() => addToCart(product)}>\n        Add to Cart\n      </button>\n    </div>\n  );\n}',body2:''},
+    {title:'Shopping Cart',est:'2 hours',body:'<p>Build a full shopping cart with add/remove, quantity updates, and total calculation.</p><h4>Cart Context</h4>',code:'const CartContext = createContext();\n\nfunction CartProvider({ children }) {\n  const [items, setItems] = useState([]);\n  \n  const addToCart = (product) => {\n    setItems(prev => {\n      const existing = prev.find(i => i._id === product._id);\n      if (existing) {\n        return prev.map(i => \n          i._id === product._id \n            ? { ...i, quantity: i.quantity + 1 }\n            : i\n        );\n      }\n      return [...prev, { ...product, quantity: 1 }];\n    });\n  };\n  \n  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);\n  \n  return (\n    <CartContext.Provider value={{ items, addToCart, total }}>\n      {children}\n    </CartContext.Provider>\n  );\n}',body2:''},
+    {title:'User Authentication',est:'3 hours',body:'<p>Add JWT-based authentication with register, login, and protected routes.</p><h4>Auth Middleware</h4>',code:'const jwt = require("jsonwebtoken");\n\nfunction authenticate(req, res, next) {\n  const token = req.header("Authorization")?.replace("Bearer ", "");\n  if (!token) return res.status(401).json({ error: "Access denied" });\n  \n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.userId = decoded.id;\n    next();\n  } catch (err) {\n    res.status(401).json({ error: "Invalid token" });\n  }\n}',body2:''},
+    {title:'Checkout & Payment',est:'3 hours',body:'<p>Integrate Stripe for secure payment processing and order creation.</p><h4>Stripe Checkout</h4>',code:'const stripe = require("stripe")(process.env.STRIPE_SECRET);\n\napp.post("/api/checkout", authenticate, async (req, res) => {\n  const { items } = req.body;\n  \n  const session = await stripe.checkout.sessions.create({\n    payment_method_types: ["card"],\n    line_items: items.map(item => ({\n      price_data: {\n        currency: "usd",\n        product_data: { name: item.name },\n        unit_amount: Math.round(item.price * 100)\n      },\n      quantity: item.quantity\n    })),\n    mode: "payment",\n    success_url: `${process.env.CLIENT_URL}/success`,\n    cancel_url: `${process.env.CLIENT_URL}/cart`\n  });\n  \n  res.json({ url: session.url });\n});',body2:''},
+    {title:'Deploy Full-Stack',est:'1 hour',body:'<p>Deploy the frontend to Vercel and backend to Railway with MongoDB Atlas.</p><h4>Deployment Checklist</h4>',code:'# Backend → Railway\nrailway login\nrailway init\nrailway add --plugin mongodb\nrailway up\n\n# Frontend → Vercel\nnpx vercel --prod\n\n# Environment variables to set:\n# MONGODB_URI, JWT_SECRET, STRIPE_SECRET, CLIENT_URL',body2:'<p>🎉 Your full-stack e-commerce store is now live!</p>'}
+  ]
+},
+{
+  id:'ai-chatbot',title:'AI Chatbot',difficulty:'intermediate',icon:'🤖',
+  bg:'linear-gradient(135deg,#1a0a3a,#0a2a1a)',
+  desc:'Build a conversational AI chatbot with the OpenAI API, conversation memory, and a polished chat interface.',
+  tech:['Python','OpenAI API','Flask','HTML/CSS'],time:'5-6 hours',steps:5,
+  fullSteps:[
+    {title:'Setup & API Key',est:'15 min',body:'<p>Set up Python project with Flask and the OpenAI library.</p><h4>Installation</h4>',code:'mkdir ai-chatbot && cd ai-chatbot\npython -m venv venv\nsource venv/bin/activate  # or venv\\Scripts\\activate on Windows\npip install flask openai python-dotenv\ntouch app.py .env templates/index.html',body2:'<p>Get an API key from <a href="https://platform.openai.com" target="_blank" style="color:var(--primary)">platform.openai.com</a>.</p>'},
+    {title:'Flask Backend',est:'30 min',body:'<p>Create the Flask server with an endpoint that talks to OpenAI.</p><h4>app.py</h4>',code:'from flask import Flask, request, jsonify, render_template\nfrom openai import OpenAI\nimport os\nfrom dotenv import load_dotenv\n\nload_dotenv()\napp = Flask(__name__)\nclient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))\n\nconversation_history = [\n    {"role": "system", "content": "You are a helpful coding tutor."}\n]\n\n@app.route("/")\ndef index():\n    return render_template("index.html")\n\n@app.route("/chat", methods=["POST"])\ndef chat():\n    user_msg = request.json["message"]\n    conversation_history.append({"role": "user", "content": user_msg})\n    \n    response = client.chat.completions.create(\n        model="gpt-3.5-turbo",\n        messages=conversation_history\n    )\n    \n    reply = response.choices[0].message.content\n    conversation_history.append({"role": "assistant", "content": reply})\n    return jsonify({"reply": reply})',body2:''},
+    {title:'Chat UI',est:'45 min',body:'<p>Build a beautiful chat interface with message bubbles and auto-scroll.</p><h4>Key HTML</h4>',code:'<div class="chat-container">\n  <div class="chat-header">\n    <span>🤖</span> Coding House AI Tutor\n  </div>\n  <div class="messages" id="messages"></div>\n  <form id="form" class="chat-input">\n    <input id="input" placeholder="Ask me anything about coding..." autocomplete="off">\n    <button type="submit">Send</button>\n  </form>\n</div>',body2:''},
+    {title:'Connect Frontend to API',est:'30 min',body:'<p>Wire the chat UI to your Flask endpoint with fetch.</p><h4>JavaScript</h4>',code:'document.getElementById("form").addEventListener("submit", async (e) => {\n  e.preventDefault();\n  const input = document.getElementById("input");\n  const msg = input.value.trim();\n  if (!msg) return;\n  \n  addMessage(msg, "user");\n  input.value = "";\n  \n  const res = await fetch("/chat", {\n    method: "POST",\n    headers: { "Content-Type": "application/json" },\n    body: JSON.stringify({ message: msg })\n  });\n  const data = await res.json();\n  addMessage(data.reply, "bot");\n});\n\nfunction addMessage(text, sender) {\n  const div = document.createElement("div");\n  div.className = `message ${sender}`;\n  div.textContent = text;\n  document.getElementById("messages").appendChild(div);\n  div.scrollIntoView({ behavior: "smooth" });\n}',body2:''},
+    {title:'Polish & Deploy',est:'30 min',body:'<p>Add typing animation, markdown rendering, and deploy to Render.</p><h4>Typing Animation CSS</h4>',code:'.typing-indicator {\n  display: flex;\n  gap: 4px;\n  padding: 12px 16px;\n}\n.typing-indicator span {\n  width: 8px; height: 8px;\n  border-radius: 50%;\n  background: #6366f1;\n  animation: bounce 1.4s infinite ease-in-out;\n}\n.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }\n.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }',body2:''}
+  ]
+},
+{
+  id:'task-manager',title:'Task Manager API',difficulty:'intermediate',icon:'📋',
+  bg:'linear-gradient(135deg,#0a3a2a,#2a0a1a)',
+  desc:'Build a full REST API with CRUD operations, JWT authentication, database integration, and API documentation.',
+  tech:['Node.js','Express','MongoDB','JWT'],time:'5-7 hours',steps:5,
+  fullSteps:[
+    {title:'Project Setup & Express',est:'20 min',body:'<p>Initialize the Node.js project and create the Express server.</p><h4>Setup</h4>',code:'mkdir task-api && cd task-api\nnpm init -y\nnpm install express mongoose jsonwebtoken bcryptjs dotenv cors\nnpm install -D nodemon\n\n# Add to package.json scripts:\n# "dev": "nodemon server.js"',body2:''},
+    {title:'MongoDB Models',est:'30 min',body:'<p>Design the User and Task schemas with Mongoose.</p><h4>Task Model</h4>',code:'const taskSchema = new mongoose.Schema({\n  title: { type: String, required: true, trim: true },\n  description: String,\n  status: {\n    type: String,\n    enum: ["todo", "in-progress", "done"],\n    default: "todo"\n  },\n  priority: {\n    type: String,\n    enum: ["low", "medium", "high"],\n    default: "medium"\n  },\n  dueDate: Date,\n  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }\n}, { timestamps: true });',body2:''},
+    {title:'CRUD Endpoints',est:'45 min',body:'<p>Build all CRUD routes for tasks: Create, Read, Update, Delete.</p><h4>Routes</h4>',code:'router.get("/tasks", auth, async (req, res) => {\n  const { status, priority, sort } = req.query;\n  const filter = { user: req.userId };\n  if (status) filter.status = status;\n  if (priority) filter.priority = priority;\n  \n  const tasks = await Task.find(filter)\n    .sort(sort || "-createdAt")\n    .limit(50);\n  res.json(tasks);\n});\n\nrouter.post("/tasks", auth, async (req, res) => {\n  const task = new Task({ ...req.body, user: req.userId });\n  await task.save();\n  res.status(201).json(task);\n});',body2:''},
+    {title:'Authentication',est:'45 min',body:'<p>Add user registration, login, and JWT-based route protection.</p><h4>Login Endpoint</h4>',code:'router.post("/login", async (req, res) => {\n  const { email, password } = req.body;\n  const user = await User.findOne({ email });\n  if (!user || !await bcrypt.compare(password, user.password)) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {\n    expiresIn: "7d"\n  });\n  res.json({ token, user: { id: user._id, name: user.name } });\n});',body2:''},
+    {title:'Testing & Deploy',est:'30 min',body:'<p>Test with Thunder Client/Postman, add error handling, and deploy.</p><h4>Example API Calls</h4>',code:'# Register\nPOST /api/register\n{ "name": "Alice", "email": "alice@test.com", "password": "pass123" }\n\n# Login\nPOST /api/login\n{ "email": "alice@test.com", "password": "pass123" }\n\n# Create Task (with Bearer token)\nPOST /api/tasks\nAuthorization: Bearer <token>\n{ "title": "Learn Node.js", "priority": "high" }\n\n# Get Tasks\nGET /api/tasks?status=todo&priority=high',body2:''}
+  ]
+}
+];
+
+var currentFilter='all';
+var PROGRESS_KEY='ch_project_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(PROGRESS_KEY))||{};}catch(e){return {};}}
+function saveProgress(p){localStorage.setItem(PROGRESS_KEY,JSON.stringify(p));}
+
+function renderGrid(){
+var filtered=currentFilter==='all'?PROJECTS:PROJECTS.filter(function(p){return p.difficulty===currentFilter;});
+document.getElementById('pj-grid').innerHTML=filtered.map(function(p,i){
+var idx=PROJECTS.indexOf(p);
+return '<div class="pj-card" onclick="openProject('+idx+')">'+
+'<div class="pj-thumb" style="background:'+p.bg+'">'+p.icon+'</div>'+
+'<div class="pj-body">'+
+'<span class="pj-diff '+p.difficulty+'">'+({starter:'🟢 Starter',intermediate:'🟡 Intermediate',capstone:'🔴 Capstone'}[p.difficulty])+'</span>'+
+'<h3>'+p.title+'</h3><p>'+p.desc+'</p>'+
+'<div class="pj-tech">'+p.tech.map(function(t){return '<span>'+t+'</span>';}).join('')+'</div>'+
+'<div class="pj-meta"><span>⏱️ '+p.time+'</span><span>📝 '+p.steps+' steps</span></div>'+
+'</div></div>';
+}).join('');
+}
+
+function filterProjects(cat,btn){
+currentFilter=cat;
+document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active')});
+btn.classList.add('active');
+renderGrid();
+}
+
+function openProject(idx){
+var p=PROJECTS[idx];
+var progress=loadProgress();
+var pKey=p.id;
+
+var html='<button class="pj-back" onclick="closeProject()">← Back to Projects</button>';
+html+='<div class="pj-detail-header">';
+html+='<span class="pj-diff '+p.difficulty+'" style="font-size:13px">'+({starter:'🟢 Starter',intermediate:'🟡 Intermediate',capstone:'🔴 Capstone'}[p.difficulty])+'</span>';
+html+='<h1>'+p.icon+' '+p.title+'</h1>';
+html+='<p>'+p.desc+'</p>';
+html+='<div class="pj-detail-meta"><span>⏱️ '+p.time+'</span><span>📝 '+p.fullSteps.length+' steps</span>'+p.tech.map(function(t){return '<span style="padding:3px 10px;background:rgba(99,102,241,0.1);border-radius:6px;font-weight:600">'+t+'</span>';}).join('')+'</div>';
+html+='</div>';
+
+html+='<div class="pj-steps">';
+p.fullSteps.forEach(function(step,si){
+var stepKey=pKey+'_step_'+si;
+var isDone=progress[stepKey];
+var numClass=isDone?'done':'todo';
+html+='<div class="pj-step" id="step-'+si+'">';
+html+='<div class="pj-step-header" onclick="toggleStep('+si+')">';
+html+='<div class="pj-step-num '+numClass+'">'+(isDone?'✓':(si+1))+'</div>';
+html+='<div class="pj-step-info"><h3>'+step.title+'</h3><span>⏱️ '+step.est+'</span></div>';
+html+='<span class="pj-step-toggle">▼</span>';
+html+='</div>';
+html+='<div class="pj-step-body">';
+html+=step.body;
+if(step.code)html+='<div class="pj-code"><button class="copy-btn" onclick="copyCode(this)">📋 Copy</button>'+escapeHtml(step.code)+'</div>';
+if(step.body2)html+=step.body2;
+html+='<div class="pj-step-check" onclick="toggleComplete(\''+pKey+'\','+si+','+idx+')">';
+html+='<input type="checkbox" '+(isDone?'checked':'')+' onclick="event.stopPropagation()">';
+html+='<label>Mark step as completed</label></div>';
+html+='</div></div>';
+});
+html+='</div>';
+
+document.getElementById('pj-detail').innerHTML=html;
+document.getElementById('pj-modal').classList.add('open');
+document.body.style.overflow='hidden';
+window.scrollTo(0,0);
+}
+
+function closeProject(){
+document.getElementById('pj-modal').classList.remove('open');
+document.body.style.overflow='';
+}
+
+function toggleStep(idx){
+var el=document.getElementById('step-'+idx);
+el.classList.toggle('expanded');
+}
+
+function toggleComplete(pKey,stepIdx,projIdx){
+var progress=loadProgress();
+var key=pKey+'_step_'+stepIdx;
+progress[key]=!progress[key];
+saveProgress(progress);
+openProject(projIdx);
+}
+
+function copyCode(btn){
+var code=btn.parentElement.textContent.replace('📋 Copy','').trim();
+navigator.clipboard.writeText(code).then(function(){
+btn.textContent='✅ Copied!';
+setTimeout(function(){btn.textContent='📋 Copy';},1500);
+});
+}
+
+function escapeHtml(t){var d=document.createElement('div');d.appendChild(document.createTextNode(t));return d.innerHTML;}
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeProject();});
+renderGrid();
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>

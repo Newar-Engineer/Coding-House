@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Roadmaps — Coding House</title>
+<meta name="description" content="Interactive visual roadmaps for Web Development, Mobile, AI/ML, Cyber Security, and Cloud Computing. Track your learning progress.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.rm-track-tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
+.rm-track-tab{padding:12px 24px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface);color:var(--text-mute);font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;gap:8px}
+.rm-track-tab:hover{border-color:var(--primary);color:var(--text)}
+.rm-track-tab.active{background:linear-gradient(135deg,var(--primary),var(--secondary));border-color:transparent;color:#fff;box-shadow:0 8px 24px rgba(124,58,237,0.3)}
+.rm-progress-bar{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 28px;margin-bottom:36px;display:flex;align-items:center;gap:20px}
+.rm-progress-info{flex:1}
+.rm-progress-info h3{font-family:'Space Grotesk',sans-serif;font-size:18px;margin-bottom:4px}
+.rm-progress-info .rm-pct{font-size:13px;color:var(--text-mute)}
+.rm-bar{flex:2;height:12px;background:var(--bg);border-radius:999px;overflow:hidden}
+.rm-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .6s cubic-bezier(0.34,1.56,0.64,1)}
+.rm-bar-num{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--primary);min-width:60px;text-align:right}
+
+/* ── Roadmap Tree ── */
+.rm-tree{position:relative;padding-left:40px}
+.rm-tree::before{content:'';position:absolute;left:19px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--primary),var(--secondary),var(--primary));border-radius:3px;opacity:0.3}
+.rm-phase{margin-bottom:40px;position:relative}
+.rm-phase-dot{position:absolute;left:-40px;top:0;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2;border:3px solid var(--border);background:var(--surface);transition:all .3s}
+.rm-phase.completed .rm-phase-dot{background:linear-gradient(135deg,var(--success),#059669);border-color:var(--success);box-shadow:0 0 20px rgba(16,185,129,0.3)}
+.rm-phase.current .rm-phase-dot{background:linear-gradient(135deg,var(--primary),var(--secondary));border-color:var(--primary);animation:pulse-glow 2s ease-in-out infinite}
+.rm-phase-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer}
+.rm-phase-header h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700}
+.rm-phase-header .rm-phase-tag{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700}
+.rm-phase.completed .rm-phase-tag{background:rgba(16,185,129,0.12);color:var(--success)}
+.rm-phase.current .rm-phase-tag{background:rgba(124,58,237,0.12);color:var(--primary)}
+.rm-phase.locked .rm-phase-tag{background:rgba(107,114,128,0.12);color:var(--text-mute)}
+.rm-phase.locked .rm-phase-header h3{color:var(--text-mute)}
+.rm-nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+.rm-node{padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .3s}
+.rm-node:hover{border-color:var(--primary);transform:translateY(-2px)}
+.rm-node .rm-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:12px}
+.rm-node.done .rm-check{background:var(--success);border-color:var(--success);color:#fff}
+.rm-node.done{opacity:0.7}
+.rm-node.locked{opacity:0.4;pointer-events:none}
+.rm-node.locked .rm-check{background:var(--bg)}
+.rm-reset{margin-top:32px;text-align:center}
+.rm-reset button{padding:10px 24px;border-radius:10px;background:rgba(255,93,114,0.1);border:1px solid rgba(255,93,114,0.3);color:var(--danger);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.rm-reset button:hover{background:rgba(255,93,114,0.2)}
+
+@media(max-width:768px){.rm-nodes{grid-template-columns:1fr}.rm-progress-bar{flex-direction:column;align-items:stretch;gap:12px}.rm-bar-num{text-align:left}}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+<ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="playground.html">Playground</a></li><li><a href="cheatsheets.html">Cheatsheets</a></li><li><a href="blog.html">Blog</a></li></ul>
+<div class="nav-cta"><button class="theme-toggle" id="theme-toggle-btn">☀️</button><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</nav></header>
+
+<section class="page-hero">
+<div class="wrap">
+<div class="eyebrow">learning paths</div>
+<h1>Interactive Roadmaps 🗺️</h1>
+<p class="sub">Choose a track, check off what you've learned, and watch your progress grow. Your journey is saved automatically.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="rm-track-tabs" id="track-tabs"></div>
+<div class="rm-progress-bar" id="progress-bar"></div>
+<div class="rm-tree" id="roadmap-tree"></div>
+<div class="rm-reset"><button onclick="resetTrack()">↺ Reset Progress for This Track</button></div>
+</div>
+</section>
+
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House. All rights reserved.</span><div class="foot-social"><a href="index.html">Home</a><a href="playground.html">Playground</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div></div></div></footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var TRACKS={
+web:{icon:'🌐',label:'Web Development',phases:[
+{title:'Foundations',nodes:['HTML Basics','CSS Fundamentals','Responsive Design','Git & GitHub','Command Line']},
+{title:'JavaScript Core',nodes:['JS Syntax & Types','DOM Manipulation','Events & Listeners','ES6+ Features','Async/Await & Promises']},
+{title:'Frontend Framework',nodes:['React Fundamentals','Components & Props','State Management','React Router','Hooks Deep Dive']},
+{title:'Backend Development',nodes:['Node.js & Express','REST API Design','Authentication (JWT)','Database (MongoDB)','Error Handling']},
+{title:'Full-Stack & Deploy',nodes:['Full-Stack Project','Testing (Jest)','CI/CD Pipeline','Docker Basics','Deploy to Vercel/AWS']}
+]},
+mobile:{icon:'📱',label:'Mobile Development',phases:[
+{title:'Foundations',nodes:['Mobile UI/UX Principles','Git & Version Control','JavaScript/Dart Basics','IDE Setup','App Architecture']},
+{title:'React Native',nodes:['React Native Setup','Core Components','Navigation','State & Props','Native Modules']},
+{title:'Flutter & Dart',nodes:['Dart Language','Flutter Widgets','Layouts & Styling','State Management','Animations']},
+{title:'Advanced Mobile',nodes:['Push Notifications','Offline Storage','Camera & Sensors','Maps Integration','Performance Tuning']},
+{title:'Publish & Maintain',nodes:['App Store Guidelines','Play Store Deploy','iOS Distribution','Analytics Setup','App Updates & CI/CD']}
+]},
+ai:{icon:'🤖',label:'AI & Machine Learning',phases:[
+{title:'Math & Foundations',nodes:['Linear Algebra','Statistics & Probability','Calculus Essentials','Python for Data','NumPy & Pandas']},
+{title:'Machine Learning',nodes:['Supervised Learning','Unsupervised Learning','Model Evaluation','Scikit-Learn','Feature Engineering']},
+{title:'Deep Learning',nodes:['Neural Networks','TensorFlow / PyTorch','CNNs (Image)','RNNs / LSTMs (Text)','Transfer Learning']},
+{title:'NLP & Computer Vision',nodes:['Text Processing','Transformers & BERT','Object Detection','Image Segmentation','Generative AI (LLMs)']},
+{title:'Production ML',nodes:['Model Deployment','MLOps Basics','API Serving','Monitoring & Drift','Ethical AI']}
+]},
+cyber:{icon:'🔒',label:'Cyber Security',phases:[
+{title:'Foundations',nodes:['Networking Basics','TCP/IP & DNS','Linux Command Line','CIA Triad','Security Concepts']},
+{title:'Defensive Security',nodes:['Firewalls & IDS','Encryption & PKI','Access Control','Security Policies','Incident Response']},
+{title:'Offensive Security',nodes:['Ethical Hacking Intro','Reconnaissance','Vulnerability Scanning','Exploitation Basics','Web App Security']},
+{title:'Advanced Topics',nodes:['Penetration Testing','Reverse Engineering','Malware Analysis','Cloud Security','OWASP Top 10']},
+{title:'Certification Prep',nodes:['CompTIA Security+','CEH Prep','CISSP Concepts','Bug Bounty Programs','Portfolio Building']}
+]},
+cloud:{icon:'☁️',label:'Cloud Computing',phases:[
+{title:'Foundations',nodes:['Cloud Concepts','Linux Administration','Networking for Cloud','Virtualization','IaaS vs PaaS vs SaaS']},
+{title:'AWS Core',nodes:['EC2 & S3','IAM & Security','RDS & DynamoDB','Lambda & Serverless','VPC & Networking']},
+{title:'Containers & Orchestration',nodes:['Docker Fundamentals','Docker Compose','Kubernetes Basics','Pods & Services','Helm Charts']},
+{title:'DevOps Practices',nodes:['CI/CD Pipelines','GitHub Actions','Infrastructure as Code','Terraform','Monitoring (Prometheus)']},
+{title:'Architecture & Scale',nodes:['Microservices Design','Event-Driven Architecture','Auto Scaling','Cost Optimization','Multi-Cloud Strategy']}
+]}
+};
+
+var currentTrack='web';
+var progress={};
+var STORAGE_KEY='ch_roadmap_progress';
+
+function loadProgress(){try{progress=JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){progress={};}}
+function saveProgress(){localStorage.setItem(STORAGE_KEY,JSON.stringify(progress));}
+
+function renderTabs(){
+var html='';
+for(var key in TRACKS){
+var t=TRACKS[key];
+html+='<button class="rm-track-tab'+(key===currentTrack?' active':'')+'" onclick="switchTrack(\''+key+'\',this)">'+t.icon+' '+t.label+'</button>';
+}
+document.getElementById('track-tabs').innerHTML=html;
+}
+
+function switchTrack(key,btn){
+currentTrack=key;
+document.querySelectorAll('.rm-track-tab').forEach(function(t){t.classList.remove('active')});
+btn.classList.add('active');
+renderRoadmap();
+}
+
+function getTrackProgress(){
+var track=TRACKS[currentTrack];
+var done=0,total=0;
+track.phases.forEach(function(phase){
+phase.nodes.forEach(function(node){
+total++;
+var k=currentTrack+'__'+node;
+if(progress[k])done++;
+});
+});
+return{done:done,total:total,pct:total?Math.round(done/total*100):0};
+}
+
+function renderRoadmap(){
+var track=TRACKS[currentTrack];
+var p=getTrackProgress();
+
+// Progress bar
+document.getElementById('progress-bar').innerHTML=
+'<div class="rm-progress-info"><h3>'+track.icon+' '+track.label+'</h3><div class="rm-pct">'+p.done+' / '+p.total+' skills completed</div></div>'+
+'<div class="rm-bar"><div class="rm-bar-fill" style="width:'+p.pct+'%"></div></div>'+
+'<div class="rm-bar-num">'+p.pct+'%</div>';
+
+// Phases
+var html='';
+var allPrevDone=true;
+track.phases.forEach(function(phase,pi){
+var phaseNodes=phase.nodes;
+var phaseDone=phaseNodes.every(function(n){return progress[currentTrack+'__'+n];});
+var phaseHasAny=phaseNodes.some(function(n){return progress[currentTrack+'__'+n];});
+var status=phaseDone?'completed':(allPrevDone?'current':'locked');
+
+html+='<div class="rm-phase '+status+'">';
+html+='<div class="rm-phase-dot">'+(phaseDone?'✓':(pi+1))+'</div>';
+html+='<div class="rm-phase-header"><h3>Phase '+(pi+1)+': '+phase.title+'</h3>';
+html+='<span class="rm-phase-tag">'+(phaseDone?'✅ Completed':(status==='current'?'🔵 In Progress':'🔒 Locked'))+'</span></div>';
+html+='<div class="rm-nodes">';
+phaseNodes.forEach(function(node){
+var k=currentTrack+'__'+node;
+var isDone=progress[k];
+var nodeStatus=isDone?'done':(status==='locked'?'locked':'');
+html+='<div class="rm-node '+nodeStatus+'" onclick="toggleNode(\''+k.replace(/'/g,"\\'")+'\')">';
+html+='<div class="rm-check">'+(isDone?'✓':'')+'</div>';
+html+='<span>'+node+'</span></div>';
+});
+html+='</div></div>';
+
+if(!phaseDone)allPrevDone=false;
+});
+
+document.getElementById('roadmap-tree').innerHTML=html;
+}
+
+function toggleNode(key){
+if(progress[key]){delete progress[key];}else{progress[key]=true;}
+saveProgress();
+renderRoadmap();
+}
+
+function resetTrack(){
+if(!confirm('Reset all progress for this track?'))return;
+var track=TRACKS[currentTrack];
+track.phases.forEach(function(phase){
+phase.nodes.forEach(function(node){
+delete progress[currentTrack+'__'+node];
+});
+});
+saveProgress();
+renderRoadmap();
+}
+
+loadProgress();
+renderTabs();
+renderRoadmap();
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>

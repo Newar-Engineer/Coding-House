@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheatsheets — Coding House</title>
+<meta name="description" content="Quick-reference cheatsheets for 16 programming languages. Copy-paste ready syntax cards for Python, Java, JavaScript, C++, and more.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body { animation: pageIn .5s ease; }
+@keyframes pageIn { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:translateY(0) } }
+
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.cs-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer;
+}
+.cs-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(124,58,237,0.2);
+}
+.cs-card-header {
+  padding: 24px 24px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cs-lang-badge {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 18px; color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+}
+.cs-card-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; }
+.cs-card-header .cs-count { font-size: 12px; color: var(--text-mute); margin-top: 2px; }
+.cs-card-body { padding: 0 24px 20px; }
+.cs-preview {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  overflow: hidden;
+  max-height: 100px;
+}
+.cs-card-footer {
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.cs-card-footer .cs-open { color: var(--primary); font-weight: 600; transition: all 0.2s; }
+.cs-card:hover .cs-open { transform: translateX(4px); }
+.cs-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.cs-tags span {
+  padding: 3px 8px; background: rgba(124,58,237,0.1);
+  border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--text-mute);
+}
+
+/* ── Expanded Cheatsheet View ── */
+.cs-modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); overflow-y: auto; padding: 40px 20px; }
+.cs-modal.open { display: block; animation: fadeIn 0.3s ease; }
+.cs-modal-content {
+  max-width: 900px; margin: 0 auto;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+}
+.cs-modal-header {
+  padding: 28px 32px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 10;
+}
+.cs-modal-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; }
+.cs-close {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--surface);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 18px; transition: all 0.2s;
+}
+.cs-close:hover { border-color: var(--danger); color: var(--danger); }
+.cs-modal-body { padding: 28px 32px; }
+.cs-section { margin-bottom: 32px; }
+.cs-section h3 {
+  font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  color: var(--primary);
+}
+.cs-snippet {
+  background: #0a0e1a; border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 16px 20px; margin-bottom: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7;
+  position: relative; overflow-x: auto; color: var(--text-soft);
+}
+.cs-snippet .copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  padding: 4px 10px; background: rgba(124,58,237,0.2);
+  border: 1px solid rgba(124,58,237,0.4); border-radius: 6px;
+  color: var(--primary); font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+}
+.cs-snippet .copy-btn:hover { background: rgba(124,58,237,0.3); }
+.cs-desc { font-size: 13px; color: var(--text-mute); margin-bottom: 8px; }
+
+@media (max-width: 768px) {
+  .cs-grid { grid-template-columns: 1fr; }
+  .cs-modal-body { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#languages">Languages</a></li>
+      <li><a href="playground.html">Playground</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="roadmap.html">Roadmaps</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="theme-toggle" id="theme-toggle-btn">☀️</button>
+      <a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a>
+      <button class="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">quick reference</div>
+    <h1>Cheatsheets 📋</h1>
+    <p class="sub">Copy-paste ready syntax cards for every language. The fastest way to look up what you forgot.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="cs-search" placeholder="Search cheatsheets..." oninput="filterCheatsheets()">
+    </div>
+    <div class="cs-grid" id="cs-grid"></div>
+  </div>
+</section>
+
+<div class="cs-modal" id="cs-modal">
+  <div class="cs-modal-content">
+    <div class="cs-modal-header">
+      <h2 id="cs-modal-title">Python Cheatsheet</h2>
+      <button class="cs-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="cs-modal-body" id="cs-modal-body"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2026 Coding House. All rights reserved.</span>
+      <div class="foot-social">
+        <a href="index.html">Home</a>
+        <a href="playground.html">Playground</a>
+        <a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var CHEATSHEETS = {
+  python: {
+    name: 'Python', ab: 'Py', c1: '#3b82f6', c2: '#22d3ee',
+    sections: [
+      { title: '📦 Variables & Types', items: [
+        { desc: 'Variable declaration', code: 'name = "Alice"\nage = 25\npi = 3.14\nis_active = True' },
+        { desc: 'Type conversion', code: 'int("42")  # → 42\nstr(42)    # → "42"\nfloat("3.14")  # → 3.14\nlist("abc")    # → ["a","b","c"]' }
+      ]},
+      { title: '🔄 Loops', items: [
+        { desc: 'For loop', code: 'for i in range(5):\n    print(i)\n\nfor item in ["a", "b", "c"]:\n    print(item)' },
+        { desc: 'While loop', code: 'count = 0\nwhile count < 5:\n    print(count)\n    count += 1' },
+        { desc: 'List comprehension', code: 'squares = [x**2 for x in range(10)]\nevens = [x for x in range(20) if x % 2 == 0]' }
+      ]},
+      { title: '⚡ Functions', items: [
+        { desc: 'Function definition', code: 'def greet(name, greeting="Hello"):\n    return f"{greeting}, {name}!"\n\nresult = greet("Alice")' },
+        { desc: 'Lambda & map', code: 'double = lambda x: x * 2\nnums = list(map(lambda x: x**2, [1,2,3]))' }
+      ]},
+      { title: '📚 Data Structures', items: [
+        { desc: 'Lists', code: 'fruits = ["apple", "banana", "cherry"]\nfruits.append("date")\nfruits.pop(0)\nsliced = fruits[1:3]' },
+        { desc: 'Dictionaries', code: 'user = {"name": "Alice", "age": 25}\nuser["email"] = "alice@email.com"\nfor key, val in user.items():\n    print(f"{key}: {val}")' },
+        { desc: 'Sets & Tuples', code: 'unique = {1, 2, 3, 3}  # {1, 2, 3}\ncoords = (10, 20)  # immutable\na, b = coords  # unpacking' }
+      ]},
+      { title: '🏗️ Classes', items: [
+        { desc: 'Class definition', code: 'class Dog:\n    def __init__(self, name, breed):\n        self.name = name\n        self.breed = breed\n    \n    def bark(self):\n        return f"{self.name} says Woof!"\n\ndog = Dog("Rex", "Labrador")' }
+      ]},
+      { title: '📁 File I/O', items: [
+        { desc: 'Read & Write files', code: '# Write\nwith open("file.txt", "w") as f:\n    f.write("Hello, World!")\n\n# Read\nwith open("file.txt", "r") as f:\n    content = f.read()' }
+      ]},
+      { title: '⚠️ Error Handling', items: [
+        { desc: 'Try/Except', code: 'try:\n    result = 10 / 0\nexcept ZeroDivisionError as e:\n    print(f"Error: {e}")\nfinally:\n    print("Always runs")' }
+      ]}
+    ]
+  },
+  javascript: {
+    name: 'JavaScript', ab: 'Js', c1: '#f5b942', c2: '#3b82f6',
+    sections: [
+      { title: '📦 Variables & Types', items: [
+        { desc: 'Variable declaration', code: 'const name = "Alice";    // immutable binding\nlet age = 25;            // mutable\nvar legacy = "avoid";    // function-scoped' },
+        { desc: 'Template literals', code: 'const greeting = `Hello, ${name}!`;\nconst multi = `Line 1\nLine 2`;' }
+      ]},
+      { title: '🔄 Loops & Iteration', items: [
+        { desc: 'Loops', code: 'for (let i = 0; i < 5; i++) { }\n\nfor (const item of [1,2,3]) { }\n\n[1,2,3].forEach((item, i) => { });' },
+        { desc: 'Array methods', code: 'const nums = [1,2,3,4,5];\nconst doubled = nums.map(n => n * 2);\nconst evens = nums.filter(n => n % 2 === 0);\nconst sum = nums.reduce((a, b) => a + b, 0);' }
+      ]},
+      { title: '⚡ Functions', items: [
+        { desc: 'Functions', code: 'function greet(name) { return `Hello ${name}`; }\n\nconst greet = (name) => `Hello ${name}`;\n\nconst add = (a, b = 0) => a + b;' },
+        { desc: 'Destructuring', code: 'const { name, age } = user;\nconst [first, ...rest] = [1, 2, 3, 4];\nconst { a: x, b: y } = { a: 1, b: 2 };' }
+      ]},
+      { title: '🔗 Async/Await', items: [
+        { desc: 'Fetch API', code: 'async function getUsers() {\n  try {\n    const res = await fetch("/api/users");\n    const data = await res.json();\n    return data;\n  } catch (err) {\n    console.error(err);\n  }\n}' },
+        { desc: 'Promises', code: 'const promise = new Promise((resolve, reject) => {\n  setTimeout(() => resolve("Done!"), 1000);\n});\n\npromise.then(val => console.log(val));' }
+      ]},
+      { title: '🏗️ Classes', items: [
+        { desc: 'ES6 Class', code: 'class Animal {\n  constructor(name) {\n    this.name = name;\n  }\n  speak() {\n    return `${this.name} makes a sound`;\n  }\n}\n\nclass Dog extends Animal {\n  speak() { return `${this.name} barks`; }\n}' }
+      ]},
+      { title: '🗃️ DOM Manipulation', items: [
+        { desc: 'Common DOM methods', code: 'document.getElementById("id");\ndocument.querySelector(".class");\ndocument.querySelectorAll("div");\n\nel.addEventListener("click", (e) => { });\nel.classList.add("active");\nel.innerHTML = "<p>New</p>";' }
+      ]}
+    ]
+  },
+  java: {
+    name: 'Java', ab: 'Jv', c1: '#8b5cf6', c2: '#3b82f6',
+    sections: [
+      { title: '📦 Variables & Types', items: [
+        { desc: 'Primitive types', code: 'int age = 25;\ndouble price = 19.99;\nboolean active = true;\nchar grade = \'A\';\nString name = "Alice";' }
+      ]},
+      { title: '🔄 Loops', items: [
+        { desc: 'For & While', code: 'for (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}\n\nfor (String s : list) {\n    System.out.println(s);\n}' }
+      ]},
+      { title: '⚡ Methods', items: [
+        { desc: 'Method definition', code: 'public static int add(int a, int b) {\n    return a + b;\n}\n\n// Overloading\npublic static double add(double a, double b) {\n    return a + b;\n}' }
+      ]},
+      { title: '🏗️ Classes & OOP', items: [
+        { desc: 'Class with constructor', code: 'public class Person {\n    private String name;\n    private int age;\n\n    public Person(String name, int age) {\n        this.name = name;\n        this.age = age;\n    }\n\n    public String getName() { return name; }\n}' }
+      ]},
+      { title: '📚 Collections', items: [
+        { desc: 'Common collections', code: 'List<String> list = new ArrayList<>();\nlist.add("Hello");\n\nMap<String, Integer> map = new HashMap<>();\nmap.put("age", 25);\n\nSet<Integer> set = new HashSet<>();\nset.add(42);' }
+      ]}
+    ]
+  },
+  cpp: { name: 'C++', ab: 'C+', c1: '#3b82f6', c2: '#8b5cf6', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Types', code: 'int x = 10;\ndouble pi = 3.14;\nbool flag = true;\nstd::string name = "Alice";\nauto val = 42; // type inference' }]},
+    { title: '🔄 Loops', items: [{ desc: 'Range-based for', code: 'std::vector<int> nums = {1, 2, 3, 4, 5};\nfor (const auto& n : nums) {\n    std::cout << n << std::endl;\n}' }]},
+    { title: '📚 STL Containers', items: [{ desc: 'Vector, Map, Set', code: 'std::vector<int> v = {1, 2, 3};\nv.push_back(4);\n\nstd::map<std::string, int> m;\nm["key"] = 42;\n\nstd::unordered_set<int> s = {1, 2, 3};' }]},
+    { title: '⚡ Smart Pointers', items: [{ desc: 'Memory management', code: 'auto ptr = std::make_unique<int>(42);\nauto shared = std::make_shared<std::string>("hello");\nstd::weak_ptr<int> weak = shared;' }]}
+  ]},
+  c: { name: 'C', ab: 'C', c1: '#22d3ee', c2: '#3b82f6', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Types', code: 'int x = 10;\nfloat pi = 3.14f;\nchar c = \'A\';\nchar str[] = "Hello";\nint arr[5] = {1, 2, 3, 4, 5};' }]},
+    { title: '🔄 Loops', items: [{ desc: 'For, While, Do-While', code: 'for (int i = 0; i < 5; i++) {\n    printf("%d\\n", i);\n}\n\nint j = 0;\nwhile (j < 5) { j++; }' }]},
+    { title: '📌 Pointers', items: [{ desc: 'Pointers & Memory', code: 'int x = 42;\nint *ptr = &x;\nprintf("Value: %d\\n", *ptr);\n\nint *arr = malloc(5 * sizeof(int));\nfree(arr);' }]},
+    { title: '🏗️ Structs', items: [{ desc: 'Struct definition', code: 'typedef struct {\n    char name[50];\n    int age;\n} Person;\n\nPerson p = {"Alice", 25};' }]}
+  ]},
+  go: { name: 'Go', ab: 'Go', c1: '#22d3ee', c2: '#34e0a1', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'var name string = "Alice"\nage := 25  // short declaration\nconst pi = 3.14' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'func add(a, b int) int {\n    return a + b\n}\n\nfunc divide(a, b float64) (float64, error) {\n    if b == 0 { return 0, errors.New("division by zero") }\n    return a / b, nil\n}' }]},
+    { title: '🔄 Goroutines', items: [{ desc: 'Concurrency', code: 'go func() {\n    fmt.Println("concurrent!")\n}()\n\nch := make(chan string)\ngo func() { ch <- "hello" }()\nmsg := <-ch' }]}
+  ]},
+  rust: { name: 'Rust', ab: 'Rs', c1: '#f5b942', c2: '#ff5d72', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Ownership', code: 'let name = "Alice";     // immutable\nlet mut age = 25;       // mutable\nlet s = String::from("hello");\nlet s2 = &s;            // borrowing' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'fn add(a: i32, b: i32) -> i32 {\n    a + b  // implicit return\n}\n\nfn greet(name: &str) -> String {\n    format!("Hello, {}!", name)\n}' }]},
+    { title: '🔄 Pattern Matching', items: [{ desc: 'Match & Option', code: 'match value {\n    1 => println!("one"),\n    2 | 3 => println!("two or three"),\n    _ => println!("other"),\n}\n\nlet opt: Option<i32> = Some(42);\nif let Some(v) = opt { println!("{}", v); }' }]}
+  ]},
+  csharp: { name: 'C#', ab: 'C#', c1: '#8b5cf6', c2: '#22d3ee', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Types', code: 'int age = 25;\nstring name = "Alice";\nbool active = true;\nvar inferred = 42;\ndouble? nullable = null;' }]},
+    { title: '🔗 LINQ', items: [{ desc: 'Query syntax', code: 'var evens = numbers.Where(n => n % 2 == 0);\nvar names = users.Select(u => u.Name);\nvar first = users.FirstOrDefault(u => u.Age > 18);\nvar sorted = users.OrderBy(u => u.Name);' }]}
+  ]},
+  typescript: { name: 'TypeScript', ab: 'Ts', c1: '#3b82f6', c2: '#22d3ee', sections: [
+    { title: '📦 Types', items: [{ desc: 'Type annotations', code: 'let name: string = "Alice";\nlet age: number = 25;\nlet active: boolean = true;\nlet items: string[] = ["a", "b"];\nlet tuple: [string, number] = ["hi", 42];' }]},
+    { title: '🏗️ Interfaces', items: [{ desc: 'Interface & Type', code: 'interface User {\n  name: string;\n  age: number;\n  email?: string; // optional\n}\n\ntype Status = "active" | "inactive";\ntype Result<T> = { data: T; error?: string };' }]}
+  ]},
+  php: { name: 'PHP', ab: 'Php', c1: '#8b5cf6', c2: '#f5b942', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: '$name = "Alice";\n$age = 25;\n$prices = [19.99, 29.99, 9.99];\n$user = ["name" => "Alice", "age" => 25];\ndefine("PI", 3.14);' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'function greet(string $name): string {\n    return "Hello, {$name}!";\n}\n\n$double = fn($x) => $x * 2;' }]}
+  ]},
+  kotlin: { name: 'Kotlin', ab: 'Kt', c1: '#8b5cf6', c2: '#ff5d72', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'val name = "Alice"    // immutable\nvar age = 25          // mutable\nval nullable: String? = null' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'fun greet(name: String) = "Hello, $name!"\n\nfun add(a: Int, b: Int = 0): Int {\n    return a + b\n}' }]}
+  ]},
+  swift: { name: 'Swift', ab: 'Sw', c1: '#ff5d72', c2: '#f5b942', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'let name = "Alice"    // constant\nvar age = 25          // variable\nvar optional: String? = nil' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'func greet(_ name: String) -> String {\n    return "Hello, \\(name)!"\n}\n\nfunc add(_ a: Int, _ b: Int = 0) -> Int { a + b }' }]}
+  ]},
+  dart: { name: 'Dart', ab: 'Dt', c1: '#22d3ee', c2: '#3b82f6', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'var name = "Alice";\nfinal age = 25;       // runtime const\nconst pi = 3.14;      // compile-time const\nString? nullable;' }]},
+    { title: '⚡ Functions', items: [{ desc: 'Functions', code: 'String greet(String name) => "Hello, $name!";\n\nint add(int a, {int b = 0}) {\n  return a + b;\n}' }]}
+  ]},
+  ruby: { name: 'Ruby', ab: 'Rb', c1: '#ff5d72', c2: '#8b5cf6', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'name = "Alice"\nage = 25\n@instance_var = "hello"\n@@class_var = "world"\nCONSTANT = 3.14' }]},
+    { title: '🔄 Blocks & Iterators', items: [{ desc: 'Each, Map, Select', code: '[1,2,3].each { |n| puts n }\ndoubled = [1,2,3].map { |n| n * 2 }\nevens = (1..10).select { |n| n.even? }' }]}
+  ]},
+  r: { name: 'R', ab: 'R', c1: '#3b82f6', c2: '#34e0a1', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Assignment', code: 'x <- 42\nname <- "Alice"\nvec <- c(1, 2, 3, 4, 5)\nmat <- matrix(1:9, nrow=3)' }]},
+    { title: '📊 Data Frames', items: [{ desc: 'Creating & querying', code: 'df <- data.frame(\n  name = c("Alice", "Bob"),\n  age = c(25, 30)\n)\nsubset(df, age > 25)' }]}
+  ]},
+  matlab: { name: 'MATLAB', ab: 'Ml', c1: '#f5b942', c2: '#3b82f6', sections: [
+    { title: '📦 Variables', items: [{ desc: 'Declaration', code: 'x = 42;\nname = "Alice";\nvec = [1 2 3 4 5];\nmat = [1 2; 3 4];' }]},
+    { title: '📊 Operations', items: [{ desc: 'Matrix ops', code: 'A = [1 2; 3 4];\nB = A\' ;          % transpose\nC = A * B;       % multiply\nD = inv(A);      % inverse' }]}
+  ]}
+};
+
+function renderGrid() {
+  var grid = document.getElementById('cs-grid');
+  var search = document.getElementById('cs-search').value.toLowerCase();
+  var html = '';
+  for (var key in CHEATSHEETS) {
+    var cs = CHEATSHEETS[key];
+    if (search && cs.name.toLowerCase().indexOf(search) === -1) continue;
+    var totalItems = 0;
+    cs.sections.forEach(function(s) { totalItems += s.items.length; });
+    var preview = cs.sections[0].items[0].code.split('\n').slice(0,4).join('\n');
+    html += '<div class="cs-card" onclick="openModal(\'' + key + '\')">';
+    html += '<div class="cs-card-header">';
+    html += '<div class="cs-lang-badge" style="background:linear-gradient(135deg,' + cs.c1 + ',' + cs.c2 + ')">' + cs.ab + '</div>';
+    html += '<div><h3>' + cs.name + '</h3><div class="cs-count">' + cs.sections.length + ' sections · ' + totalItems + ' snippets</div></div>';
+    html += '</div>';
+    html += '<div class="cs-card-body"><div class="cs-preview"><code>' + escapeHtml(preview) + '</code></div></div>';
+    html += '<div class="cs-card-footer">';
+    html += '<div class="cs-tags"><span>' + cs.sections.length + ' sections</span></div>';
+    html += '<span class="cs-open">Open →</span>';
+    html += '</div></div>';
+  }
+  grid.innerHTML = html;
+}
+
+function openModal(key) {
+  var cs = CHEATSHEETS[key];
+  document.getElementById('cs-modal-title').textContent = cs.name + ' Cheatsheet';
+  var body = document.getElementById('cs-modal-body');
+  var html = '';
+  cs.sections.forEach(function(section) {
+    html += '<div class="cs-section"><h3>' + section.title + '</h3>';
+    section.items.forEach(function(item) {
+      html += '<p class="cs-desc">' + item.desc + '</p>';
+      html += '<div class="cs-snippet"><button class="copy-btn" onclick="copySnippet(this)">📋 Copy</button><code>' + escapeHtml(item.code) + '</code></div>';
+    });
+    html += '</div>';
+  });
+  body.innerHTML = html;
+  document.getElementById('cs-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('cs-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function copySnippet(btn) {
+  var code = btn.parentElement.querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(function() {
+    btn.textContent = '✅ Copied!';
+    setTimeout(function() { btn.textContent = '📋 Copy'; }, 1500);
+  });
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+function filterCheatsheets() { renderGrid(); }
+
+// Close modal on escape
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+document.getElementById('cs-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+renderGrid();
+
+// Burger menu
+var burger = document.querySelector('.burger');
+var navLinks = document.querySelector('.nav-links');
+if (burger) burger.addEventListener('click', function() {
+  var open = navLinks.style.display === 'flex';
+  navLinks.style.display = open ? 'none' : 'flex';
+  navLinks.style.flexDirection = 'column'; navLinks.style.position = 'absolute';
+  navLinks.style.top = '64px'; navLinks.style.left = '0'; navLinks.style.right = '0';
+  navLinks.style.background = 'rgba(6,9,20,.98)'; navLinks.style.padding = '20px 32px';
+  navLinks.style.borderBottom = '1px solid var(--border)'; navLinks.style.gap = '18px';
+});
+</script>
+</body>
+</html>

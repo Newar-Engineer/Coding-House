@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Certificate — Coding House</title>
+<meta name="description" content="Verify the authenticity of a Coding House certificate. Enter a certificate ID to confirm completion.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+body{animation:pageIn .5s ease}@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.verify-box{max-width:560px;margin:0 auto 48px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center}
+.verify-box h2{font-family:'Space Grotesk',sans-serif;font-size:24px;margin-bottom:8px}
+.verify-box p{color:var(--text-soft);font-size:14px;margin-bottom:24px}
+.verify-input-group{display:flex;gap:10px;margin-bottom:16px}
+.verify-input{flex:1;padding:14px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-size:15px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase;transition:border-color .2s}
+.verify-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
+.verify-input::placeholder{text-transform:none;letter-spacing:normal;font-family:'Inter',sans-serif}
+.verify-btn{padding:14px 28px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;font-size:15px;cursor:pointer;border:none;transition:all .3s;font-family:'Inter',sans-serif;box-shadow:0 4px 16px rgba(124,58,237,0.3);white-space:nowrap}
+.verify-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.4)}
+
+/* ── Certificate Display ── */
+.cert-result{display:none;max-width:700px;margin:0 auto}
+.cert-result.visible{display:block;animation:fadeInUp .5s ease}
+.cert-card{background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(34,211,238,0.04));border:2px solid var(--border);border-radius:24px;padding:48px;text-align:center;position:relative;overflow:hidden}
+.cert-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 30%,rgba(99,102,241,0.06),transparent 50%),radial-gradient(circle at 70% 70%,rgba(34,211,238,0.04),transparent 50%);pointer-events:none}
+.cert-verified-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:999px;font-size:14px;font-weight:700;color:#10b981;margin-bottom:24px}
+.cert-logo{font-size:48px;margin-bottom:16px}
+.cert-title{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.cert-name{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;margin-bottom:8px;background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cert-course{font-size:18px;color:var(--text-soft);margin-bottom:24px}
+.cert-details{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cert-detail{text-align:center}
+.cert-detail .cd-label{font-size:11px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px}
+.cert-detail .cd-value{font-size:15px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.cert-skills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.cert-skill{padding:5px 14px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:999px;font-size:12px;font-weight:600;color:var(--primary)}
+.cert-id-display{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-mute)}
+.cert-actions{display:flex;gap:12px;justify-content:center;margin-top:24px}
+.cert-actions button{padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.cert-share{background:var(--primary);border:none;color:#fff}
+.cert-share:hover{opacity:.9}
+.cert-print{background:transparent;border:1px solid var(--border);color:var(--text-mute)}
+.cert-print:hover{border-color:var(--primary);color:var(--text)}
+
+.cert-not-found{display:none;max-width:500px;margin:0 auto;text-align:center;padding:40px;background:rgba(255,93,114,0.06);border:1px solid rgba(255,93,114,0.2);border-radius:16px}
+.cert-not-found.visible{display:block;animation:fadeInUp .5s ease}
+.cert-not-found .cnf-icon{font-size:48px;margin-bottom:12px}
+.cert-not-found h3{font-family:'Space Grotesk',sans-serif;font-size:20px;color:var(--danger);margin-bottom:8px}
+.cert-not-found p{color:var(--text-soft);font-size:14px}
+
+.sample-ids{max-width:560px;margin:32px auto 0;text-align:center;font-size:13px;color:var(--text-mute)}
+.sample-ids code{background:rgba(124,58,237,0.1);padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;color:var(--primary);cursor:pointer;transition:opacity .2s}
+.sample-ids code:hover{opacity:.7}
+
+@media(max-width:600px){.verify-input-group{flex-direction:column}.cert-details{grid-template-columns:1fr}.cert-card{padding:32px 20px}}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="index.html" class="logo"><img class="codinghouse-logo" src="assets/codinghouse-logo.svg" alt="" width="30" height="30">Coding House</a>
+<ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="index.html#languages">Languages</a></li><li><a href="playground.html">Playground</a></li><li><a href="blog.html">Blog</a></li><li><a href="roadmap.html">Roadmaps</a></li></ul>
+<div class="nav-cta"><button class="theme-toggle" id="theme-toggle-btn">☀️</button><a href="index.html#languages" class="btn btn-primary btn-sm">Start Learning</a><button class="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+</nav></header>
+
+<section class="page-hero">
+<div class="wrap">
+<div class="eyebrow">verification</div>
+<h1>Verify Certificate 🎓</h1>
+<p class="sub">Enter a certificate ID to verify its authenticity and view completion details.</p>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="verify-box">
+<h2>🔍 Certificate Lookup</h2>
+<p>Enter the certificate ID found at the bottom of any Coding House certificate.</p>
+<div class="verify-input-group">
+<input class="verify-input" id="cert-input" placeholder="e.g. CH-PY-2026-0001" maxlength="20" onkeydown="if(event.key==='Enter')verifyCert()">
+<button class="verify-btn" onclick="verifyCert()">Verify</button>
+</div>
+</div>
+
+<div class="cert-result" id="cert-result"></div>
+<div class="cert-not-found" id="cert-not-found">
+<div class="cnf-icon">❌</div>
+<h3>Certificate Not Found</h3>
+<p>The ID you entered doesn't match any certificate in our records. Please double-check and try again.</p>
+</div>
+
+<div class="sample-ids">
+<p>Try these sample IDs: <code onclick="tryId('CH-PY-2026-0001')">CH-PY-2026-0001</code> · <code onclick="tryId('CH-JS-2026-0042')">CH-JS-2026-0042</code> · <code onclick="tryId('CH-WD-2026-0108')">CH-WD-2026-0108</code></p>
+</div>
+</div>
+</section>
+
+<footer><div class="wrap"><div class="foot-bottom" style="border-top:none;padding-top:0;"><span>© 2026 Coding House. All rights reserved.</span><div class="foot-social"><a href="index.html">Home</a><a href="playground.html">Playground</a><a href="https://github.com/Newar-Engineer/Coding-House">GitHub</a></div></div></div></footer>
+
+<script src="js/theme-toggle.js"></script>
+<script src="js/back-to-top.js"></script>
+<script>
+var CERTS={
+'CH-PY-2026-0001':{name:'Amara Sharma',course:'Python — Complete Masterclass',date:'June 15, 2026',score:'94%',level:'Professional',skills:['Python Core','OOP','Data Structures','APIs','Machine Learning','Automation']},
+'CH-JS-2026-0042':{name:'Rohan Kapoor',course:'JavaScript — Full Course',date:'May 28, 2026',score:'88%',level:'Advanced',skills:['ES6+','DOM','Async/Await','Node.js','React','REST APIs']},
+'CH-WD-2026-0108':{name:'Lina Martinez',course:'Web Development Track',date:'July 1, 2026',score:'91%',level:'Professional',skills:['HTML/CSS','JavaScript','React','Node.js','MongoDB','Deployment']},
+'CH-JV-2026-0023':{name:'Marcus Thompson',course:'Java — Enterprise Development',date:'April 10, 2026',score:'87%',level:'Advanced',skills:['Java Core','OOP','Spring Boot','JPA','REST APIs','Testing']},
+'CH-ML-2026-0007':{name:'Kim Jisoo',course:'AI & Machine Learning Track',date:'June 30, 2026',score:'96%',level:'Professional',skills:['Python','NumPy','TensorFlow','CNNs','NLP','Model Deployment']}
+};
+
+function verifyCert(){
+var id=document.getElementById('cert-input').value.trim().toUpperCase();
+document.getElementById('cert-result').classList.remove('visible');
+document.getElementById('cert-not-found').classList.remove('visible');
+if(!id)return;
+
+var cert=CERTS[id];
+if(!cert){
+document.getElementById('cert-not-found').classList.add('visible');
+return;
+}
+
+var html='<div class="cert-card">'+
+'<div class="cert-verified-badge">✅ Verified Certificate</div>'+
+'<div class="cert-logo">🏠</div>'+
+'<div class="cert-title">Coding House — Certificate of Completion</div>'+
+'<div class="cert-name">'+cert.name+'</div>'+
+'<div class="cert-course">'+cert.course+'</div>'+
+'<div class="cert-details">'+
+'<div class="cert-detail"><div class="cd-label">Date</div><div class="cd-value">'+cert.date+'</div></div>'+
+'<div class="cert-detail"><div class="cd-label">Score</div><div class="cd-value">'+cert.score+'</div></div>'+
+'<div class="cert-detail"><div class="cd-label">Level</div><div class="cd-value">'+cert.level+'</div></div>'+
+'</div>'+
+'<div class="cert-skills">'+cert.skills.map(function(s){return '<span class="cert-skill">'+s+'</span>';}).join('')+'</div>'+
+'<div class="cert-id-display">Certificate ID: '+id+'</div>'+
+'<div class="cert-actions">'+
+'<button class="cert-share" onclick="shareCert(\''+id+'\')">🔗 Share Link</button>'+
+'<button class="cert-print" onclick="window.print()">🖨️ Print</button>'+
+'</div>'+
+'</div>';
+
+document.getElementById('cert-result').innerHTML=html;
+document.getElementById('cert-result').classList.add('visible');
+}
+
+function tryId(id){
+document.getElementById('cert-input').value=id;
+verifyCert();
+}
+
+function shareCert(id){
+var url=window.location.origin+window.location.pathname+'?id='+id;
+navigator.clipboard.writeText(url).then(function(){alert('Certificate link copied to clipboard!');});
+}
+
+// Check URL for pre-filled ID
+window.addEventListener('load',function(){
+var params=new URLSearchParams(window.location.search);
+var id=params.get('id');
+if(id){document.getElementById('cert-input').value=id;verifyCert();}
+});
+
+// Burger
+var burger=document.querySelector('.burger'),navLinks=document.querySelector('.nav-links');
+if(burger)burger.addEventListener('click',function(){var o=navLinks.style.display==='flex';navLinks.style.display=o?'none':'flex';navLinks.style.flexDirection='column';navLinks.style.position='absolute';navLinks.style.top='64px';navLinks.style.left='0';navLinks.style.right='0';navLinks.style.background='rgba(6,9,20,.98)';navLinks.style.padding='20px 32px';navLinks.style.borderBottom='1px solid var(--border)';navLinks.style.gap='18px';});
+</script>
+</body>
+</html>
