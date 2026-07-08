@@ -338,32 +338,121 @@ document.getElementById('theme-select').addEventListener('change', function () {
   if (editor) monaco.editor.setTheme(this.value);
 });
 
-// Piston API for code execution
-var PISTON_URL = 'https://emkc.org/api/v2/piston/execute';
-var PISTON_LANG_MAP = {
-  python: { language: 'python', version: '3.10.0' },
-  javascript: { language: 'javascript', version: '18.15.0' },
-  typescript: { language: 'typescript', version: '5.0.3' },
-  java: { language: 'java', version: '15.0.2' },
-  c: { language: 'c', version: '10.2.0' },
-  cpp: { language: 'c++', version: '10.2.0' },
-  csharp: { language: 'csharp.net', version: '6.12.0' },
-  go: { language: 'go', version: '1.16.2' },
-  rust: { language: 'rust', version: '1.68.2' },
-  php: { language: 'php', version: '8.2.3' },
-  ruby: { language: 'ruby', version: '3.0.1' },
-  swift: { language: 'swift', version: '5.3.3' },
-  kotlin: { language: 'kotlin', version: '1.8.20' },
-  dart: { language: 'dart', version: '2.19.6' },
-  r: { language: 'r', version: '4.1.1' },
-  matlab: { language: 'octave', version: '6.4.0' }
+// ── Code Execution Engine ──
+// JavaScript/TypeScript: Runs locally in browser (no API needed)
+// All other languages: Uses Judge0 CE free public API
+
+var JUDGE0_ENDPOINTS = [
+  'https://judge0-ce.p.rapidapi.com',
+  'https://ce.judge0.com'
+];
+var JUDGE0_LANG_IDS = {
+  python: 71, java: 62, c: 50, cpp: 54, csharp: 51,
+  go: 60, rust: 73, php: 68, ruby: 72, swift: 83,
+  kotlin: 78, dart: 90, r: 80, matlab: 66
 };
+
+// Execute JavaScript/TypeScript locally in a sandboxed way
+function runJSLocally(code, lang) {
+  return new Promise(function(resolve) {
+    var output = [];
+    var errors = [];
+
+    // If TypeScript, strip type annotations (basic transpile)
+    if (lang === 'typescript') {
+      code = code
+        .replace(/:\s*(string|number|boolean|any|void|never|object|unknown|undefined|null)(\[\])?/g, '')
+        .replace(/\<[A-Za-z, ]+\>/g, '')
+        .replace(/\bas\b\s+\w+/g, '')
+        .replace(/interface\s+\w+\s*\{[^}]*\}/g, '')
+        .replace(/type\s+\w+\s*=\s*[^;]+;/g, '')
+        .replace(/export\s+/g, '')
+        .replace(/import\s+.*from\s+['"][^'"]+['"];?/g, '');
+    }
+
+    // Override console methods to capture output
+    var fakeConsole = {
+      log: function() { output.push(Array.from(arguments).map(function(a) { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); }).join(' ')); },
+      error: function() { errors.push(Array.from(arguments).map(String).join(' ')); },
+      warn: function() { output.push('[WARN] ' + Array.from(arguments).map(String).join(' ')); },
+      info: function() { output.push(Array.from(arguments).map(String).join(' ')); },
+      table: function(data) { output.push(JSON.stringify(data, null, 2)); },
+      dir: function(obj) { output.push(JSON.stringify(obj, null, 2)); },
+      clear: function() { output = []; }
+    };
+
+    try {
+      var wrappedCode = '(function(console, window, document, fetch, XMLHttpRequest) {\n' + code + '\n})';
+      var fn = eval(wrappedCode);
+      var result = fn(fakeConsole, undefined, undefined, undefined, undefined);
+
+      // Handle async results
+      if (result && typeof result.then === 'function') {
+        result.then(function() {
+          resolve({ stdout: output.join('\n'), stderr: errors.join('\n'), code: errors.length ? 1 : 0 });
+        }).catch(function(e) {
+          errors.push(String(e));
+          resolve({ stdout: output.join('\n'), stderr: errors.join('\n'), code: 1 });
+        });
+      } else {
+        resolve({ stdout: output.join('\n'), stderr: errors.join('\n'), code: errors.length ? 1 : 0 });
+      }
+    } catch (e) {
+      errors.push(e.name + ': ' + e.message);
+      resolve({ stdout: output.join('\n'), stderr: errors.join('\n'), code: 1 });
+    }
+  });
+}
+
+// Execute via Judge0 CE API
+function runViaJudge0(code, langId) {
+  var endpointIdx = 0;
+
+  function tryEndpoint(idx) {
+    var url = JUDGE0_ENDPOINTS[idx];
+    var submitUrl = url + '/submissions?base64_encoded=true&wait=true&fields=stdout,stderr,status,compile_output';
+
+    return fetch(submitUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        language_id: langId,
+        source_code: btoa(unescape(encodeURIComponent(code))),
+        stdin: ''
+      })
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function(data) {
+      var stdout = data.stdout ? decodeURIComponent(escape(atob(data.stdout))) : '';
+      var stderr = data.stderr ? decodeURIComponent(escape(atob(data.stderr))) : '';
+      var compileErr = data.compile_output ? decodeURIComponent(escape(atob(data.compile_output))) : '';
+      var exitCode = (data.status && data.status.id <= 3) ? 0 : 1;
+
+      if (compileErr && !stdout) stderr = compileErr + (stderr ? '\n' + stderr : '');
+      return { stdout: stdout, stderr: stderr, code: exitCode };
+    })
+    .catch(function(err) {
+      // Try next endpoint
+      if (idx + 1 < JUDGE0_ENDPOINTS.length) {
+        return tryEndpoint(idx + 1);
+      }
+      throw err;
+    });
+  }
+
+  return tryEndpoint(0);
+}
 
 function runCode() {
   if (!editor) return;
   var code = editor.getValue();
   var lang = document.getElementById('lang-select').value;
-  var pistonLang = PISTON_LANG_MAP[lang];
   var btn = document.getElementById('run-btn');
   var output = document.getElementById('output');
   var status = document.getElementById('status');
@@ -371,43 +460,42 @@ function runCode() {
   btn.innerHTML = '⏳ <span class="label">Running...</span>';
   btn.classList.add('running');
   status.textContent = 'Executing...';
-  output.innerHTML = '<span class="out-info">⏳ Running your ' + lang + ' code...</span>\n';
 
-  fetch(PISTON_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      language: pistonLang.language,
-      version: pistonLang.version,
-      files: [{ name: 'main.' + (LANG_MAP[lang].ext), content: code }]
-    })
-  })
-  .then(function (res) { return res.json(); })
-  .then(function (data) {
-    btn.innerHTML = '▶ <span class="label">Run Code</span>';
-    btn.classList.remove('running');
+  var isLocal = (lang === 'javascript' || lang === 'typescript');
+  output.innerHTML = '<span class="out-info">⏳ Running your ' + lang + ' code' + (isLocal ? ' (in-browser)' : ' (cloud)') + '...</span>\n';
 
-    if (data.run) {
-      var stdout = data.run.stdout || '';
-      var stderr = data.run.stderr || '';
-      var exitCode = data.run.code;
-
-      output.innerHTML = '';
-      if (stdout) output.innerHTML += '<span class="out-success">' + escapeHtml(stdout) + '</span>';
-      if (stderr) output.innerHTML += '<span class="out-error">' + escapeHtml(stderr) + '</span>';
-      if (!stdout && !stderr) output.innerHTML = '<span class="out-info">Program finished with no output.</span>';
-
-      status.textContent = exitCode === 0 ? '✓ Success · ' + lang : '✗ Exit code: ' + exitCode;
-    } else if (data.message) {
-      output.innerHTML = '<span class="out-error">Error: ' + escapeHtml(data.message) + '</span>';
-      status.textContent = '✗ Error';
+  var execPromise;
+  if (isLocal) {
+    execPromise = runJSLocally(code, lang);
+  } else {
+    var langId = JUDGE0_LANG_IDS[lang];
+    if (!langId) {
+      btn.innerHTML = '▶ <span class="label">Run Code</span>';
+      btn.classList.remove('running');
+      output.innerHTML = '<span class="out-error">⚠ Language "' + lang + '" is not supported for cloud execution yet.</span>';
+      status.textContent = '✗ Unsupported';
+      return;
     }
-  })
-  .catch(function (err) {
+    execPromise = runViaJudge0(code, langId);
+  }
+
+  execPromise
+  .then(function(result) {
     btn.innerHTML = '▶ <span class="label">Run Code</span>';
     btn.classList.remove('running');
-    output.innerHTML = '<span class="out-error">⚠ Network error. Please check your connection and try again.\n\n' + escapeHtml(err.message) + '</span>';
-    status.textContent = '✗ Network Error';
+
+    output.innerHTML = '';
+    if (result.stdout) output.innerHTML += '<span class="out-success">' + escapeHtml(result.stdout) + '</span>';
+    if (result.stderr) output.innerHTML += '<span class="out-error">' + escapeHtml(result.stderr) + '</span>';
+    if (!result.stdout && !result.stderr) output.innerHTML = '<span class="out-info">Program finished with no output.</span>';
+
+    status.textContent = result.code === 0 ? '✓ Success · ' + lang + (isLocal ? ' (local)' : '') : '✗ Exit code: ' + result.code;
+  })
+  .catch(function(err) {
+    btn.innerHTML = '▶ <span class="label">Run Code</span>';
+    btn.classList.remove('running');
+    output.innerHTML = '<span class="out-error">⚠ Could not connect to code execution service.\n\nTip: JavaScript and TypeScript always run locally in your browser — try switching to those!\n\nError: ' + escapeHtml(err.message) + '</span>';
+    status.textContent = '✗ API Error';
   });
 }
 
