@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Creator — Coding House</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060914;
+  --surface:#0d1224;
+  --surface2:#111827;
+  --border:rgba(99,102,241,0.18);
+  --primary:#6366f1;
+  --primary2:#818cf8;
+  --accent:#22d3ee;
+  --green:#10b981;
+  --yellow:#f5b942;
+  --red:#f87171;
+  --text:#e2e8f0;
+  --mute:#64748b;
+  --sidebar:220px;
+  --neon-glow: 0 0 20px rgba(99,102,241,0.4), 0 0 40px rgba(34,211,238,0.2);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;z-index:100;overflow:hidden;
+}
+.sidebar-logo{
+  padding:24px 20px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;
+}
+.sidebar-logo .mark{color:var(--primary);font-size:1.3rem}
+.sidebar-logo img{display:block}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto}
+.nav-section{padding:8px 20px 4px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--mute);text-transform:uppercase}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;margin:2px 8px;border-radius:8px;
+  text-decoration:none;color:var(--mute);font-size:14px;font-weight:500;
+  transition:all .2s ease;cursor:pointer;border:none;background:none;width:calc(100% - 16px);
+}
+.nav-item:hover,.nav-item.active{background:rgba(99,102,241,.12);color:var(--text)}
+.nav-item.active{color:var(--primary2);border-left:2px solid var(--primary)}
+.nav-item .ni{font-size:16px;width:20px;text-align:center}
+.sidebar-user{
+  padding:16px 20px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.user-av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;flex-shrink:0;
+}
+.user-info{flex:1;overflow:hidden}
+.user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:11px;color:var(--mute)}
+.logout-btn{
+  padding:6px;border-radius:6px;border:none;background:rgba(248,113,113,.1);
+  color:var(--red);cursor:pointer;transition:all .2s;font-size:14px;
+}
+.logout-btn:hover{background:rgba(248,113,113,.2)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  padding:16px 32px;background:rgba(6,9,20,.8);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;
+}
+.topbar-left h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700}
+.topbar-left p{font-size:13px;color:var(--mute);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.streak-badge{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;background:rgba(245,185,66,.1);border:1px solid rgba(245,185,66,.3);
+  border-radius:20px;font-size:13px;font-weight:600;color:var(--yellow);
+}
+
+/* ── CONTENT ── */
+.content{padding:28px 32px;flex:1}
+
+/* ── SKILL CREATOR LAYOUT ── */
+.creator-container{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:28px;
+  margin-top:20px;
+}
+
+/* Cards & Inputs styling */
+.glass-card{
+  background:rgba(13,18,36,0.6);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+}
+.glass-card:hover{
+  border-color:rgba(99,102,241,0.4);
+  box-shadow:var(--neon-glow);
+}
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.card-header h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.25rem;
+  font-weight:700;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* Form Styles */
+.form-group{margin-bottom:18px}
+.form-label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--mute);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:8px;
+}
+.form-input, .form-textarea, .form-select{
+  width:100%;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:12px 14px;
+  border-radius:10px;
+  font-family:inherit;
+  font-size:14px;
+  outline:none;
+  transition:all 0.2s ease;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus{
+  border-color:var(--primary2);
+  box-shadow:0 0 0 3px rgba(99,102,241,0.15);
+}
+
+/* Step Builder */
+.steps-list{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin-bottom:20px;
+}
+.step-item{
+  background:rgba(6,9,20,0.4);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  position:relative;
+  transition:all 0.3s ease;
+}
+.step-item:hover{
+  border-color:rgba(34,211,238,0.4);
+}
+.step-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.step-number{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:var(--primary);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:700;
+}
+.delete-step{
+  background:transparent;
+  border:none;
+  color:var(--red);
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+}
+.delete-step:hover{text-decoration:underline}
+
+/* Floating Actions */
+.btn-row{
+  display:flex;
+  gap:12px;
+  margin-top:20px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 24px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  font-family:inherit;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:#fff;
+  border:none;
+  box-shadow:0 4px 14px rgba(99,102,241,0.3);
+}
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 20px rgba(99,102,241,0.5);
+}
+.btn-secondary{
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.08);
+}
+
+/* Visualization Panel */
+.visualizer-panel{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  position:sticky;
+  top:90px;
+}
+.preview-header{
+  display:flex;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+  padding-bottom:10px;
+}
+.preview-tab{
+  font-size:12px;
+  font-weight:700;
+  color:var(--mute);
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.preview-tab.active{
+  background:rgba(99,102,241,0.15);
+  color:var(--primary2);
+}
+.code-window{
+  background:#05070e;
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:12px;
+  padding:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  line-height:1.6;
+  height:400px;
+  overflow-y:auto;
+  white-space:pre-wrap;
+  color:#a5b4fc;
+}
+.accent-text{color:var(--accent)}
+.keyword-text{color:var(--red)}
+.string-text{color:var(--green)}
+.comment-text{color:var(--mute)}
+
+/* Distill success overlay */
+.distill-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(6,9,20,0.85);
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.distill-overlay.open{display:flex}
+.distill-card{
+  background:var(--surface);
+  border:1px solid var(--primary);
+  border-radius:24px;
+  padding:40px;
+  max-width:500px;
+  width:90%;
+  text-align:center;
+  box-shadow:var(--neon-glow);
+  transform:scale(0.9);
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.distill-overlay.open .distill-card{transform:scale(1)}
+.distill-glow-icon{
+  font-size:64px;
+  margin-bottom:20px;
+  animation:floatGlow 3s ease-in-out infinite;
+}
+@keyframes floatGlow {
+  0%,100% {transform:translateY(0); text-shadow:0 0 10px rgba(99,102,241,0.5)}
+  50% {transform:translateY(-10px); text-shadow:0 0 30px rgba(34,211,238,0.8)}
+}
+
+@media (max-width:1080px){
+  .creator-container{grid-template-columns:1fr}
+  .visualizer-panel{position:static}
+}
+@media (max-width:720px){
+  .main{margin-left:0}
+  .sidebar{position:static;width:100%;height:auto}
+  .content{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo" style="cursor: pointer;" onclick="window.location.href='../index.html'">
+    <img class="codinghouse-logo" src="../assets/codinghouse-logo.svg" alt="" aria-hidden="true" width="30" height="30"> Coding House
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="userdashboard.html"><span class="ni">🏠</span> Dashboard</a>
+    <a class="nav-item" href="courses.html"><span class="ni">📚</span> My Courses</a>
+    <a class="nav-item" href="roadmaps.html"><span class="ni">🗺️</span> Roadmaps</a>
+    <a class="nav-item" href="challenges.html"><span class="ni">⚡</span> Challenges</a>
+    <a class="nav-item" href="projects.html"><span class="ni">🏗️</span> Projects</a>
+
+    <div class="nav-section" style="margin-top:12px">Practice</div>
+    <a class="nav-item" href="interview-prep.html"><span class="ni">🎯</span> Interview Prep</a>
+    <a class="nav-item" href="ai-assistant.html"><span class="ni">🤖</span> AI Assistant</a>
+    <a class="nav-item" href="notes.html"><span class="ni">📝</span> Notes</a>
+    <a class="nav-item active" href="workflow-skill-creator.html"><span class="ni">⚙️</span> Skill Creator</a>
+
+    <div class="nav-section" style="margin-top:12px">Account</div>
+    <a class="nav-item" href="profile.html"><span class="ni">👤</span> Profile</a>
+    <a class="nav-item" href="achievements.html"><span class="ni">🏆</span> Achievements</a>
+    <a class="nav-item" href="settings.html"><span class="ni">⚙️</span> Settings</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av" style="cursor: pointer;" onclick="window.location.href='profile.html'">SR</div>
+    <div class="user-info" style="cursor: pointer;" onclick="window.location.href='profile.html'">
+      <div class="user-name">Shrestha</div>
+      <div class="user-role">Pro Member</div>
+    </div>
+    <button class="logout-btn" onclick="window.location.href='../login.html'" title="Log out">↩</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Workflow-to-Skill Distiller ⚙️</h1>
+      <p>Distill your developer steps & CLI activities into clean reusable agent skills</p>
+    </div>
+    <div class="topbar-right">
+      <div class="streak-badge">🔥 14 day streak</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="creator-container">
+      
+      <!-- LEFT PANEL: WORKFLOW BUILDER -->
+      <div class="glass-card">
+        <div class="card-header">
+          <h2>🛠️ Distillation Builder</h2>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="skill-name">Skill Name</label>
+          <input type="text" id="skill-name" class="form-input" placeholder="e.g. log-analyzer" oninput="updatePreview()">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="skill-desc">Description</label>
+          <textarea id="skill-desc" class="form-textarea" rows="3" placeholder="Briefly describe what this skill accomplishes..." oninput="updatePreview()"></textarea>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+          <div class="form-group">
+            <label class="form-label" for="skill-placement">Placement Path</label>
+            <select id="skill-placement" class="form-select" onchange="updatePreview()">
+              <option value="local">Local Workspace (.agents/skills/)</option>
+              <option value="global">Global (~/.gemini/config/skills/)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="skill-type">Implementation Pattern</label>
+            <select id="skill-type" class="form-select" onchange="togglePatternFields(); updatePreview();">
+              <option value="cli">CLI Script Helper (Recommended for API/Files)</option>
+              <option value="instruction">Instruction-Only (Reasoning tasks)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cli-fields">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px;">
+            <div class="form-group">
+              <label class="form-label" for="rate-limit">Rate Limit (req/sec)</label>
+              <input type="number" id="rate-limit" class="form-input" value="1" min="1" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="error-strategy">Error Strategy</label>
+              <select id="error-strategy" class="form-select" onchange="updatePreview()">
+                <option value="retry">Exponential Backoff & Retry</option>
+                <option value="guidance">Ask User For Guidance</option>
+                <option value="fail">Fail Loudly immediately</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-header" style="margin-top:28px;">
+          <h3>📋 Workflow Steps</h3>
+          <button class="btn btn-secondary" style="padding:6px 12px; font-size:12px;" onclick="addStep()">➕ Add Step</button>
+        </div>
+
+        <div class="steps-list" id="steps-container"></div>
+        
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="triggerDistillation()">⚡ Distill Skill</button>
+          <button class="btn btn-secondary" onclick="resetBuilder()">Reset Form</button>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: LIVE PREVIEW & VISUALIZER -->
+      <div class="visualizer-panel">
+        <div class="glass-card">
+          <div class="card-header">
+            <h2>🔮 Live Code Preview</h2>
+          </div>
+          
+          <div class="preview-header">
+            <div class="preview-tab active" id="tab-skill" onclick="switchPreviewTab('skill')">SKILL.md</div>
+            <div class="preview-tab" id="tab-script" onclick="switchPreviewTab('script')">scripts/cli.py</div>
+          </div>
+
+          <div class="code-window" id="code-preview"></div>
+          
+          <div class="btn-row" style="margin-top:16px; justify-content:flex-end;">
+            <button class="btn btn-secondary" onclick="copyGeneratedCode()">📋 Copy Snippet</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- Distill Progress Overlay -->
+<div class="distill-overlay" id="distill-overlay">
+  <div class="distill-card">
+    <div class="distill-glow-icon">🪄</div>
+    <h2 style="font-family:'Space Grotesk',sans-serif; margin-bottom:12px;">Distilling Workflow...</h2>
+    <p style="color:var(--mute); font-size:14px; line-height:1.6; margin-bottom:24px;">Extracting patterns, mapping inputs/outputs, structuring rate-limits, and writing skill packages...</p>
+    <div style="height:4px; width:100%; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; position:relative;">
+      <div style="height:100%; width:0%; background:linear-gradient(90deg,var(--primary),var(--accent)); border-radius:2px; animation:loadBar 2.5s ease-in-out forwards;"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes loadBar {
+  0% {width: 0%;}
+  50% {width: 70%;}
+  100% {width: 100%;}
+}
+</style>
+
+<script>
+var stepsData = [
+  {title: "Fetch Logs", desc: "Retrieve text log files from the server target path or provided URL."},
+  {title: "Scan & Parse Patterns", desc: "Scan files using regex rules to extract warnings, errors, and access patterns."},
+  {title: "Format & Output Report", desc: "Generate a simplified JSON analytics breakdown and save to output file."}
+];
+var activeTab = 'skill';
+
+function initSteps() {
+  var container = document.getElementById('steps-container');
+  container.innerHTML = '';
+  stepsData.forEach(function(step, idx) {
+    container.innerHTML += createStepHTML(idx, step.title, step.desc);
+  });
+  updatePreview();
+}
+
+function createStepHTML(idx, title, desc) {
+  return '<div class="step-item">' +
+    '<div class="step-header">' +
+      '<div style="display:flex; align-items:center; gap:10px;">' +
+        '<div class="step-number">' + (idx + 1) + '</div>' +
+        '<input type="text" class="form-input" style="padding:6px 10px; font-weight:700; width:220px;" value="' + title + '" oninput="stepTitleChanged(' + idx + ', this.value)">' +
+      '</div>' +
+      '<button class="delete-step" onclick="deleteStep(' + idx + ')">Delete</button>' +
+    '</div>' +
+    '<textarea class="form-textarea" rows="2" style="font-size:13px; padding:8px 10px;" oninput="stepDescChanged(' + idx + ', this.value)">' + desc + '</textarea>' +
+  '</div>';
+}
+
+function addStep() {
+  stepsData.push({title: "New Step", desc: "Describe action steps to run..."});
+  initSteps();
+}
+
+function deleteStep(idx) {
+  stepsData.splice(idx, 1);
+  initSteps();
+}
+
+function stepTitleChanged(idx, val) {
+  stepsData[idx].title = val;
+  updatePreview();
+}
+
+function stepDescChanged(idx, val) {
+  stepsData[idx].desc = val;
+  updatePreview();
+}
+
+function togglePatternFields() {
+  var type = document.getElementById('skill-type').value;
+  var cliFields = document.getElementById('cli-fields');
+  var scriptTab = document.getElementById('tab-script');
+  
+  if (type === 'cli') {
+    cliFields.style.display = 'block';
+    scriptTab.style.display = 'block';
+  } else {
+    cliFields.style.display = 'none';
+    scriptTab.style.display = 'none';
+    if (activeTab === 'script') {
+      switchPreviewTab('skill');
+    }
+  }
+}
+
+function switchPreviewTab(tab) {
+  activeTab = tab;
+  document.getElementById('tab-skill').classList.toggle('active', tab === 'skill');
+  document.getElementById('tab-script').classList.toggle('active', tab === 'script');
+  updatePreview();
+}
+
+function updatePreview() {
+  var name = document.getElementById('skill-name').value.trim() || 'my-custom-skill';
+  var desc = document.getElementById('skill-desc').value.trim() || 'A customizable agent skill distilled from builder workflow.';
+  var placement = document.getElementById('skill-placement').value;
+  var type = document.getElementById('skill-type').value;
+  var rateLimit = document.getElementById('rate-limit') ? document.getElementById('rate-limit').value : 1;
+  var errorStrat = document.getElementById('error-strategy') ? document.getElementById('error-strategy').value : 'retry';
+  
+  var formattedPreview = '';
+  
+  if (activeTab === 'skill') {
+    formattedPreview += '<span class="comment-text">---</span>\n';
+    formattedPreview += '<span class="keyword-text">name:</span> <span class="string-text">' + name.toLowerCase().replace(/\s+/g, '-') + '</span>\n';
+    formattedPreview += '<span class="keyword-text">description:</span> <span class="string-text">|\n  ' + desc + '</span>\n';
+    formattedPreview += '<span class="comment-text">---</span>\n\n';
+    formattedPreview += '<span class="accent-text"># ' + name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + '</span>\n\n';
+    formattedPreview += '<span class="keyword-text">## Overview</span>\n';
+    formattedPreview += desc + '\n\n';
+    
+    if (type === 'cli') {
+      formattedPreview += '<span class="keyword-text">## Utility Scripts</span>\n';
+      formattedPreview += 'This skill uses a Python helper command script. Trigger commands via terminal:\n';
+      formattedPreview += '<span class="string-text">`uv run scripts/cli.py run`</span>\n\n';
+    }
+    
+    formattedPreview += '<span class="keyword-text">## Workflow Steps</span>\n';
+    stepsData.forEach(function(step, idx) {
+      formattedPreview += '<span class="accent-text">### ' + (idx + 1) + '. ' + step.title + '</span>\n';
+      formattedPreview += step.desc + '\n\n';
+    });
+    
+    if (type === 'cli') {
+      formattedPreview += '<span class="keyword-text">## Rate Limiting</span>\n';
+      formattedPreview += 'Enforced at ' + rateLimit + ' request(s) per second. Error strategy sets to ' + errorStrat + '.\n';
+    }
+  } else {
+    formattedPreview += '<span class="keyword-text">import</span> os\n';
+    formattedPreview += '<span class="keyword-text">import</span> sys\n';
+    formattedPreview += '<span class="keyword-text">import</span> time\n';
+    formattedPreview += '<span class="keyword-text">import</span> argparse\n\n';
+    formattedPreview += '<span class="comment-text"># Distilled CLI client helper script for: ' + name + '</span>\n';
+    formattedPreview += '<span class="keyword-text">class</span> <span class="accent-text">SkillClient</span>:\n';
+    formattedPreview += '    <span class="keyword-text">def</span> <span class="accent-text">__init__</span>(self):\n';
+    formattedPreview += '        self.rate_limit_delay = <span class="string-text">' + (1 / rateLimit).toFixed(2) + '</span>\n';
+    formattedPreview += '        self.error_strategy = <span class="string-text">"' + errorStrat + '"</span>\n\n';
+    
+    stepsData.forEach(function(step) {
+      var funcName = step.title.toLowerCase().replace(/\s+/g, '_');
+      formattedPreview += '    <span class="keyword-text">def</span> <span class="accent-text">' + funcName + '</span>(self, args):\n';
+      formattedPreview += '        <span class="comment-text"># TODO: ' + step.desc + '</span>\n';
+      formattedPreview += '        print(<span class="string-text">"Executing: ' + step.title + '..."</span>)\n';
+      formattedPreview += '        time.sleep(self.rate_limit_delay)\n\n';
+    });
+  }
+  
+  document.getElementById('code-preview').innerHTML = formattedPreview;
+}
+
+function triggerDistillation() {
+  var overlay = document.getElementById('distill-overlay');
+  overlay.classList.add('open');
+  
+  setTimeout(function() {
+    overlay.classList.remove('open');
+    alert('🎉 Skill distilled and prepared successfully! Ready to download/use.');
+  }, 2500);
+}
+
+function copyGeneratedCode() {
+  var container = document.createElement('textarea');
+  container.value = document.getElementById('code-preview').innerText;
+  document.body.appendChild(container);
+  container.select();
+  document.execCommand('copy');
+  document.body.removeChild(container);
+  alert('📋 Code copied to clipboard!');
+}
+
+function resetBuilder() {
+  document.getElementById('skill-name').value = '';
+  document.getElementById('skill-desc').value = '';
+  stepsData = [
+    {title: "Fetch Logs", desc: "Retrieve text log files from the server target path or provided URL."},
+    {title: "Scan & Parse Patterns", desc: "Scan files using regex rules to extract warnings, errors, and access patterns."},
+    {title: "Format & Output Report", desc: "Generate a simplified JSON analytics breakdown and save to output file."}
+  ];
+  initSteps();
+}
+
+window.onload = function() {
+  initSteps();
+};
+</script>
+</body>
+</html>
