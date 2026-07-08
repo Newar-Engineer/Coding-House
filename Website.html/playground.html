@@ -140,6 +140,86 @@ body { overflow: hidden; }
 .output-placeholder .big-icon { font-size: 48px; margin-bottom: 12px; display: block; }
 .output-placeholder p { font-size: 14px; }
 
+/* ── Stdin Input Panel ── */
+.stdin-panel {
+  border-bottom: 1px solid var(--border);
+  background: rgba(124,58,237,0.03);
+}
+.stdin-toggle {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.stdin-toggle:hover { background: rgba(124,58,237,0.06); }
+.stdin-toggle span {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-mute);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stdin-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
+.stdin-panel.open .stdin-toggle .arrow { transform: rotate(180deg); }
+.stdin-body {
+  display: none;
+  padding: 0 12px 10px;
+}
+.stdin-panel.open .stdin-body { display: block; }
+#stdin-input {
+  width: 100%;
+  min-height: 48px;
+  max-height: 100px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+#stdin-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(124,58,237,0.1); }
+#stdin-input::placeholder { color: var(--text-mute); font-family: 'Inter', sans-serif; font-size: 12px; }
+
+/* ── Error formatting ── */
+#output .out-error-block {
+  background: rgba(248,113,113,0.06);
+  border: 1px solid rgba(248,113,113,0.15);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 8px;
+}
+#output .out-error-block .err-title {
+  font-weight: 700;
+  color: #f87171;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+#output .out-error-block .err-body {
+  color: var(--text-soft);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+#output .out-hint {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(124,58,237,0.06);
+  border: 1px solid rgba(124,58,237,0.15);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+#output .out-hint strong { color: var(--primary); }
+
 /* ── Share modal ── */
 .share-toast {
   position: fixed;
@@ -229,11 +309,21 @@ body { overflow: hidden; }
         <span class="tab active">⚡ Output</span>
         <button class="pg-btn pg-btn-sec" style="padding:4px 10px;font-size:11px" onclick="clearOutput()">Clear</button>
       </div>
+      <div class="stdin-panel" id="stdin-panel">
+        <div class="stdin-toggle" onclick="document.getElementById('stdin-panel').classList.toggle('open')">
+          <span>⌨️ Program Input (stdin)</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="stdin-body">
+          <textarea id="stdin-input" placeholder="Enter input values here, one per line...&#10;Example:&#10;5&#10;10"></textarea>
+        </div>
+      </div>
       <div id="output">
         <div class="output-placeholder">
           <span class="big-icon">🚀</span>
           <p>Click <strong>▶ Run Code</strong> to see output here</p>
           <p style="margin-top:8px;font-size:12px;color:var(--text-mute)">Supports Python, JavaScript, Java, C, C++, Go, Rust and more</p>
+          <p style="margin-top:4px;font-size:11px;color:var(--text-mute)">💡 If your code uses input(), expand the <strong>Program Input</strong> panel above</p>
         </div>
       </div>
     </div>
@@ -405,7 +495,7 @@ function runJSLocally(code, lang) {
 }
 
 // Execute via Judge0 CE API
-function runViaJudge0(code, langId) {
+function runViaJudge0(code, langId, stdinData) {
   var endpointIdx = 0;
 
   function tryEndpoint(idx) {
@@ -421,7 +511,7 @@ function runViaJudge0(code, langId) {
       body: JSON.stringify({
         language_id: langId,
         source_code: btoa(unescape(encodeURIComponent(code))),
-        stdin: ''
+        stdin: stdinData ? btoa(unescape(encodeURIComponent(stdinData))) : ''
       })
     })
     .then(function(res) {
@@ -453,6 +543,8 @@ function runCode() {
   if (!editor) return;
   var code = editor.getValue();
   var lang = document.getElementById('lang-select').value;
+  var stdinInput = document.getElementById('stdin-input');
+  var stdinData = stdinInput ? stdinInput.value : '';
   var btn = document.getElementById('run-btn');
   var output = document.getElementById('output');
   var status = document.getElementById('status');
@@ -476,7 +568,7 @@ function runCode() {
       status.textContent = '✗ Unsupported';
       return;
     }
-    execPromise = runViaJudge0(code, langId);
+    execPromise = runViaJudge0(code, langId, stdinData);
   }
 
   execPromise
@@ -485,16 +577,45 @@ function runCode() {
     btn.classList.remove('running');
 
     output.innerHTML = '';
-    if (result.stdout) output.innerHTML += '<span class="out-success">' + escapeHtml(result.stdout) + '</span>';
-    if (result.stderr) output.innerHTML += '<span class="out-error">' + escapeHtml(result.stderr) + '</span>';
-    if (!result.stdout && !result.stderr) output.innerHTML = '<span class="out-info">Program finished with no output.</span>';
+
+    // Show stdout
+    if (result.stdout) {
+      output.innerHTML += '<span class="out-success">' + escapeHtml(result.stdout) + '</span>';
+    }
+
+    // Show stderr with smart error formatting
+    if (result.stderr) {
+      var stderrText = result.stderr;
+      var isInputError = stderrText.indexOf('EOFError') !== -1 || stderrText.indexOf('EOF when reading') !== -1
+        || stderrText.indexOf('NoSuchElementException') !== -1 || stderrText.indexOf('scanf') !== -1;
+
+      output.innerHTML += '<div class="out-error-block">';
+      output.innerHTML += '<div class="err-title">❌ ' + (result.code !== 0 ? 'Runtime Error' : 'Warning') + '</div>';
+      output.innerHTML += '<div class="err-body">' + escapeHtml(stderrText) + '</div>';
+      output.innerHTML += '</div>';
+
+      // Show helpful hint for input-related errors
+      if (isInputError) {
+        output.innerHTML += '<div class="out-hint"><strong>💡 Tip:</strong> Your code uses <code>input()</code> / <code>scanf()</code> which requires user input. ' +
+          'Click the <strong>⌨️ Program Input</strong> panel above the output and enter your input values (one per line), then run again.</div>';
+        // Auto-open stdin panel
+        var panel = document.getElementById('stdin-panel');
+        if (panel && !panel.classList.contains('open')) panel.classList.add('open');
+      }
+    }
+
+    if (!result.stdout && !result.stderr) {
+      output.innerHTML = '<span class="out-info">Program finished with no output.</span>';
+    }
 
     status.textContent = result.code === 0 ? '✓ Success · ' + lang + (isLocal ? ' (local)' : '') : '✗ Exit code: ' + result.code;
   })
   .catch(function(err) {
     btn.innerHTML = '▶ <span class="label">Run Code</span>';
     btn.classList.remove('running');
-    output.innerHTML = '<span class="out-error">⚠ Could not connect to code execution service.\n\nTip: JavaScript and TypeScript always run locally in your browser — try switching to those!\n\nError: ' + escapeHtml(err.message) + '</span>';
+    output.innerHTML = '<div class="out-error-block"><div class="err-title">⚠ Connection Error</div>' +
+      '<div class="err-body">Could not connect to code execution service.</div></div>' +
+      '<div class="out-hint"><strong>💡 Tip:</strong> JavaScript and TypeScript always run locally in your browser with zero latency — try switching to those!<br><br>Error: ' + escapeHtml(err.message) + '</div>';
     status.textContent = '✗ API Error';
   });
 }
