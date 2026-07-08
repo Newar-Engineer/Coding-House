@@ -364,6 +364,15 @@ nav {
   box-shadow: 0 20px 40px -10px rgba(0,0,0,.6);
   backdrop-filter: blur(12px);
 }
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -16px; /* Bridges the 14px gap */
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: transparent;
+}
 .has-drop:hover .dropdown { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
 .dropdown a { display: block; padding: 8px 10px; border-radius: 7px; font-size: 13.5px; color: var(--text-soft); }
 .dropdown a:hover { background: var(--surface-2); color: var(--cyan); }
