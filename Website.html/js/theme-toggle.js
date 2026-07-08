@@ -10,7 +10,7 @@
   function getPreferred() {
     var saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return saved;
-    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    return 'dark'; // Default to the premium dark developer theme
   }
 
   function applyTheme(theme) {
