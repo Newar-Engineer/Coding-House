@@ -363,54 +363,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
         </div>
     </div>
 
-    <div class="card" style="margin-bottom:24px;">
-        <div class="card-title">🔥 Daily Challenge Spotlight</div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <h3>Two Sum (Problem #1)</h3>
-                <p style="font-size:13px; color:var(--mute); margin-top:4px;">Given an array of integers and a target value, return the indices of the two elements that sum up to the target.</p>
-                <div style="margin-top:8px;">
-                    <span class="diff-easy" style="padding:4px 8px; font-size:11px; border-radius:6px; font-weight:700; background:rgba(16,185,129,.15); color:var(--green);">Easy</span>
-                    <span style="font-size:12px; color:var(--mute); margin-left:12px;">Topic: Arrays, Hash Map</span>
-                </div>
-            </div>
-            <button class="go-btn" onclick="alert('Solve workspace opening...')">Solve Challenge</button>
-        </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-family:'Space Grotesk',sans-serif;">Language-Specific Problem Bank</h3>
+        <select id="lang-selector" style="background:var(--surface2); color:var(--text); border:1px solid var(--border); padding:8px 16px; border-radius:8px; outline:none; cursor:pointer;" onchange="renderChallenges()">
+            <option value="python" selected>Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="java">Java</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="csharp">C#</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="php">PHP</option>
+            <option value="ruby">Ruby</option>
+            <option value="swift">Swift</option>
+            <option value="kotlin">Kotlin</option>
+            <option value="dart">Dart</option>
+            <option value="r">R</option>
+            <option value="matlab">MATLAB</option>
+        </select>
+    </div>
+
+    <div class="diff-tabs" style="display:flex; gap:10px; margin-bottom:20px;">
+        <button class="diff-tab active" data-diff="easy" style="flex:1; padding:12px; border:1px solid var(--border); background:rgba(16,185,129,.1); color:var(--green); border-radius:8px; cursor:pointer; font-weight:600;" onclick="setDifficulty('easy')">🟢 Easy</button>
+        <button class="diff-tab" data-diff="medium" style="flex:1; padding:12px; border:1px solid var(--border); background:rgba(245,185,66,.1); color:var(--yellow); border-radius:8px; cursor:pointer; font-weight:600;" onclick="setDifficulty('medium')">🟡 Medium</button>
+        <button class="diff-tab" data-diff="hard" style="flex:1; padding:12px; border:1px solid var(--border); background:rgba(248,113,113,.1); color:var(--red); border-radius:8px; cursor:pointer; font-weight:600;" onclick="setDifficulty('hard')">🔴 Hard</button>
+        <button class="diff-tab" data-diff="expert" style="flex:1; padding:12px; border:1px solid var(--border); background:rgba(129,140,248,.1); color:var(--primary2); border-radius:8px; cursor:pointer; font-weight:600;" onclick="setDifficulty('expert')">🔥 Expert</button>
     </div>
 
     <div class="card">
-        <div class="card-title">Recent Challenge Practice List</div>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border); align-items:center;">
-                <div>
-                    <h4 style="font-weight:600;">Valid Parentheses</h4>
-                    <span style="font-size:12px; color:var(--mute)">Stack · Strings</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span style="color:var(--green); font-size:12px; font-weight:700;">Solved</span>
-                    <button class="action-btn">Review</button>
-                </div>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border); align-items:center;">
-                <div>
-                    <h4 style="font-weight:600;">LRU Cache Eviction Policy</h4>
-                    <span style="font-size:12px; color:var(--mute)">Design · Linked List · Hash Map</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span style="color:var(--red); font-size:12px; font-weight:700;">Unsolved</span>
-                    <button class="go-btn" style="padding:4px 10px; font-size:11px;">Solve</button>
-                </div>
-            </div>
-            <div style="display:flex; justify-content:space-between; padding:12px; align-items:center;">
-                <div>
-                    <h4 style="font-weight:600;">Binary Tree Level Order Traversal</h4>
-                    <span style="font-size:12px; color:var(--mute)">Tree · BFS</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span style="color:var(--green); font-size:12px; font-weight:700;">Solved</span>
-                    <button class="action-btn">Review</button>
-                </div>
-            </div>
+        <div class="card-title">Challenges <span id="current-lang-diff" style="font-size:13px; color:var(--mute); margin-left:auto; font-weight:500;">Python · Easy</span></div>
+        <div id="dynamic-challenges-list" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- Rendered by JS -->
         </div>
     </div>
 
@@ -707,6 +692,79 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     g.appendChild(c);
   });
 })();
+</script>
+<script src="../js/challenges-data.js"></script>
+<script>
+  let currentLang = 'python';
+  let currentDiff = 'easy';
+
+  function capitalize(str) {
+      if(str === 'javascript') return 'JavaScript';
+      if(str === 'typescript') return 'TypeScript';
+      if(str === 'php') return 'PHP';
+      if(str === 'cpp') return 'C++';
+      if(str === 'csharp') return 'C#';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function setDifficulty(diff) {
+      currentDiff = diff;
+      document.querySelectorAll('.diff-tab').forEach(btn => {
+          if(btn.getAttribute('data-diff') === diff) {
+              btn.classList.add('active');
+              btn.style.opacity = '1';
+              btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+          } else {
+              btn.classList.remove('active');
+              btn.style.opacity = '0.6';
+              btn.style.boxShadow = 'none';
+          }
+      });
+      renderChallenges();
+  }
+
+  function renderChallenges() {
+      currentLang = document.getElementById('lang-selector').value;
+      const listContainer = document.getElementById('dynamic-challenges-list');
+      const diffLabel = document.getElementById('current-lang-diff');
+      
+      diffLabel.textContent = `${capitalize(currentLang)} · ${capitalize(currentDiff)}`;
+      listContainer.innerHTML = '';
+
+      if (!window.CHALLENGES_DB || !window.CHALLENGES_DB[currentLang] || !window.CHALLENGES_DB[currentLang][currentDiff] || window.CHALLENGES_DB[currentLang][currentDiff].length === 0) {
+          listContainer.innerHTML = `<div style="text-align:center; padding:30px; color:var(--mute);">More ${capitalize(currentLang)} challenges coming soon!</div>`;
+          return;
+      }
+
+      const challenges = window.CHALLENGES_DB[currentLang][currentDiff];
+      challenges.forEach(ch => {
+          let diffColor = currentDiff === 'easy' ? 'var(--green)' : currentDiff === 'medium' ? 'var(--yellow)' : currentDiff === 'hard' ? 'var(--red)' : 'var(--primary2)';
+          let diffBg = currentDiff === 'easy' ? 'rgba(16,185,129,.15)' : currentDiff === 'medium' ? 'rgba(245,185,66,.15)' : currentDiff === 'hard' ? 'rgba(248,113,113,.15)' : 'rgba(129,140,248,.15)';
+          
+          let row = document.createElement('div');
+          row.style.cssText = "display:flex; justify-content:space-between; padding:14px; border-bottom:1px solid var(--border); align-items:center; transition: background 0.2s;";
+          row.onmouseover = () => row.style.background = 'var(--surface2)';
+          row.onmouseout = () => row.style.background = 'transparent';
+          row.innerHTML = `
+              <div>
+                  <h4 style="font-weight:600; margin-bottom:4px; color:var(--text); font-size:15px;">${ch.title}</h4>
+                  <p style="font-size:13px; color:var(--mute); line-height:1.4; max-width:650px;">${ch.desc}</p>
+              </div>
+              <div style="display:flex; align-items:center; gap:16px;">
+                  <span style="padding:4px 10px; font-size:11px; border-radius:6px; font-weight:700; background:${diffBg}; color:${diffColor}; text-transform:capitalize;">${currentDiff}</span>
+                  <a href="../playground.html?lang=${currentLang}&challenge=${ch.id}" class="go-btn" style="padding:8px 16px; font-size:13px; text-decoration:none;">Solve <span style="font-size:11px; margin-left:4px;">▶</span></a>
+              </div>
+          `;
+          listContainer.appendChild(row);
+      });
+  }
+
+  // Initial render
+  setTimeout(() => {
+      if(window.CHALLENGES_DB) {
+          setDifficulty('easy'); // This calls renderChallenges
+      }
+  }, 100);
 </script>
 </body>
 </html>

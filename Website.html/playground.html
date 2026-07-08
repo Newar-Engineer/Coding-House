@@ -667,11 +667,37 @@ window.addEventListener('load', function () {
   var params = new URLSearchParams(window.location.search);
   var lang = params.get('lang');
   var code = params.get('code');
+  var challengeId = params.get('challenge');
+
   if (lang && LANG_MAP[lang]) {
     document.getElementById('lang-select').value = lang;
     document.getElementById('lang-select').dispatchEvent(new Event('change'));
   }
-  if (code && editor) {
+
+  if (challengeId && window.CHALLENGES_DB && lang) {
+    setTimeout(function() {
+        var challenge = null;
+        var tiers = ['easy', 'medium', 'hard', 'expert'];
+        for (var i = 0; i < tiers.length; i++) {
+            var tierList = window.CHALLENGES_DB[lang][tiers[i]];
+            if (tierList) {
+                for (var j = 0; j < tierList.length; j++) {
+                    if (tierList[j].id === challengeId) {
+                        challenge = tierList[j];
+                        break;
+                    }
+                }
+            }
+            if (challenge) break;
+        }
+        
+        if (challenge && editor) {
+            var commentPrefix = (lang === 'python' || lang === 'ruby' || lang === 'r') ? '#' : '//';
+            var descHeader = commentPrefix + " 🎯 CHALLENGE: " + challenge.title + "\n" + commentPrefix + " 📝 " + challenge.desc.replace(/\n/g, '\n' + commentPrefix + ' ') + "\n" + commentPrefix + " " + "─".repeat(40) + "\n\n";
+            editor.setValue(descHeader + challenge.template);
+        }
+    }, 500); // Give Monaco time to initialize if needed
+  } else if (code && editor) {
     try {
       var decoded = decodeURIComponent(escape(atob(code)));
       editor.setValue(decoded);
@@ -679,5 +705,6 @@ window.addEventListener('load', function () {
   }
 });
 </script>
+<script src="js/challenges-data.js"></script>
 </body>
 </html>
