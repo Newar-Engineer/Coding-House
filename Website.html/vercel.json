@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/api/chat", "destination": "/api/chat.js" },
+    { "source": "/api/public/(.*)", "destination": "/api/index.js" },
+    { "source": "/api/content/(.*)", "destination": "/api/index.js" },
+    { "source": "/api/users/(.*)", "destination": "/api/index.js" },
+    { "source": "/api/images/(.*)", "destination": "/api/index.js" },
+    { "source": "/api/auth/(.*)", "destination": "/api/index.js" },
+    { "source": "/api/health", "destination": "/api/index.js" }
+  ]
+}

@@ -13,6 +13,7 @@ const { testConnection } = require('./db/connection');
 const { requireAuth, requireAdmin } = require('./middleware/auth');
 const usersRouter  = require('./routes/users');
 const imagesRouter = require('./routes/images');
+const contentRouter = require('./routes/content');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -126,6 +127,7 @@ app.get('/api/public/images', async (req, res) => {
 // ── PROTECTED ROUTES ──
 app.use('/api/users',  requireAuth, requireAdmin, usersRouter);
 app.use('/api/images', requireAuth, requireAdmin, imagesRouter);
+app.use('/api', contentRouter);
 
 // ── 404 ──
 app.use((req, res) => {
@@ -156,4 +158,8 @@ async function start() {
   });
 }
 
-start();
+if (require.main === module) {
+  start();
+}
+
+module.exports = app;

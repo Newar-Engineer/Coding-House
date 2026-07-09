@@ -291,12 +291,54 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 
   <div class="content">
 
-    <h2>⚙️ System Settings & Backups</h2>
-    <p style="color:var(--mute); margin-top:4px; margin-bottom:24px;">Configure database settings, maintenance periods, and backup targets.</p>
-    <div class="card">
-        <button class="approve-btn" onclick="alert('Triggering full system DB snapshot...')">Trigger Backup Snapshot</button>
-        <p style="font-size:12px; color:var(--mute); margin-top:12px;">Last Backup: Today at 04:00 AM (Status: SUCCESS)</p>
-    </div>
+    <h2>⚙️ System Settings &amp; Configuration</h2>
+    <p style="color:var(--mute); margin-top:4px; margin-bottom:24px;">Manage site identity, landing page content, SEO, stats counters, and toggles.</p>
+
+    <form id="settings-form" onsubmit="saveSettings(event)" style="display:flex; flex-direction:column; gap:20px;">
+      <!-- Global Settings -->
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><span>🌐</span> Global Site Branding &amp; SEO</div></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px;">
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Site Title</label><input type="text" id="gs_site_title" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)" required></div>
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Subheadline</label><input type="text" id="gs_subheadline" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px;">
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Logo Text</label><input type="text" id="gs_logo_text" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Contact Email</label><input type="email" id="gs_contact_email" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+        </div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Meta Description (SEO)</label><textarea id="gs_meta_description" rows="2" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit"></textarea></div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">SEO Keywords</label><input type="text" id="gs_seo_keywords" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">CTA Label</label><input type="text" id="gs_cta_text" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+          <div><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">CTA URL</label><input type="text" id="gs_cta_url" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+        </div>
+      </div>
+      <!-- Feature Toggles -->
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><span>⚙️</span> Feature Controls</div></div>
+        <div style="display:flex;gap:32px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="gs_enable_ai" style="width:16px;height:16px;accent-color:var(--primary)"><span>Enable AI Assistant</span></label>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="gs_enable_terminal" style="width:16px;height:16px;accent-color:var(--primary)"><span>Enable Terminal Animation</span></label>
+        </div>
+      </div>
+      <!-- Hero Section -->
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><span>🚀</span> Hero Landing &amp; Stats</div></div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Headline</label><input type="text" id="hs_headline" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)" required></div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Description</label><textarea id="hs_description" rows="3" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit"></textarea></div>
+        <div style="margin-bottom:16px"><label style="display:block;font-size:12px;margin-bottom:6px;color:var(--mute)">Terminal Code Snippet</label><textarea id="hs_code_snippet" rows="4" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px"></textarea></div>
+        <h4 style="font-weight:600;font-size:13px;color:var(--primary2);margin-bottom:12px;border-bottom:1px solid rgba(168,85,247,0.1);padding-bottom:6px">Counter Stats</h4>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+          <div><label style="display:block;font-size:11px;margin-bottom:4px;color:var(--mute)">Languages</label><input type="number" id="hs_stat_languages" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+          <div><label style="display:block;font-size:11px;margin-bottom:4px;color:var(--mute)">Challenges</label><input type="number" id="hs_stat_challenges" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+          <div><label style="display:block;font-size:11px;margin-bottom:4px;color:var(--mute)">Projects</label><input type="number" id="hs_stat_projects" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+          <div><label style="display:block;font-size:11px;margin-bottom:4px;color:var(--mute)">Students</label><input type="number" id="hs_stat_students" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text)"></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button type="submit" class="approve-btn" style="padding:10px 24px;font-weight:700">💾 Save All Settings</button>
+      </div>
+    </form>
 
 </div><!-- /content -->
 </main>
@@ -593,6 +635,63 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
 <script src="../js/admin-auth.js"></script>
 <script src="../js/admin-api.js"></script>
 <script>
+async function loadSettings() {
+  var g = await AdminAPI.fetchContent('global_settings');
+  var h = await AdminAPI.fetchContent('hero_section');
+  if (g.ok) {
+    var d = g.data;
+    document.getElementById('gs_site_title').value = d.site_title || '';
+    document.getElementById('gs_subheadline').value = d.subheadline || '';
+    document.getElementById('gs_logo_text').value = d.logo_text || '';
+    document.getElementById('gs_contact_email').value = d.contact_email || '';
+    document.getElementById('gs_meta_description').value = d.meta_description || '';
+    document.getElementById('gs_seo_keywords').value = d.seo_keywords || '';
+    document.getElementById('gs_cta_text').value = d.cta_text || '';
+    document.getElementById('gs_cta_url').value = d.cta_url || '';
+    document.getElementById('gs_enable_ai').checked = !!d.enable_ai_helper;
+    document.getElementById('gs_enable_terminal').checked = !!d.enable_terminal_animation;
+  }
+  if (h.ok) {
+    var d = h.data;
+    document.getElementById('hs_headline').value = d.headline || '';
+    document.getElementById('hs_description').value = d.description || '';
+    document.getElementById('hs_code_snippet').value = d.code_snippet || '';
+    document.getElementById('hs_stat_languages').value = d.stat_languages || 0;
+    document.getElementById('hs_stat_challenges').value = d.stat_challenges || 0;
+    document.getElementById('hs_stat_projects').value = d.stat_projects || 0;
+    document.getElementById('hs_stat_students').value = d.stat_students || 0;
+  }
+}
+
+async function saveSettings(event) {
+  event.preventDefault();
+  var gd = {
+    site_title: document.getElementById('gs_site_title').value,
+    subheadline: document.getElementById('gs_subheadline').value,
+    logo_text: document.getElementById('gs_logo_text').value,
+    contact_email: document.getElementById('gs_contact_email').value,
+    meta_description: document.getElementById('gs_meta_description').value,
+    seo_keywords: document.getElementById('gs_seo_keywords').value,
+    cta_text: document.getElementById('gs_cta_text').value,
+    cta_url: document.getElementById('gs_cta_url').value,
+    enable_ai_helper: document.getElementById('gs_enable_ai').checked ? 1 : 0,
+    enable_terminal_animation: document.getElementById('gs_enable_terminal').checked ? 1 : 0
+  };
+  var hd = {
+    headline: document.getElementById('hs_headline').value,
+    description: document.getElementById('hs_description').value,
+    code_snippet: document.getElementById('hs_code_snippet').value,
+    stat_languages: parseInt(document.getElementById('hs_stat_languages').value) || 0,
+    stat_challenges: parseInt(document.getElementById('hs_stat_challenges').value) || 0,
+    stat_projects: parseInt(document.getElementById('hs_stat_projects').value) || 0,
+    stat_students: parseInt(document.getElementById('hs_stat_students').value) || 0
+  };
+  var r1 = await AdminAPI.updateContent('global_settings', 1, gd);
+  var r2 = await AdminAPI.updateContent('hero_section', 1, hd);
+  if (r1.ok && r2.ok) AdminAPI.showToast('Settings saved successfully', 'success');
+  else AdminAPI.showToast('Failed to save some settings', 'error');
+}
+
 (async function() {
   var ok = await AdminAuth.requireAdminSession();
   if (!ok) return;
@@ -603,6 +702,7 @@ tr:hover td{color:var(--text);background:rgba(168,85,247,.03)}
     var av = document.getElementById('sidebar-av');
     if (av) av.textContent = (admin.name || 'AD').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
   }
+  loadSettings();
 })();
 </script></body>
 </html>

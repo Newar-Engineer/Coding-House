@@ -720,17 +720,21 @@ var defaultLanguages = [
   { name:"MATLAB", tag:"Engineering & math", ab:"Ml", c1:"#f5b942", c2:"#3b82f6", slug:"matlab" },
 ];
 
-if (!localStorage.getItem('codinghouse_languages')) {
-  localStorage.setItem('codinghouse_languages', JSON.stringify(defaultLanguages));
-}
-
-var courses = JSON.parse(localStorage.getItem('codinghouse_languages'));
-courses.sort(function(a, b) {
-  return a.name.localeCompare(b.name);
-});
-
+var courses = [];
 var activeLang = null;
+var activeLangId = null;
 var activeTopics = [];
+
+async function loadCourses() {
+  var res = await AdminAPI.fetchContent('languages');
+  if (res.ok) {
+    courses = res.data.items || [];
+    courses.sort(function(a, b) {
+      return a.name.localeCompare(b.name);
+    });
+    renderCoursesList();
+  }
+}
 
 function renderCoursesList() {
   var html = '';
@@ -745,9 +749,9 @@ function renderCoursesList() {
               </div>
           </div>
           <div style="display:flex; gap:8px;">
-              <button class="action-btn" onclick="loadSyllabus('${c.slug}', '${c.name}')">Edit Syllabus</button>
+              <button class="action-btn" onclick="loadSyllabus('${c.slug}', '${c.name}', ${c.id})">Edit Syllabus</button>
               <button class="action-btn" onclick="openCourseModal(${idx})">Edit Config</button>
-              <button class="action-btn danger" onclick="deleteCourse('${c.slug}')">Delete</button>
+              <button class="action-btn danger" onclick="deleteCourse(${idx})">Delete</button>
           </div>
       </div>
     `;
@@ -783,7 +787,7 @@ function closeCourseModal() {
   document.getElementById('course-modal').style.display = 'none';
 }
 
-function saveCourse(event) {
+async function saveCourse(event) {
   event.preventDefault();
   var idx = document.getElementById('course-index').value;
   var name = document.getElementById('c-name').value;
@@ -797,14 +801,22 @@ function saveCourse(event) {
 
   if (idx !== '') {
     // update existing
-    courses[idx] = newCourse;
+    var courseId = courses[idx].id;
+    var res = await AdminAPI.updateContent('languages', courseId, newCourse);
+    if (res.ok) {
+      courses[idx] = Object.assign(courses[idx], newCourse);
+    }
   } else {
     // add new
     if (courses.some(c => c.slug === slug)) {
       alert('A course with this slug already exists!');
       return;
     }
-    courses.push(newCourse);
+    var res = await AdminAPI.createContent('languages', newCourse);
+    if (res.ok) {
+      newCourse.id = res.data.id;
+      courses.push(newCourse);
+    }
   }
 
   // Sort alphabetically
@@ -812,16 +824,18 @@ function saveCourse(event) {
     return a.name.localeCompare(b.name);
   });
 
-  localStorage.setItem('codinghouse_languages', JSON.stringify(courses));
   renderCoursesList();
   closeCourseModal();
 }
 
-function deleteCourse(slug) {
-  if (confirm('Are you sure you want to delete the ' + slug + ' course portal? This will remove it from the catalog homepage.')) {
-    courses = courses.filter(c => c.slug !== slug);
-    localStorage.setItem('codinghouse_languages', JSON.stringify(courses));
-    renderCoursesList();
+async function deleteCourse(idx) {
+  var course = courses[idx];
+  if (confirm('Are you sure you want to delete the ' + course.name + ' course portal? This will remove all its topics and delete it from the catalog.')) {
+    var res = await AdminAPI.deleteContent('languages', course.id);
+    if (res.ok) {
+      courses.splice(idx, 1);
+      renderCoursesList();
+    }
   }
 }
 
@@ -831,31 +845,29 @@ function showCatalog() {
   document.getElementById('topic-modal').style.display = 'none';
 }
 
-function loadSyllabus(slug, name) {
+async function loadSyllabus(slug, name, langId) {
   activeLang = slug;
+  activeLangId = langId;
   document.getElementById('syllabus-title').textContent = '📚 Syllabus Editor: ' + name;
   document.getElementById('catalog-view').style.display = 'none';
   document.getElementById('syllabus-view').style.display = 'block';
   
-  var localKey = 'codinghouse_topics_' + slug;
-  var cached = localStorage.getItem(localKey);
-  
-  if (cached) {
-    activeTopics = JSON.parse(cached);
+  var res = await AdminAPI.fetchContent('lessons', { language_id: langId });
+  if (res.ok) {
+    activeTopics = (res.data.items || []).map(r => {
+      return {
+        id: r.id,
+        num: r.num,
+        title: r.title,
+        beg: { desc: r.beg_desc || '', code: r.beg_code || '', usecase: r.beg_usecase || '' },
+        int: { desc: r.int_desc || '', code: r.int_code || '', usecase: r.int_usecase || '' },
+        pro: { desc: r.pro_desc || '', code: r.pro_code || '', usecase: r.pro_usecase || '' }
+      };
+    });
     renderTopicsList();
   } else {
-    fetch('../data/topics/' + slug + '.json')
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        activeTopics = data;
-        localStorage.setItem(localKey, JSON.stringify(data));
-        renderTopicsList();
-      })
-      .catch(function(err) {
-        console.warn('No default topics found. Starting empty syllabus.', err);
-        activeTopics = [];
-        renderTopicsList();
-      });
+    activeTopics = [];
+    renderTopicsList();
   }
 }
 
@@ -868,7 +880,7 @@ function renderTopicsList() {
               <span style="font-family:'JetBrains Mono',monospace; color:var(--primary2); font-weight:700; margin-right:8px;">${t.num}</span>
               <strong style="font-size:14px;">${t.title}</strong>
               <div style="font-size:11px; color:var(--mute); margin-top:4px;">
-                🟢 ${t.beg.desc.substring(0, 50)}... | 🟡 ${t.int.desc.substring(0, 50)}...
+                🟢 ${(t.beg.desc || '').substring(0, 50)}... | 🟡 ${(t.int.desc || '').substring(0, 50)}...
               </div>
           </div>
           <div style="display:flex; gap:8px;">
@@ -885,7 +897,7 @@ function openTopicModal(index) {
   var modal = document.getElementById('topic-modal');
   modal.style.display = 'block';
   modal.scrollIntoView({ behavior: 'smooth' });
-
+ 
   if (index !== undefined) {
     document.getElementById('topic-modal-title').textContent = 'Edit Topic Card #' + activeTopics[index].num;
     document.getElementById('topic-index').value = index;
@@ -918,51 +930,73 @@ function closeTopicModal() {
   document.getElementById('topic-modal').style.display = 'none';
 }
 
-function saveTopic(event) {
+async function saveTopic(event) {
   event.preventDefault();
   var idx = document.getElementById('topic-index').value;
   var num = document.getElementById('t-num').value;
   var title = document.getElementById('t-title').value;
 
-  var beg = {
-    desc: document.getElementById('t-beg-desc').value,
-    code: document.getElementById('t-beg-code').value,
-    usecase: document.getElementById('t-beg-usecase').value
+  var topicData = {
+    language_id: activeLangId,
+    num: num,
+    title: title,
+    beg_desc: document.getElementById('t-beg-desc').value,
+    beg_code: document.getElementById('t-beg-code').value,
+    beg_usecase: document.getElementById('t-beg-usecase').value,
+    int_desc: document.getElementById('t-int-desc').value,
+    int_code: document.getElementById('t-int-code').value,
+    int_usecase: document.getElementById('t-int-usecase').value,
+    pro_desc: document.getElementById('t-pro-desc').value,
+    pro_code: document.getElementById('t-pro-code').value,
+    pro_usecase: document.getElementById('t-pro-usecase').value
   };
-  var int = {
-    desc: document.getElementById('t-int-desc').value,
-    code: document.getElementById('t-int-code').value,
-    usecase: document.getElementById('t-int-usecase').value
-  };
-  var pro = {
-    desc: document.getElementById('t-pro-desc').value,
-    code: document.getElementById('t-pro-code').value,
-    usecase: document.getElementById('t-pro-usecase').value
-  };
-
-  var newTopic = { num, title, beg, int, pro };
 
   if (idx !== '') {
-    activeTopics[idx] = newTopic;
+    // Edit existing topic
+    var topicId = activeTopics[idx].id;
+    var res = await AdminAPI.updateContent('lessons', topicId, topicData);
+    if (res.ok) {
+      activeTopics[idx] = {
+        id: topicId,
+        num: num,
+        title: title,
+        beg: { desc: topicData.beg_desc, code: topicData.beg_code, usecase: topicData.beg_usecase },
+        int: { desc: topicData.int_desc, code: topicData.int_code, usecase: topicData.int_usecase },
+        pro: { desc: topicData.pro_desc, code: topicData.pro_code, usecase: topicData.pro_usecase }
+      };
+    }
   } else {
-    activeTopics.push(newTopic);
+    // Add new topic
+    var res = await AdminAPI.createContent('lessons', topicData);
+    if (res.ok) {
+      activeTopics.push({
+        id: res.data.id,
+        num: num,
+        title: title,
+        beg: { desc: topicData.beg_desc, code: topicData.beg_code, usecase: topicData.beg_usecase },
+        int: { desc: topicData.int_desc, code: topicData.int_code, usecase: topicData.int_usecase },
+        pro: { desc: topicData.pro_desc, code: topicData.pro_code, usecase: topicData.pro_usecase }
+      });
+    }
   }
 
-  localStorage.setItem('codinghouse_topics_' + activeLang, JSON.stringify(activeTopics));
   renderTopicsList();
   closeTopicModal();
 }
 
-function deleteTopic(index) {
+async function deleteTopic(index) {
   if (confirm('Are you sure you want to remove this topic card?')) {
-    activeTopics.splice(index, 1);
-    localStorage.setItem('codinghouse_topics_' + activeLang, JSON.stringify(activeTopics));
-    renderTopicsList();
+    var topicId = activeTopics[index].id;
+    var res = await AdminAPI.deleteContent('lessons', topicId);
+    if (res.ok) {
+      activeTopics.splice(index, 1);
+      renderTopicsList();
+    }
   }
 }
 
 // Initial render
-renderCoursesList();
+loadCourses();
 </script>
 
 <!-- Supabase + Admin modules -->

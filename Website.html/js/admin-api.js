@@ -216,19 +216,70 @@ var AdminAPI = (function() {
     return result;
   }
 
+  async function fetchContent(section, params) {
+    var queryStr = '';
+    if (params) {
+      queryStr = '?' + new URLSearchParams(params).toString();
+    }
+    return apiFetch('/content/' + section + queryStr);
+  }
+
+  async function createContent(section, itemData) {
+    var result = await apiFetch('/content/' + section, {
+      method: 'POST',
+      body: JSON.stringify(itemData)
+    });
+    if (result.ok) showToast('Item created successfully', 'success');
+    return result;
+  }
+
+  async function updateContent(section, id, itemData) {
+    var result = await apiFetch('/content/' + section + '/' + id, {
+      method: 'PUT',
+      body: JSON.stringify(itemData)
+    });
+    if (result.ok) showToast('Item updated successfully', 'success');
+    return result;
+  }
+
+  async function deleteContent(section, id) {
+    var result = await apiFetch('/content/' + section + '/' + id, { method: 'DELETE' });
+    if (result.ok) showToast('Item deleted successfully', 'success');
+    return result;
+  }
+
+  async function reorderContent(section, orders) {
+    var result = await apiFetch('/content/' + section + '/reorder', {
+      method: 'PUT',
+      body: JSON.stringify({ orders: orders })
+    });
+    if (result.ok) showToast('Order updated successfully', 'success');
+    return result;
+  }
+
+  async function fetchAuditLogs() {
+    return apiFetch('/content/audit-logs');
+  }
+
   // ── Public API ──
   return {
-    showToast:     showToast,
-    fetchUsers:    fetchUsers,
-    getUser:       getUser,
-    createUser:    createUser,
-    updateUser:    updateUser,
-    deleteUser:    deleteUser,
-    getUserStats:  getUserStats,
-    fetchImages:   fetchImages,
-    getImageStats: getImageStats,
-    uploadImage:   uploadImage,
-    updateImage:   updateImage,
-    deleteImage:   deleteImage
+    showToast:      showToast,
+    fetchUsers:     fetchUsers,
+    getUser:        getUser,
+    createUser:     createUser,
+    updateUser:     updateUser,
+    deleteUser:     deleteUser,
+    getUserStats:   getUserStats,
+    fetchImages:    fetchImages,
+    getImageStats:  getImageStats,
+    uploadImage:    uploadImage,
+    updateImage:    updateImage,
+    deleteImage:    deleteImage,
+    fetchContent:   fetchContent,
+    createContent:  createContent,
+    updateContent:  updateContent,
+    deleteContent:  deleteContent,
+    reorderContent: reorderContent,
+    fetchAuditLogs: fetchAuditLogs
   };
 })();
