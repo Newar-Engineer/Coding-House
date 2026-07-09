@@ -153,6 +153,7 @@
 </style>
 </head>
 <body>
+  <canvas class="ambient-particles" id="ambient-particles" aria-hidden="true"></canvas>
   <div class="loading-screen">
   <div class="spinner"></div>
   <div class="loading-text">Loading your track...</div>
@@ -306,50 +307,57 @@
       <div class="path-step">
         <span class="dot"></span>
         <h4>Beginner</h4>
-        <ul>
-          <li>What is Python</li>
-          <li>Installation</li>
-          <li>Variables &amp; data types</li>
-          <li>Operators &amp; conditions</li>
-          <li>Loops &amp; functions</li>
-          <li>Lists, dicts, tuples</li>
+        <ul class="lesson-list">
+          <li><button type="button" class="lesson-topic" data-answer="what-python">What is Python</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="installation">Installation</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="variables">Variables &amp; data types</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="operators">Operators &amp; conditions</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="loops">Loops &amp; functions</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="collections">Lists, dicts, tuples</button></li>
         </ul>
       </div>
       <div class="path-step">
         <span class="dot"></span>
         <h4>Intermediate</h4>
-        <ul>
-          <li>OOP</li>
-          <li>File handling</li>
-          <li>Modules &amp; packages</li>
-          <li>APIs &amp; JSON</li>
-          <li>Error handling</li>
-          <li>Virtual environments</li>
+        <ul class="lesson-list">
+          <li><button type="button" class="lesson-topic" data-answer="oop">OOP</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="files">File handling</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="modules">Modules &amp; packages</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="apis">APIs &amp; JSON</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="errors">Error handling</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="venv">Virtual environments</button></li>
         </ul>
       </div>
       <div class="path-step">
         <span class="dot"></span>
         <h4>Advanced</h4>
-        <ul>
-          <li>Multithreading</li>
-          <li>Async programming</li>
-          <li>Design patterns</li>
-          <li>Data science</li>
-          <li>Machine learning</li>
-          <li>Automation &amp; scraping</li>
+        <ul class="lesson-list">
+          <li><button type="button" class="lesson-topic" data-answer="threads">Multithreading</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="async">Async programming</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="patterns">Design patterns</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="data-science">Data science</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="ml">Machine learning</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="automation">Automation &amp; scraping</button></li>
         </ul>
       </div>
       <div class="path-step">
         <span class="dot"></span>
         <h4>Professional Projects</h4>
-        <ul>
-          <li>AI chatbot</li>
-          <li>Face recognition</li>
-          <li>E-commerce backend</li>
-          <li>Discord bot</li>
-          <li>Stock market analyzer</li>
+        <ul class="lesson-list">
+          <li><button type="button" class="lesson-topic" data-answer="chatbot">AI chatbot</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="face">Face recognition</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="ecommerce">E-commerce backend</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="discord">Discord bot</button></li>
+          <li><button type="button" class="lesson-topic" data-answer="stocks">Stock market analyzer</button></li>
         </ul>
       </div>
+    </div>
+
+    <div class="lesson-answer-panel" id="lesson-answer-panel" aria-live="polite">
+      <div class="answer-kicker">Click a topic above</div>
+      <h3>See the answer with an example</h3>
+      <p>Pick any item in the path to reveal a simple explanation and a practical Python example.</p>
+      <pre><code># Your selected lesson appears here</code></pre>
     </div>
 
     <div class="path-note">
@@ -873,6 +881,153 @@ var statsObserver = new IntersectionObserver(function(entries) {
 var statsRow = document.querySelector('.stats-row');
 if (statsRow) statsObserver.observe(statsRow);
 
+// Interactive lesson answers for the four-stage path
+const lessonAnswers = {
+  "what-python": {
+    title: "What is Python?",
+    body: "Python is a beginner-friendly programming language used for web apps, automation, data science, AI, and backend systems.",
+    example: "print(\"Welcome to Coding House\")\nname = \"Learner\"\nprint(\"Hello\", name)"
+  },
+  installation: {
+    title: "Installation",
+    body: "Installation means setting up Python on your computer so you can run .py files from a terminal or code editor.",
+    example: "python --version\npython main.py"
+  },
+  variables: {
+    title: "Variables & data types",
+    body: "Variables store values. Data types describe what kind of value you are storing, like text, numbers, booleans, or lists.",
+    example: "name = \"Asha\"\nage = 18\nis_learning = True\nskills = [\"Python\", \"HTML\"]"
+  },
+  operators: {
+    title: "Operators & conditions",
+    body: "Operators compare or calculate values. Conditions let your program make decisions based on those values.",
+    example: "score = 86\nif score >= 80:\n    print(\"Great work\")\nelse:\n    print(\"Keep practicing\")"
+  },
+  loops: {
+    title: "Loops & functions",
+    body: "Loops repeat work. Functions group reusable logic so you can run it whenever you need.",
+    example: "def greet(name):\n    return \"Hello \" + name\n\nfor student in [\"Maya\", \"Ravi\"]:\n    print(greet(student))"
+  },
+  collections: {
+    title: "Lists, dicts, tuples",
+    body: "Collections hold multiple values. Lists are editable, dictionaries use key-value pairs, and tuples are fixed.",
+    example: "languages = [\"Python\", \"JavaScript\"]\nprofile = {\"name\": \"Maya\", \"level\": \"Beginner\"}\npoint = (10, 20)\nprint(profile[\"name\"])"
+  },
+  oop: {
+    title: "OOP",
+    body: "Object-oriented programming organizes code into classes and objects, which helps model real things in your app.",
+    example: "class Learner:\n    def __init__(self, name):\n        self.name = name\n\nstudent = Learner(\"Ravi\")\nprint(student.name)"
+  },
+  files: {
+    title: "File handling",
+    body: "File handling lets your program read and write files, such as notes, reports, logs, or saved user data.",
+    example: "with open(\"notes.txt\", \"w\") as file:\n    file.write(\"Practice Python daily\")\n\nwith open(\"notes.txt\") as file:\n    print(file.read())"
+  },
+  modules: {
+    title: "Modules & packages",
+    body: "Modules are reusable Python files. Packages are collections of modules that help keep bigger projects organized.",
+    example: "import math\n\nradius = 5\narea = math.pi * radius ** 2\nprint(round(area, 2))"
+  },
+  apis: {
+    title: "APIs & JSON",
+    body: "APIs let apps talk to each other. JSON is a common data format used to send structured information.",
+    example: "import json\n\nraw = '{\"course\": \"Python\", \"level\": \"Intermediate\"}'\ndata = json.loads(raw)\nprint(data[\"course\"])"
+  },
+  errors: {
+    title: "Error handling",
+    body: "Error handling keeps your program from crashing when something unexpected happens.",
+    example: "try:\n    age = int(\"eighteen\")\nexcept ValueError:\n    print(\"Please enter a number\")"
+  },
+  venv: {
+    title: "Virtual environments",
+    body: "A virtual environment keeps project dependencies separate, so one project does not break another.",
+    example: "python -m venv .venv\n.venv\\Scripts\\activate\npip install requests"
+  },
+  threads: {
+    title: "Multithreading",
+    body: "Multithreading lets a program run multiple tasks at the same time, useful for waiting on slow work like downloads.",
+    example: "from threading import Thread\n\ndef task(name):\n    print(\"Running\", name)\n\nThread(target=task, args=(\"download\",)).start()"
+  },
+  async: {
+    title: "Async programming",
+    body: "Async programming handles waiting tasks efficiently, such as API calls, timers, or network requests.",
+    example: "import asyncio\n\nasync def main():\n    await asyncio.sleep(1)\n    print(\"Done\")\n\nasyncio.run(main())"
+  },
+  patterns: {
+    title: "Design patterns",
+    body: "Design patterns are proven ways to solve common coding problems, especially in larger applications.",
+    example: "class Settings:\n    theme = \"dark\"\n\napp_settings = Settings()\nprint(app_settings.theme)"
+  },
+  "data-science": {
+    title: "Data science",
+    body: "Data science uses code to clean, analyze, and understand information so you can make better decisions.",
+    example: "scores = [70, 85, 90, 95]\naverage = sum(scores) / len(scores)\nprint(\"Average:\", average)"
+  },
+  ml: {
+    title: "Machine learning",
+    body: "Machine learning trains programs to find patterns in data and make predictions from examples.",
+    example: "hours = [1, 2, 3, 4]\nscores = [50, 60, 70, 80]\n# More study hours usually means a higher score"
+  },
+  automation: {
+    title: "Automation & scraping",
+    body: "Automation makes repetitive tasks run by themselves. Scraping extracts useful information from web pages.",
+    example: "tasks = [\"rename files\", \"send report\", \"backup data\"]\nfor task in tasks:\n    print(\"Automating:\", task)"
+  },
+  chatbot: {
+    title: "AI chatbot",
+    body: "An AI chatbot receives a user message, sends it to an AI model, and returns a helpful response.",
+    example: "user_message = \"Explain loops\"\nresponse = \"Loops repeat code while a condition is true.\"\nprint(response)"
+  },
+  face: {
+    title: "Face recognition",
+    body: "Face recognition projects usually detect faces in images first, then compare features to identify a person.",
+    example: "image = \"student-photo.jpg\"\nprint(\"Detect faces in\", image)\nprint(\"Compare face features\")"
+  },
+  ecommerce: {
+    title: "E-commerce backend",
+    body: "An e-commerce backend manages users, products, carts, orders, and payments behind an online store.",
+    example: "cart = [{\"item\": \"Course\", \"price\": 49}]\ntotal = sum(product[\"price\"] for product in cart)\nprint(\"Total:\", total)"
+  },
+  discord: {
+    title: "Discord bot",
+    body: "A Discord bot listens for commands and replies automatically inside a server.",
+    example: "command = \"/help\"\nif command == \"/help\":\n    print(\"Available commands: /roadmap /challenge\")"
+  },
+  stocks: {
+    title: "Stock market analyzer",
+    body: "A stock analyzer reads price data, calculates trends, and helps visualize market movement.",
+    example: "prices = [100, 104, 102, 110]\nchange = prices[-1] - prices[0]\nprint(\"Price change:\", change)"
+  }
+};
+
+const answerPanel = document.getElementById("lesson-answer-panel");
+const lessonButtons = document.querySelectorAll(".lesson-topic[data-answer]");
+
+function showLessonAnswer(button) {
+  const answer = lessonAnswers[button.dataset.answer];
+  if (!answer || !answerPanel) return;
+
+  lessonButtons.forEach(function(item) {
+    const isActive = item === button;
+    item.classList.toggle("active", isActive);
+    item.setAttribute("aria-expanded", isActive ? "true" : "false");
+  });
+
+  answerPanel.classList.add("active");
+  answerPanel.querySelector(".answer-kicker").textContent = "Selected topic";
+  answerPanel.querySelector("h3").textContent = answer.title;
+  answerPanel.querySelector("p").textContent = answer.body;
+  answerPanel.querySelector("code").textContent = answer.example;
+}
+
+lessonButtons.forEach(function(button) {
+  button.setAttribute("aria-controls", "lesson-answer-panel");
+  button.setAttribute("aria-expanded", "false");
+  button.addEventListener("click", function() {
+    showLessonAnswer(button);
+  });
+});
+
 // Close notification dropdown when clicking outside
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.notif-bell')) {
@@ -881,6 +1036,7 @@ document.addEventListener('click', function(e) {
 });
 </script>
 <script src="js/theme-toggle.js"></script>
+<script src="js/ambient-particles.js"></script>
 <script src="js/back-to-top.js"></script>
 </body>
 </html>

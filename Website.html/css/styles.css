@@ -172,6 +172,38 @@ section { position: relative; padding: 96px 0; }
     radial-gradient(circle at 88% 82%, rgba(139,92,246,.10), transparent 40%);
 }
 
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.72;
+  mix-blend-mode: screen;
+}
+
+.ambient-particles ~ section > .wrap,
+.ambient-particles ~ footer > .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.ambient-particles ~ header {
+  z-index: 100;
+}
+
+[data-theme="light"] .ambient-particles {
+  opacity: 0.58;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-particles {
+    opacity: 0.38;
+  }
+}
+
 /* ============================= 3. UTILITY CLASSES ============================= */
 
 /* ── Glassmorphism ── */
@@ -542,6 +574,67 @@ nav {
 .path-step ul { display: flex; flex-direction: column; gap: 7px; }
 .path-step li { font-size: 13.5px; color: var(--text-soft); padding-left: 14px; position: relative; }
 .path-step li::before { content: "›"; position: absolute; left: 0; color: var(--violet); }
+.lesson-topic {
+  display: inline;
+  padding: 0;
+  color: var(--text-soft);
+  font-size: 13.5px;
+  line-height: 1.6;
+  text-align: left;
+  transition: color .2s ease;
+}
+.lesson-topic:hover,
+.lesson-topic.active {
+  color: var(--cyan);
+}
+.lesson-topic.active {
+  font-weight: 700;
+}
+.lesson-answer-panel {
+  margin-top: 34px;
+  padding: 24px;
+  max-width: 860px;
+  background: linear-gradient(135deg, rgba(34,211,238,.08), rgba(124,58,237,.08));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 48px -30px rgba(34,211,238,.55);
+  color: var(--text-soft);
+}
+.lesson-answer-panel.active {
+  border-color: rgba(34,211,238,.45);
+}
+.lesson-answer-panel .answer-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.lesson-answer-panel h3 {
+  font-family: var(--font-display);
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.lesson-answer-panel p {
+  max-width: 720px;
+  margin-bottom: 16px;
+}
+.lesson-answer-panel pre {
+  overflow-x: auto;
+  padding: 16px;
+  background: rgba(6,9,20,.72);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
+.lesson-answer-panel code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mint);
+  white-space: pre;
+}
 .path-note {
   margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px;
   align-items: center; font-size: 13px; color: var(--text-mute);
