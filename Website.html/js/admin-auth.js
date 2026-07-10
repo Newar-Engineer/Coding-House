@@ -69,7 +69,10 @@ var AdminAuth = (function() {
       if (client) await client.auth.signOut();
     } catch (e) { /* ignore */ }
     sessionStorage.removeItem('codinghouse_admin');
-    window.location.href = 'admin-login.html';
+    localStorage.removeItem('codinghouse_currentUser');
+    localStorage.removeItem('codinghouse_tier');
+    localStorage.removeItem('codinghouse_role');
+    window.location.href = '../login.html';
   }
 
   /**
@@ -99,19 +102,31 @@ var AdminAuth = (function() {
   }
 
   /**
-   * Guard — redirect to admin-login.html if not authenticated.
+   * Guard — redirect to login.html if not authenticated.
    * Call this at the top of every admin page.
    */
   async function requireAdminSession() {
+    // ── Local Admin Session Check ──
+    if (localStorage.getItem('codinghouse_role') === 'admin') {
+      var localUser = localStorage.getItem('codinghouse_currentUser');
+      if (localUser) {
+        if (!sessionStorage.getItem('codinghouse_admin')) {
+          sessionStorage.setItem('codinghouse_admin', localUser);
+        }
+        injectStudentViewLink();
+        return true;
+      }
+    }
+
     var client = getClient();
     if (!client) {
-      window.location.href = 'admin-login.html';
+      window.location.href = '../login.html';
       return false;
     }
 
     var result = await client.auth.getSession();
     if (!result.data || !result.data.session) {
-      window.location.href = 'admin-login.html';
+      window.location.href = '../login.html';
       return false;
     }
 
@@ -122,7 +137,7 @@ var AdminAuth = (function() {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       if (!resp.ok) {
-        window.location.href = 'admin-login.html';
+        window.location.href = '../login.html';
         return false;
       }
       var data = await resp.json();
