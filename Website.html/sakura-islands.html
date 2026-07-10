@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakura Floating Islands — Coding House</title>
+  <meta name="description" content="An interactive, high-performance web experience recreating the floating cherry blossom islands. Control physics, sound, and the day/night cycle.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ff8da1;
+      --primary-hover: #ff6b85;
+      --bg-glass: rgba(10, 15, 30, 0.65);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0c0f1d;
+      font-family: var(--font-body);
+      color: var(--text);
+    }
+
+    /* Video Background */
+    #video-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    #bg-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%) translate3d(0, 0, 0);
+      object-fit: cover;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      filter: saturate(1.05) contrast(1.03) brightness(1.02);
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    /* Night Overlay to tint video */
+    .night-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 20, 45, 0.7);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      z-index: 1;
+    }
+
+    .night-overlay.active {
+      opacity: 1;
+    }
+
+    /* Interactive Canvas Overlay */
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Screen vignettes and depth overlays */
+    .vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.45);
+      transition: background 1.5s ease;
+      background: radial-gradient(circle, transparent 50%, rgba(12, 15, 29, 0.25) 100%);
+    }
+
+    .vignette.night {
+      background: radial-gradient(circle, transparent 30%, rgba(5, 5, 20, 0.5) 100%);
+    }
+
+    /* Floating navigation logo */
+    .logo-container {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      background: rgba(10, 15, 30, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      padding: 10px 18px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .logo-container:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 12px 40px rgba(255, 141, 161, 0.2);
+    }
+
+    .logo-container img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-container span {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    /* Interactive UI Controller Panel */
+    .control-panel {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 320px;
+      z-index: 10;
+      background: var(--bg-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-glass);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: top right;
+    }
+
+    .control-panel.collapsed {
+      transform: scale(0) translate(50px, -50px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .panel-toggle-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 11;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: rgba(10, 15, 30, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glass);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .panel-toggle-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      color: var(--primary);
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 12px;
+    }
+
+    .control-header h2 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .close-panel-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      transition: color 0.2s;
+    }
+
+    .close-panel-btn:hover {
+      color: var(--primary);
+    }
+
+    .control-group {
+      margin-bottom: 18px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .control-label span.val {
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+
+    /* Custom range sliders */
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.08);
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px rgba(255, 141, 161, 0.5);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: var(--text);
+    }
+
+    /* Custom switch styling */
+    .switch-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .switch-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.08);
+      transition: .4s;
+      border-radius: 24px;
+      border: 1px solid var(--border-glass);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text);
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: rgba(255, 141, 161, 0.3);
+      border-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: var(--primary);
+      box-shadow: 0 0 8px rgba(255, 141, 161, 0.6);
+    }
+
+    /* Buttons */
+    .btn-action {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-action:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #0f172a;
+      box-shadow: 0 8px 24px rgba(255, 141, 161, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Sound Synthesizer Panel styling */
+    .sound-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .sound-btn.active {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: rgba(255, 141, 161, 0.1);
+    }
+
+    /* Sparkle instruction tooltip */
+    .instruction-tooltip {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background: rgba(10, 15, 30, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      pointer-events: none;
+      animation: floatTooltip 4s ease-in-out infinite;
+    }
+
+    .instruction-tooltip span.highlight {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    @keyframes floatTooltip {
+      0%, 100% { transform: translate(-50%, 0px); }
+      50% { transform: translate(-50%, -6px); }
+    }
+
+    /* SVG icons helper */
+    .icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating logo linking to home -->
+  <a href="index.html" class="logo-container">
+    <img src="assets/codinghouse-logo.svg" alt="Coding House Logo">
+    <span>Coding House</span>
+  </a>
+
+  <!-- Menu toggle button (when panel is closed) -->
+  <div class="panel-toggle-btn" id="open-panel-btn" style="display: none;">
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.47,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+    </svg>
+  </div>
+
+  <!-- Interactive UI Control Panel -->
+  <div class="control-panel" id="gui-panel">
+    <div class="control-header">
+      <h2>Environment Controls</h2>
+      <button class="close-panel-btn" id="close-panel-btn">&times;</button>
+    </div>
+
+    <!-- Wind Slider -->
+    <div class="control-group">
+      <div class="control-label">
+        <span>Wind Strength</span>
+        <span class="val" id="wind-val">1.5</span>
+      </div>
+      <input type="range" id="wind-slider" min="0.2" max="5" step="0.1" value="1.5">
+    </div>
+
+    <!-- Petal Count Slider -->
+    <div class="control-group">
+      <div class="control-label">
+        <span>Petal Density</span>
+        <span class="val" id="density-val">180</span>
+      </div>
+      <input type="range" id="density-slider" min="50" max="400" step="10" value="180">
+    </div>
+
+    <!-- Gravity Slider -->
+    <div class="control-group">
+      <div class="control-label">
+        <span>Falling Speed</span>
+        <span class="val" id="speed-val">1.0</span>
+      </div>
+      <input type="range" id="speed-slider" min="0.4" max="3" step="0.1" value="1.0">
+    </div>
+
+    <!-- Day/Night Cycle Toggle -->
+    <div class="control-group">
+      <div class="switch-wrapper">
+        <span class="switch-label">Night Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="night-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <div class="control-group">
+      <div class="switch-wrapper">
+        <span class="switch-label">Ambient Sound</span>
+        <button class="sound-btn" id="sound-btn">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+          <span>Off</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Spawn Burst Action Button -->
+    <button class="btn-action" id="burst-btn">
+      <svg class="icon" viewBox="0 0 24 24" style="fill: none; stroke: currentColor; stroke-width: 2;">
+        <path d="M12 2v20M2 12h20M12 12L3 3M12 12l9 9M12 12l-9 9M12 12l9-9" />
+      </svg>
+      Blossom Burst
+    </button>
+  </div>
+
+  <!-- Instruction Tooltip -->
+  <div class="instruction-tooltip">
+    <svg class="icon" viewBox="0 0 24 24" style="fill: none; stroke: currentColor; stroke-width: 2; margin-top: 1px;">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 8v8M8 12h8" />
+    </svg>
+    Click anywhere to <span class="highlight">spawn blossoms</span>
+  </div>
+
+  <!-- Video Background HTML5 -->
+  <div id="video-wrapper">
+    <video autoplay loop muted playsinline id="bg-video">
+      <source src="assets/sakura-bg.mp4" type="video/mp4">
+    </video>
+    <!-- Dark Blue Tint Overlay for Night Mode -->
+    <div class="night-overlay" id="night-overlay"></div>
+  </div>
+
+  <!-- Canvas Container and Vignette -->
+  <div class="vignette" id="vignette-overlay"></div>
+  <div id="canvas-container">
+    <canvas id="sakura-canvas"></canvas>
+  </div>
+
+  <script>
+    // --- CANVAS CONFIGURATION ---
+    const canvas = document.getElementById('sakura-canvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvas-container');
+
+    // UI elements
+    const guiPanel = document.getElementById('gui-panel');
+    const openPanelBtn = document.getElementById('open-panel-btn');
+    const closePanelBtn = document.getElementById('close-panel-btn');
+    const windSlider = document.getElementById('wind-slider');
+    const windVal = document.getElementById('wind-val');
+    const densitySlider = document.getElementById('density-slider');
+    const densityVal = document.getElementById('density-val');
+    const speedSlider = document.getElementById('speed-slider');
+    const speedVal = document.getElementById('speed-val');
+    const nightToggle = document.getElementById('night-toggle');
+    const soundBtn = document.getElementById('sound-btn');
+    const burstBtn = document.getElementById('burst-btn');
+    const vignetteOverlay = document.getElementById('vignette-overlay');
+    const nightOverlay = document.getElementById('night-overlay');
+
+    // Environment and Physics properties
+    let dpr = window.devicePixelRatio || 1;
+    let width = container.offsetWidth;
+    let height = container.offsetHeight;
+
+    function setupCanvas() {
+      dpr = window.devicePixelRatio || 1;
+      width = container.offsetWidth;
+      height = container.offsetHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.scale(dpr, dpr);
+    }
+
+    setupCanvas();
+
+    let time = 0;
+    let mouse = { x: width / 2, y: height / 2, tx: width / 2, ty: height / 2 };
+    let wind = 1.5;
+    let targetPetals = 180;
+    let fallSpeed = 1.0;
+    let isNight = false;
+
+    // Entities Arrays (Transparent overlay features only)
+    const petals = [];
+    const stars = [];
+    const fireflies = [];
+    const godRays = [];
+
+    // Sound state
+    let audioCtx = null;
+    let ambientSynth = null;
+
+    // Re-adjust sizes on resize
+    window.addEventListener('resize', () => {
+      setupCanvas();
+      initObjects();
+    });
+
+    // Handle Parallax Mouse Events for layers
+    window.addEventListener('mousemove', (e) => {
+      mouse.tx = e.clientX;
+      mouse.ty = e.clientY;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        mouse.tx = e.touches[0].clientX;
+        mouse.ty = e.touches[0].clientY;
+      }
+    });
+
+    // Click to spawn petals
+    canvas.addEventListener('click', (e) => {
+      createPetalBurst(e.clientX, e.clientY, 35);
+    });
+
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        createPetalBurst(e.touches[0].clientX, e.touches[0].clientY, 25);
+      }
+    });
+
+    // Toggle Panels
+    closePanelBtn.addEventListener('click', () => {
+      guiPanel.classList.add('collapsed');
+      openPanelBtn.style.display = 'flex';
+    });
+
+    openPanelBtn.addEventListener('click', () => {
+      guiPanel.classList.remove('collapsed');
+      openPanelBtn.style.display = 'none';
+    });
+
+    // Connect slider listeners
+    windSlider.addEventListener('input', (e) => {
+      wind = parseFloat(e.target.value);
+      windVal.textContent = wind.toFixed(1);
+    });
+
+    densitySlider.addEventListener('input', (e) => {
+      targetPetals = parseInt(e.target.value);
+      densityVal.textContent = targetPetals;
+      adjustPetalCount();
+    });
+
+    speedSlider.addEventListener('input', (e) => {
+      fallSpeed = parseFloat(e.target.value);
+      speedVal.textContent = fallSpeed.toFixed(1);
+    });
+
+    nightToggle.addEventListener('change', (e) => {
+      isNight = e.target.checked;
+      if (isNight) {
+        vignetteOverlay.classList.add('night');
+        nightOverlay.classList.add('active');
+      } else {
+        vignetteOverlay.classList.remove('night');
+        nightOverlay.classList.remove('active');
+      }
+      // Update ambient sound frequency slightly for night mood
+      if (ambientSynth) {
+        ambientSynth.setNight(isNight);
+      }
+    });
+
+    burstBtn.addEventListener('click', () => {
+      createPetalBurst(width * 0.35, height * 0.35, 50);
+    });
+
+    // --- ENTITY CLASSES & INITIALIZATION ---
+
+    // --- REALISTIC SAKURA PETAL ---
+    // Helper: convert hex to RGB
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return { r, g, b };
+    }
+
+    class Petal {
+      constructor(isBurst = false, bx = 0, by = 0) {
+        this.reset(isBurst, bx, by);
+      }
+
+      reset(isBurst = false, bx = 0, by = 0) {
+        this.x = isBurst ? bx + (Math.random() - 0.5) * 80 : Math.random() * (width + 300) - 150;
+        this.y = isBurst ? by + (Math.random() - 0.5) * 80 : Math.random() * -height;
+        this.size = Math.random() * 9 + 4;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin = (Math.random() * 0.03 - 0.015) * (0.6 + Math.random() * 0.8);
+        this.flip = Math.random() * Math.PI;
+        this.flipSpeed = Math.random() * 0.028 + 0.012;
+        this.curl = Math.random() * Math.PI; // secondary curl axis
+        this.curlSpeed = Math.random() * 0.018 + 0.006;
+        this.speedY = (Math.random() * 1.4 + 0.7) * fallSpeed;
+        this.speedX = (Math.random() * 0.7 + 0.2) * wind;
+        this.wobble = Math.random() * Math.PI;
+        this.wobbleSpeed = Math.random() * 0.022 + 0.008;
+        this.depth = Math.random(); // 0 = far background, 1 = near foreground
+        this.opacity = 0.55 + this.depth * 0.45; // far petals are more transparent
+        this.life = 0; // fade-in counter
+        this.isBurst = isBurst;
+
+        // Photorealistic sakura palette — each petal gets a unique tint
+        const palettes = [
+          { base: '#ffb7c5', tip: '#ff8fa3', vein: '#e87594' },  // Classic sakura
+          { base: '#ffc8d6', tip: '#ffaec0', vein: '#f29db0' },  // Soft blush
+          { base: '#ffe0e8', tip: '#ffccd5', vein: '#f5b3c1' },  // Pale petal
+          { base: '#ffa3b5', tip: '#ff7090', vein: '#e0607a' },  // Deep cherry
+          { base: '#fff0f5', tip: '#ffe0eb', vein: '#f5c6d0' },  // White-pink highlight
+          { base: '#ffd1dc', tip: '#ffb3c6', vein: '#eda3b3' },  // Rose quartz
+        ];
+        const pal = palettes[Math.floor(Math.random() * palettes.length)];
+        this.baseColor = hexToRgb(pal.base);
+        this.tipColor = hexToRgb(pal.tip);
+        this.veinColor = pal.vein;
+
+        // Slight random hue shift per petal for natural variation
+        const hueShift = Math.floor(Math.random() * 12 - 6);
+        this.baseColor.r = Math.min(255, Math.max(0, this.baseColor.r + hueShift));
+        this.tipColor.r = Math.min(255, Math.max(0, this.tipColor.r + hueShift));
+      }
+
+      update() {
+        this.angle += this.spin;
+        this.flip += this.flipSpeed;
+        this.curl += this.curlSpeed;
+        this.wobble += this.wobbleSpeed;
+        if (this.life < 1) this.life += 0.02;
+
+        // Realistic falling: sway + drift + depth parallax
+        const sway = Math.sin(this.wobble) * 0.65 + Math.sin(this.wobble * 0.7) * 0.25;
+        this.y += this.speedY * (0.85 + this.depth * 0.45) * fallSpeed;
+        this.x += (this.speedX + sway) * wind * (0.8 + this.depth * 0.5);
+
+        // Subtle air resistance deceleration for burst petals
+        if (this.isBurst && this.speedY > 0.5) {
+          this.speedY *= 0.998;
+        }
+
+        if (this.y > height + 30 || this.x > width + 150 || this.x < -150) {
+          this.reset(false);
+        }
+      }
+
+      _petalPath(s) {
+        // Organic asymmetric petal shape — slightly different left/right curves
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(s * 0.45, -s * 0.85, s * 0.95, -s * 0.35, 0, s * 1.05);
+        ctx.bezierCurveTo(-s * 0.85, -s * 0.4, -s * 0.5, -s * 0.9, 0, 0);
+        ctx.closePath();
+      }
+
+      draw() {
+        const flipScale = Math.sin(this.flip);
+        const curlScale = Math.cos(this.curl) * 0.15 + 0.85; // subtle secondary curl
+        const fadeIn = Math.min(1, this.life);
+        const alpha = this.opacity * fadeIn;
+
+        // Skip nearly-invisible edge-on petals
+        if (Math.abs(flipScale) < 0.08) return;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.scale(flipScale * curlScale, 1);
+
+        const s = this.size;
+        const bc = this.baseColor;
+        const tc = this.tipColor;
+
+        // --- Layer 1: Base fill with radial gradient (centre -> tip colour) ---
+        const baseGrad = ctx.createRadialGradient(0, s * 0.25, 0, 0, s * 0.25, s * 1.2);
+        baseGrad.addColorStop(0, `rgba(${bc.r}, ${bc.g}, ${bc.b}, 1)`);
+        baseGrad.addColorStop(0.6, `rgba(${Math.round((bc.r + tc.r) / 2)}, ${Math.round((bc.g + tc.g) / 2)}, ${Math.round((bc.b + tc.b) / 2)}, 0.95)`);
+        baseGrad.addColorStop(1, `rgba(${tc.r}, ${tc.g}, ${tc.b}, 0.85)`);
+        ctx.fillStyle = baseGrad;
+        this._petalPath(s);
+        ctx.fill();
+
+        // --- Layer 2: Translucent inner glow (light hitting the petal) ---
+        const innerGlow = ctx.createRadialGradient(s * 0.1, -s * 0.15, 0, 0, s * 0.2, s * 0.9);
+        innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+        innerGlow.addColorStop(0.5, 'rgba(255, 240, 245, 0.12)');
+        innerGlow.addColorStop(1, 'rgba(255, 220, 230, 0)');
+        ctx.fillStyle = innerGlow;
+        this._petalPath(s);
+        ctx.fill();
+
+        // --- Layer 3: Vein lines (central vein + side veins) ---
+        ctx.strokeStyle = this.veinColor;
+        ctx.lineWidth = 0.4;
+        ctx.globalAlpha = alpha * 0.3;
+
+        // Central vein
+        ctx.beginPath();
+        ctx.moveTo(0, -s * 0.1);
+        ctx.quadraticCurveTo(s * 0.04, s * 0.4, 0, s * 0.95);
+        ctx.stroke();
+
+        // Side veins
+        for (let i = 1; i <= 3; i++) {
+          const t = i * 0.22;
+          const vy = s * t;
+          ctx.beginPath();
+          ctx.moveTo(0, vy);
+          ctx.quadraticCurveTo(s * 0.25 * (1 - t * 0.5), vy - s * 0.12, s * 0.35 * (1 - t * 0.4), vy - s * 0.05);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(0, vy);
+          ctx.quadraticCurveTo(-s * 0.22 * (1 - t * 0.5), vy - s * 0.1, -s * 0.32 * (1 - t * 0.4), vy - s * 0.04);
+          ctx.stroke();
+        }
+
+        // --- Layer 4: Soft edge highlight (rim light) ---
+        ctx.globalAlpha = alpha * 0.18;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 0.6;
+        this._petalPath(s);
+        ctx.stroke();
+
+        // --- Layer 5: Subtle shadow on back side when flipped ---
+        if (flipScale < 0) {
+          ctx.globalAlpha = alpha * 0.12;
+          ctx.fillStyle = 'rgba(180, 80, 100, 0.25)';
+          this._petalPath(s);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // --- REALISTIC TWINKLING STAR (Night Mode) ---
+    class Star {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * (height * 0.7);
+        this.size = Math.random() * 1.8 + 0.3;
+        this.twinkleSpeed = Math.random() * 0.03 + 0.006;
+        this.twinkleSpeed2 = Math.random() * 0.017 + 0.004; // secondary shimmer
+        this.phase = Math.random() * Math.PI * 2;
+        this.phase2 = Math.random() * Math.PI * 2;
+        // Slight colour temperature variation
+        const temps = [
+          { r: 255, g: 255, b: 255 },   // white
+          { r: 200, g: 220, b: 255 },   // cool blue-white
+          { r: 255, g: 240, b: 200 },   // warm yellow-white
+          { r: 180, g: 210, b: 255 },   // pale blue
+        ];
+        this.color = temps[Math.floor(Math.random() * temps.length)];
+      }
+
+      draw() {
+        this.phase += this.twinkleSpeed;
+        this.phase2 += this.twinkleSpeed2;
+        // Compound twinkle for more organic shimmer
+        const t1 = (Math.sin(this.phase) + 1) / 2;
+        const t2 = (Math.sin(this.phase2 * 1.7) + 1) / 2;
+        const brightness = 0.2 + t1 * 0.5 + t2 * 0.3;
+        const c = this.color;
+
+        ctx.save();
+
+        // Outer glow halo
+        if (this.size > 1) {
+          const halo = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 5);
+          halo.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${brightness * 0.15})`);
+          halo.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+          ctx.fillStyle = halo;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 4-point cross glint (diffraction spike)
+        const glintLen = this.size * (2.5 + t1 * 1.5);
+        ctx.strokeStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${brightness * 0.5})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(this.x - glintLen, this.y);
+        ctx.lineTo(this.x + glintLen, this.y);
+        ctx.moveTo(this.x, this.y - glintLen);
+        ctx.lineTo(this.x, this.y + glintLen);
+        ctx.stroke();
+
+        // Core dot
+        ctx.fillStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${brightness * 0.9})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    // --- REALISTIC FIREFLIES (Night Mode) ---
+    class Firefly {
+      constructor() {
+        this.trail = []; // motion trail positions
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = height - Math.random() * (height * 0.5);
+        this.size = Math.random() * 2 + 1;
+        this.vx = Math.random() * 0.5 - 0.25;
+        this.vy = Math.random() * -0.35 - 0.1;
+        this.ax = 0; this.ay = 0; // wandering acceleration
+        this.phase = Math.random() * Math.PI * 2;
+        this.phaseSpeed = Math.random() * 0.03 + 0.015;
+        this.warmth = Math.random(); // 0 = green-yellow, 1 = amber
+        this.trail = [];
+      }
+
+      update() {
+        // Organic wandering movement — random acceleration changes
+        this.ax += (Math.random() - 0.5) * 0.012;
+        this.ay += (Math.random() - 0.5) * 0.008;
+        this.ax *= 0.96; this.ay *= 0.96;
+        this.vx += this.ax; this.vy += this.ay;
+        // Clamp velocity
+        const maxV = 0.6;
+        this.vx = Math.max(-maxV, Math.min(maxV, this.vx));
+        this.vy = Math.max(-maxV, Math.min(maxV, this.vy));
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.phase += this.phaseSpeed;
+
+        // Store trail
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 8) this.trail.shift();
+
+        if (this.y < height * 0.25 || this.x < -30 || this.x > width + 30 || this.y > height + 20) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        const pulse = (Math.sin(this.phase) + 1) / 2;
+        const glowOpacity = 0.15 + pulse * 0.85;
+        const w = this.warmth;
+        // Warm firefly colours — green-yellow to amber
+        const coreR = Math.round(220 + w * 35);
+        const coreG = Math.round(255 - w * 40);
+        const coreB = Math.round(160 - w * 80);
+
+        ctx.save();
+
+        // Fading motion trail
+        if (this.trail.length > 2) {
+          for (let i = 1; i < this.trail.length; i++) {
+            const t = i / this.trail.length;
+            ctx.globalAlpha = t * 0.15 * glowOpacity;
+            ctx.fillStyle = `rgb(${coreR}, ${coreG}, ${coreB})`;
+            ctx.beginPath();
+            ctx.arc(this.trail[i].x, this.trail[i].y, this.size * 0.5 * t, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        ctx.globalAlpha = 1;
+
+        // Wide ambient glow
+        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 9);
+        glow.addColorStop(0, `rgba(${coreR}, ${coreG}, ${coreB}, ${glowOpacity * 0.6})`);
+        glow.addColorStop(0.25, `rgba(${coreR}, ${coreG}, ${coreB}, ${glowOpacity * 0.2})`);
+        glow.addColorStop(0.6, `rgba(${coreR}, ${coreG}, ${coreB}, ${glowOpacity * 0.05})`);
+        glow.addColorStop(1, `rgba(${coreR}, ${coreG}, ${coreB}, 0)`);
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 9, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Hot core
+        ctx.fillStyle = `rgba(255, 255, 230, ${glowOpacity * 0.95})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    // --- SETUP ENGINE ---
+
+    function initObjects() {
+      // Setup Stars
+      stars.length = 0;
+      for (let i = 0; i < 70; i++) {
+        stars.push(new Star());
+      }
+
+      // Setup Fireflies
+      fireflies.length = 0;
+      for (let i = 0; i < 20; i++) {
+        fireflies.push(new Firefly());
+      }
+
+      // Setup God Rays / Sun shafts — more rays, varied widths, organic feel
+      godRays.length = 0;
+      for (let i = 0; i < 7; i++) {
+        godRays.push({
+          angle: Math.random() * 0.7 + 0.8,
+          width: Math.random() * 70 + 30,
+          baseOpacity: Math.random() * 0.035 + 0.015,
+          opacity: 0,
+          speed: Math.random() * 0.0006 - 0.0003,
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: Math.random() * 0.008 + 0.003
+        });
+      }
+
+      // Adjust sakura petal quantity
+      adjustPetalCount();
+    }
+
+    function adjustPetalCount() {
+      while (petals.length < targetPetals) {
+        petals.push(new Petal());
+      }
+      if (petals.length > targetPetals) {
+        petals.splice(targetPetals);
+      }
+    }
+
+    function createPetalBurst(x, y, count) {
+      for (let i = 0; i < count; i++) {
+        petals.push(new Petal(true, x, y));
+      }
+    }
+
+    // --- PROCEDURAL SYNTHESIZED SOUND GENERATOR ---
+    class AmbientSynth {
+      constructor() {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.active = false;
+        
+        // Wind Synthesizer
+        this.windFilter = null;
+        this.windGain = null;
+        this.windSource = null;
+
+        // Waterfall Synthesizer
+        this.waterFilter = null;
+        this.waterGain = null;
+        this.waterSource = null;
+      }
+
+      createNoiseBuffer() {
+        const bufferSize = 2 * this.ctx.sampleRate;
+        const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+        return noiseBuffer;
+      }
+
+      start() {
+        if (this.active) return;
+        
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        const noiseBuffer = this.createNoiseBuffer();
+
+        // 1. WIND GENERATOR
+        this.windSource = this.ctx.createBufferSource();
+        this.windSource.buffer = noiseBuffer;
+        this.windSource.loop = true;
+
+        this.windFilter = this.ctx.createBiquadFilter();
+        this.windFilter.type = 'bandpass';
+        this.windFilter.Q.value = 2.2;
+        this.windFilter.frequency.value = 350;
+
+        this.windGain = this.ctx.createGain();
+        this.windGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+
+        this.windSource.connect(this.windFilter);
+        this.windFilter.connect(this.windGain);
+        this.windGain.connect(this.ctx.destination);
+
+        // 2. WATERFALL GENERATOR
+        this.waterSource = this.ctx.createBufferSource();
+        this.waterSource.buffer = noiseBuffer;
+        this.waterSource.loop = true;
+
+        this.waterFilter = this.ctx.createBiquadFilter();
+        this.waterFilter.type = 'lowpass';
+        this.waterFilter.frequency.value = 160;
+
+        this.waterGain = this.ctx.createGain();
+        this.waterGain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+
+        this.waterSource.connect(this.waterFilter);
+        this.waterFilter.connect(this.waterGain);
+        this.waterGain.connect(this.ctx.destination);
+
+        this.windSource.start(0);
+        this.waterSource.start(0);
+
+        this.active = true;
+        this.animateWind();
+      }
+
+      stop() {
+        if (!this.active) return;
+
+        this.windSource.stop();
+        this.waterSource.stop();
+        
+        this.windSource.disconnect();
+        this.waterSource.disconnect();
+        this.windFilter.disconnect();
+        this.waterFilter.disconnect();
+        this.windGain.disconnect();
+        this.waterGain.disconnect();
+
+        this.active = false;
+      }
+
+      animateWind() {
+        if (!this.active) return;
+        
+        const now = this.ctx.currentTime;
+        const windBaseFreq = isNight ? 260 : 350;
+        const targetFreq = windBaseFreq + Math.sin(now * 0.4) * 160 + (wind * 60);
+        const targetVolume = 0.03 + Math.sin(now * 0.5) * 0.025 + (wind * 0.008);
+
+        this.windFilter.frequency.linearRampToValueAtTime(targetFreq, now + 0.1);
+        this.windGain.gain.linearRampToValueAtTime(targetVolume, now + 0.1);
+
+        setTimeout(() => this.animateWind(), 100);
+      }
+
+      setNight(night) {
+        if (!this.active) return;
+        const now = this.ctx.currentTime;
+        if (night) {
+          this.waterFilter.frequency.exponentialRampToValueAtTime(110, now + 2);
+          this.waterGain.gain.linearRampToValueAtTime(0.035, now + 2);
+        } else {
+          this.waterFilter.frequency.exponentialRampToValueAtTime(160, now + 2);
+          this.waterGain.gain.linearRampToValueAtTime(0.06, now + 2);
+        }
+      }
+    }
+
+    // Toggle Sound Button
+    soundBtn.addEventListener('click', () => {
+      if (!audioCtx) {
+        audioCtx = new AmbientSynth();
+      }
+
+      if (audioCtx.active) {
+        audioCtx.stop();
+        soundBtn.classList.remove('active');
+        soundBtn.querySelector('span').textContent = 'Off';
+      } else {
+        audioCtx.start();
+        soundBtn.classList.add('active');
+        soundBtn.querySelector('span').textContent = 'On';
+      }
+    });
+
+    // Initialize arrays
+    initObjects();
+
+    // --- MAIN DRAW LOOP (with depth-of-field simulation) ---
+    function animate() {
+      time = Date.now();
+
+      // Clear the transparent overlay canvas
+      ctx.clearRect(0, 0, width, height);
+
+      // Parallax Mouse calculations
+      mouse.x += (mouse.tx - mouse.x) * 0.05;
+      mouse.y += (mouse.ty - mouse.y) * 0.05;
+      
+      const mouseOffsetX = (mouse.x - width / 2);
+      const mouseOffsetY = (mouse.y - height / 2);
+
+      // --- PASS 1: Background-depth petals (depth < 0.35) — softer, more transparent ---
+      ctx.save();
+      petals.forEach(p => {
+        if (p.depth < 0.35) {
+          p.update();
+          ctx.globalAlpha = 0.5; // simulate depth-of-field softness
+          p.draw();
+          ctx.globalAlpha = 1;
+        }
+      });
+      ctx.restore();
+
+      // --- PASS 2: Stars (Night Mode only) ---
+      if (isNight) {
+        stars.forEach(s => s.draw());
+      }
+
+      // --- PASS 3: God Rays / Atmospheric Light Shafts (Day Mode) ---
+      if (!isNight) {
+        const sunX = width * 0.72 + mouseOffsetX * -0.01;
+        const sunY = height * 0.18 + mouseOffsetY * -0.01;
+        
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        godRays.forEach(ray => {
+          ray.angle += ray.speed;
+          ray.phase += ray.phaseSpeed;
+          // Atmospheric pulsing — rays gently breathe in and out
+          ray.opacity = ray.baseOpacity * (0.5 + Math.sin(ray.phase) * 0.35 + Math.sin(ray.phase * 0.6) * 0.15);
+
+          ctx.save();
+          ctx.translate(sunX, sunY);
+          ctx.rotate(ray.angle);
+          
+          // Multi-stop gradient for atmospheric scattering look
+          const rayLen = height * 1.2;
+          let rayGrad = ctx.createLinearGradient(0, 0, 0, rayLen);
+          rayGrad.addColorStop(0, `rgba(255, 250, 230, ${ray.opacity * 1.5})`);
+          rayGrad.addColorStop(0.15, `rgba(255, 245, 210, ${ray.opacity * 1.2})`);
+          rayGrad.addColorStop(0.5, `rgba(255, 240, 200, ${ray.opacity * 0.6})`);
+          rayGrad.addColorStop(0.8, `rgba(255, 235, 190, ${ray.opacity * 0.2})`);
+          rayGrad.addColorStop(1, 'rgba(255, 230, 180, 0)');
+          
+          ctx.fillStyle = rayGrad;
+          ctx.beginPath();
+          ctx.moveTo(-ray.width * 0.35, 0);
+          ctx.lineTo(ray.width * 0.35, 0);
+          ctx.lineTo(ray.width * 2.2, rayLen);
+          ctx.lineTo(-ray.width * 2.2, rayLen);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        });
+        ctx.restore();
+      }
+
+      // --- PASS 4: Mid-ground petals (depth 0.35 – 0.7) ---
+      petals.forEach(p => {
+        if (p.depth >= 0.35 && p.depth < 0.7) {
+          p.update();
+          p.draw();
+        }
+      });
+
+      // --- PASS 5: Fireflies (Night Mode only) ---
+      if (isNight) {
+        fireflies.forEach(f => {
+          f.update();
+          f.draw();
+        });
+      }
+
+      // --- PASS 6: Foreground petals (depth >= 0.7) — closest to camera, sharpest ---
+      petals.forEach(p => {
+        if (p.depth >= 0.7) {
+          p.update();
+          p.draw();
+        }
+      });
+
+      // --- PASS 7: Subtle floating dust motes / pollen (atmospheric depth) ---
+      if (!isNight) {
+        const dustTime = time * 0.001;
+        ctx.save();
+        for (let i = 0; i < 18; i++) {
+          const dx = (Math.sin(dustTime * 0.3 + i * 2.1) * 0.5 + 0.5) * width;
+          const dy = (Math.cos(dustTime * 0.2 + i * 1.7) * 0.5 + 0.5) * height;
+          const ds = Math.sin(dustTime * 0.5 + i) * 0.4 + 0.8;
+          ctx.globalAlpha = 0.12 + Math.sin(dustTime + i * 3.3) * 0.06;
+          ctx.fillStyle = 'rgba(255, 245, 230, 0.7)';
+          ctx.beginPath();
+          ctx.arc(dx, dy, ds, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Start loop
+    animate();
+  </script>
+</body>
+</html>
