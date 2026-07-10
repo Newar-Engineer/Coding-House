@@ -816,75 +816,8 @@ window.addEventListener('pageshow', (event) => {
     document.querySelector('.loading-screen').classList.remove('active');
   }
 });
-const defaultLanguages = [
-  { name:"Python", tag:"Beginner friendly", ab:"Py", c1:"#3b82f6", c2:"#22d3ee", slug:"python" },
-  { name:"Java", tag:"Enterprise & Android", ab:"Jv", c1:"#8b5cf6", c2:"#3b82f6", slug:"java" },
-  { name:"C", tag:"Systems fundamentals", ab:"C", c1:"#22d3ee", c2:"#3b82f6", slug:"c" },
-  { name:"C++", tag:"Performance & games", ab:"C+", c1:"#3b82f6", c2:"#8b5cf6", slug:"cpp" },
-  { name:"C#", tag:".NET & game dev", ab:"C#", c1:"#8b5cf6", c2:"#22d3ee", slug:"csharp" },
-  { name:"JavaScript", tag:"The web's language", ab:"Js", c1:"#f5b942", c2:"#3b82f6", slug:"javascript" },
-  { name:"TypeScript", tag:"JavaScript, typed", ab:"Ts", c1:"#3b82f6", c2:"#22d3ee", slug:"typescript" },
-  { name:"Go", tag:"Cloud & concurrency", ab:"Go", c1:"#22d3ee", c2:"#34e0a1", slug:"go" },
-  { name:"Rust", tag:"Safe systems code", ab:"Rs", c1:"#f5b942", c2:"#ff5d72", slug:"rust" },
-  { name:"PHP", tag:"Server-side web", ab:"Php", c1:"#8b5cf6", c2:"#f5b942", slug:"php" },
-  { name:"Kotlin", tag:"Modern Android", ab:"Kt", c1:"#8b5cf6", c2:"#ff5d72", slug:"kotlin" },
-  { name:"Swift", tag:"iOS & macOS", ab:"Sw", c1:"#ff5d72", c2:"#f5b942", slug:"swift" },
-  { name:"Dart", tag:"UI-first language", ab:"Dt", c1:"#22d3ee", c2:"#3b82f6", slug:"dart" },
-  { name:"Ruby", tag:"Expressive & fast", ab:"Rb", c1:"#ff5d72", c2:"#8b5cf6", slug:"ruby" },
-  { name:"R", tag:"Statistics & data", ab:"R", c1:"#3b82f6", c2:"#34e0a1", slug:"r" },
-  { name:"MATLAB", tag:"Engineering & math", ab:"Ml", c1:"#f5b942", c2:"#3b82f6", slug:"matlab" },
-];
+// Dynamic content loader script is loaded via public-content-loader.js below
 
-if (!localStorage.getItem('codinghouse_languages')) {
-  localStorage.setItem('codinghouse_languages', JSON.stringify(defaultLanguages));
-}
-const languages = JSON.parse(localStorage.getItem('codinghouse_languages'));
-
-// Sort languages alphabetically (serially) by name
-languages.sort(function(a, b) {
-  return a.name.localeCompare(b.name);
-});
-
-const defaultSlugList = ['python', 'java', 'c', 'cpp', 'csharp', 'javascript', 'typescript', 'go', 'rust', 'php', 'kotlin', 'swift', 'dart', 'ruby', 'r', 'matlab'];
-const grid = document.getElementById("lang-grid");
-
-(async function() {
-  var images = [];
-  try {
-    var resp = await fetch('http://localhost:3001/api/public/images');
-    if (resp.ok) {
-      var data = await resp.json();
-      images = data.images || [];
-    }
-  } catch (e) {
-    console.warn("[Coding House] Could not load dynamic images:", e);
-  }
-
-  grid.innerHTML = languages.map(l => {
-    const url = defaultSlugList.indexOf(l.slug) !== -1 ? `${l.slug}.html` : `course-detail.html?lang=${l.slug}`;
-    
-    // Find if an image is uploaded for this course slug
-    var matchedImg = images.find(function(img) {
-      return img.linked_slug && img.linked_slug.toLowerCase() === l.slug.toLowerCase();
-    });
-
-    var badgeStyle = `background:linear-gradient(135deg, ${l.c1}, ${l.c2})`;
-    var textContent = l.ab;
-    if (matchedImg) {
-      badgeStyle = `background:url('${matchedImg.url}') center/cover no-repeat`;
-      textContent = '';
-    }
-
-    return `
-      <a href="${url}" class="lang-card">
-        <div class="lang-badge" style="${badgeStyle}">${textContent}</div>
-        <div class="lang-name">${l.name}</div>
-        <div class="lang-tag">${l.tag}</div>
-        <div class="lang-arrow">Open portal →</div>
-      </a>
-    `;
-  }).join("");
-})();
 
 const burger = document.querySelector(".burger");
 const navLinks = document.querySelector(".nav-links");
@@ -1087,6 +1020,7 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
+<script src="js/public-content-loader.js"></script>
 <script src="js/theme-toggle.js"></script>
 <script src="js/ambient-particles.js"></script>
 <script src="js/back-to-top.js"></script>
